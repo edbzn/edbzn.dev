@@ -63,7 +63,7 @@
     "react-dom": "18.3.1",
     "react-helmet": "6.1.0",
     "react-typography": "0.16.23",
-    "remark-gfm": "^3.0.0",
+    "remark-gfm": "^4.0.0",
     "typography": "0.16.24",
     "typography-theme-wordpress-2016": "0.16.19"
   },
