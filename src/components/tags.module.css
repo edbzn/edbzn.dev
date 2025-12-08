@@ -9,22 +9,22 @@
   display: inline-flex;
   align-items: center;
   padding: 0.15rem 0.5rem;
-  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
-  color: white !important;
+  background-color: rgb(241, 241, 241);
+  color: #333 !important;
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 400;
   font-family: 'Public Sans', sans-serif;
   text-decoration: none;
   box-shadow:
-    rgba(107, 114, 128, 0.2) 0px 2px 8px,
-    rgba(107, 114, 128, 0.1) 0px 4px 16px;
+    rgba(0, 0, 0, 0.1) 0px 2px 8px,
+    rgba(0, 0, 0, 0.05) 0px 4px 16px;
   transition: all 0.2s ease;
 }
 
 .tag:hover {
   box-shadow:
-    rgba(107, 114, 128, 0.3) 0px 4px 12px,
-    rgba(107, 114, 128, 0.2) 0px 8px 24px;
-  background: linear-gradient(135deg, #7c8491 0%, #5a6471 100%);
+    rgba(0, 0, 0, 0.15) 0px 4px 12px,
+    rgba(0, 0, 0, 0.1) 0px 8px 24px;
+  background-color: rgb(235, 235, 235);
 }
