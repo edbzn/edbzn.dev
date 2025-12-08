@@ -106,6 +106,7 @@ export const pageQuery = graphql`
           position
           period
           url
+          logo
         }
       }
     }

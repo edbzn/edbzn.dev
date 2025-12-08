@@ -34,7 +34,16 @@ export const Resume = ({ experiences }) => {
                 className={`${css.content} ${css.blockLink} ${index === 2 && !showAll ? css.partial : ''}`}
               >
                 <p>{experience.period}</p>
-                <h3>{experience.company}</h3>
+                <div className={css.companyHeader}>
+                  {experience.logo && (
+                    <img
+                      src={experience.logo}
+                      alt={`${experience.company} logo`}
+                      className={css.logo}
+                    />
+                  )}
+                  <h3>{experience.company}</h3>
+                </div>
                 <p className={css.position}>{experience.position}</p>
               </a>
             ) : (
@@ -42,7 +51,16 @@ export const Resume = ({ experiences }) => {
                 className={`${css.content} ${index === 2 && !showAll ? css.partial : ''}`}
               >
                 <p>{experience.period}</p>
-                <h3>{experience.company}</h3>
+                <div className={css.companyHeader}>
+                  {experience.logo && (
+                    <img
+                      src={experience.logo}
+                      alt={`${experience.company} logo`}
+                      className={css.logo}
+                    />
+                  )}
+                  <h3>{experience.company}</h3>
+                </div>
                 <p className={css.position}>{experience.position}</p>
               </div>
             )}
