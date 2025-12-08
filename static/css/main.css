@@ -60,30 +60,30 @@ details {
 
 .box:hover:not(.sponsor-card):not(.bio):after {
   box-shadow:
-    rgba(17, 17, 26, 0.1) 0px 8px 24px,
-    rgba(17, 17, 26, 0.1) 0px 16px 48px;
+    rgba(17, 17, 26, 0.08) 0px 6px 20px,
+    rgba(17, 17, 26, 0.08) 0px 12px 36px;
 }
 
 .sponsor-card {
-  background: linear-gradient(135deg, #e63946 0%, #d62828 100%);
+  background: rgba(0, 0, 0, 0.9);
   transition: transform 0.2s ease;
 }
 
 .sponsor-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
 }
 
 .sponsor-card:after {
   box-shadow:
-    rgba(230, 57, 70, 0.3) 0px 4px 16px,
-    rgba(230, 57, 70, 0.2) 0px 8px 32px;
+    rgba(0, 0, 0, 0.2) 0px 4px 16px,
+    rgba(0, 0, 0, 0.15) 0px 8px 32px;
   transition: box-shadow 0.2s ease;
 }
 
 .sponsor-card:hover:after {
   box-shadow:
-    rgba(230, 57, 70, 0.4) 0px 8px 24px,
-    rgba(230, 57, 70, 0.3) 0px 16px 48px;
+    rgba(0, 0, 0, 0.3) 0px 6px 20px,
+    rgba(0, 0, 0, 0.2) 0px 12px 36px;
 }
 
 .iframe {

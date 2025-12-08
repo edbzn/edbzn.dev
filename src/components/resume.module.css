@@ -32,6 +32,33 @@
   display: none;
 }
 
+.current {
+  background-color: rgba(241, 241, 241, 0.3);
+  border-radius: 8px;
+}
+
+.current::after {
+  background-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+  animation: pulse 2s ease-in-out infinite;
+  left: 0;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(37, 99, 235, 0.1);
+  }
+}
+
+.current::before {
+  background: linear-gradient(to bottom, #2563eb 0%, #000000 100%);
+  left: 6px;
+}
+
 .content {
   background-color: white;
   position: relative;
@@ -45,6 +72,42 @@
   font-family: 'Public Sans', sans-serif;
   font-weight: 100;
   font-size: 1.2rem;
+}
+
+.blockLink {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  box-shadow: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  border-radius: 4px;
+}
+
+.blockLink:hover {
+  transform: translateX(4px);
+}
+
+.current .blockLink:hover {
+  box-shadow: none;
+}
+
+.container:last-child .blockLink:hover {
+  box-shadow: none;
+}
+
+.companyLink {
+  color: inherit;
+  text-decoration: none;
+  box-shadow: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.companyLink:hover {
+  border-bottom-color: #000;
 }
 
 .position {

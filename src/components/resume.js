@@ -14,18 +14,38 @@ export const Resume = ({ experiences }) => {
     document.body.removeChild(link);
   };
 
+  const isCurrent = (period) => {
+    return period && period.toLowerCase().includes('today');
+  };
+
   return (
     <>
       <section>
         {displayedExperiences.map((experience, index) => (
-          <div key={index} className={css.container}>
-            <div
-              className={`${css.content} ${index === 2 && !showAll ? css.partial : ''}`}
-            >
-              <p>{experience.period}</p>
-              <h3>{experience.company}</h3>
-              <p className={css.position}>{experience.position}</p>
-            </div>
+          <div
+            key={index}
+            className={`${css.container} ${isCurrent(experience.period) ? css.current : ''}`}
+          >
+            {experience.url ? (
+              <a
+                href={experience.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${css.content} ${css.blockLink} ${index === 2 && !showAll ? css.partial : ''}`}
+              >
+                <p>{experience.period}</p>
+                <h3>{experience.company}</h3>
+                <p className={css.position}>{experience.position}</p>
+              </a>
+            ) : (
+              <div
+                className={`${css.content} ${index === 2 && !showAll ? css.partial : ''}`}
+              >
+                <p>{experience.period}</p>
+                <h3>{experience.company}</h3>
+                <p className={css.position}>{experience.position}</p>
+              </div>
+            )}
           </div>
         ))}
       </section>

@@ -24,7 +24,7 @@
 
 .tag:hover {
   box-shadow:
-    rgba(0, 0, 0, 0.15) 0px 4px 12px,
-    rgba(0, 0, 0, 0.1) 0px 8px 24px;
-  background-color: rgb(235, 235, 235);
+    rgba(0, 0, 0, 0.12) 0px 3px 10px,
+    rgba(0, 0, 0, 0.08) 0px 6px 18px;
+  background-color: rgb(237, 237, 237);
 }

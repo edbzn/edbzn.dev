@@ -105,6 +105,7 @@ export const pageQuery = graphql`
           company
           position
           period
+          url
         }
       }
     }
