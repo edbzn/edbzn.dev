@@ -32,11 +32,6 @@
   display: none;
 }
 
-.current {
-  background-color: rgba(241, 241, 241, 0.3);
-  border-radius: 8px;
-}
-
 .current::after {
   background-color: #2563eb;
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
