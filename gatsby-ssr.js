@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export const onRenderBody = ({ setHeadComponents }) => {
+export const onRenderBody = ({ setHeadComponents, setPreBodyComponents }) => {
   setHeadComponents(
     [
       'FiraCode-Regular',
@@ -18,4 +18,25 @@ export const onRenderBody = ({ setHeadComponents }) => {
       />
     ))
   );
+
+  // Prevent flash of wrong theme on page load
+  setPreBodyComponents([
+    <script
+      key="theme-init"
+      dangerouslySetInnerHTML={{
+        __html: `
+          (function() {
+            try {
+              const savedTheme = localStorage.getItem('theme');
+              if (savedTheme && savedTheme !== 'system') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+              }
+            } catch (e) {
+              console.error('Error loading theme:', e);
+            }
+          })();
+        `,
+      }}
+    />,
+  ]);
 };

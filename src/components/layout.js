@@ -3,6 +3,7 @@ import React from 'react';
 import rss from '../../static/icons/rss.svg';
 import { rhythm } from '../utils/typography';
 import { Service } from './service';
+import { ThemeToggle } from './theme-toggle';
 
 class Layout extends React.Component {
   render() {
@@ -24,7 +25,7 @@ class Layout extends React.Component {
       >
         <header
           style={{
-            background: '#fff',
+            background: 'var(--bg-primary)',
             paddingBottom: 18,
             paddingTop: 18,
             display: 'flex',
@@ -177,8 +178,8 @@ class Layout extends React.Component {
               <span
                 style={{
                   marginLeft: '12px',
-                  background: 'rgba(0, 0, 0, 0.9)',
-                  color: '#fff',
+                  background: 'var(--text-primary)',
+                  color: 'var(--bg-primary)',
                   padding: '2px 4px',
                 }}
               >
@@ -201,7 +202,7 @@ class Layout extends React.Component {
                 textTransform: 'uppercase',
                 fontSize: '14px',
                 fontWeight: '500',
-                color: 'rgba(0, 0, 0, 0.9)',
+                color: 'var(--text-primary)',
                 textDecoration: 'none',
               }}
               activeStyle={{
@@ -218,7 +219,7 @@ class Layout extends React.Component {
                 textTransform: 'uppercase',
                 fontSize: '14px',
                 fontWeight: '500',
-                color: 'rgba(0, 0, 0, 0.9)',
+                color: 'var(--text-primary)',
                 textDecoration: 'none',
               }}
               activeStyle={{
@@ -227,6 +228,7 @@ class Layout extends React.Component {
             >
               Posts
             </Link>
+            <ThemeToggle />
           </nav>
         </header>
         <main style={{ marginTop: rhythm(1) }}>{children}</main>

@@ -14,7 +14,7 @@ export const PostPreview = ({ node }) => {
             fontFamily: '"Public Sans", sans-serif',
           }}
         >
-          <Link style={{ color: 'initial' }} to={node.fields.slug}>
+          <Link style={{ color: 'var(--text-primary)' }} to={node.fields.slug}>
             {node.frontmatter.title}
           </Link>
         </h3>

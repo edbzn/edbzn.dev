@@ -1,3 +1,153 @@
+/* CSS Variables for theming */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --text-primary: rgba(0, 0, 0, 0.9);
+  --text-secondary: rgba(0, 0, 0, 0.7);
+  --text-muted: rgba(0, 0, 0, 0.5);
+  --border-color: rgba(0, 0, 0, 0.1);
+  --box-shadow-light: rgba(17, 17, 26, 0.05);
+  --box-shadow-dark: rgba(17, 17, 26, 0.08);
+  --accent-color: #007acc;
+  --code-bg: rgba(255, 229, 100, 0.2);
+  --code-text: #1a1a1a;
+  --link-color: #007acc;
+  --blockquote-color: black;
+  --highlight-bg: #f0f4f8;
+  --highlight-border: rgba(0, 122, 204, 0.15);
+  --tag-bg: rgb(241, 241, 241);
+  --tag-text: #333;
+  --tag-bg-hover: rgb(237, 237, 237);
+  --tag-shadow:
+    rgba(0, 0, 0, 0.1) 0px 2px 8px, rgba(0, 0, 0, 0.05) 0px 4px 16px;
+  --tag-shadow-hover:
+    rgba(0, 0, 0, 0.12) 0px 3px 10px, rgba(0, 0, 0, 0.08) 0px 6px 18px;
+  --note-bg: #f9f9f9;
+  --note-border: rgba(0, 0, 0, 0.1);
+  --note-warning-bg: #fff4cc;
+  --note-warning-border: #f5d068;
+  --note-tip-bg: #d1f4dd;
+  --note-tip-border: #6ed593;
+  --table-border: rgba(0, 0, 0, 0.12);
+  --blockquote-border: rgba(0, 0, 0, 0.15);
+  --anchor-color: rgba(0, 0, 0, 0.3);
+
+  /* Smooth transitions for theme changes */
+  color-scheme: light;
+}
+
+/* Dark theme - system preference */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg-primary: #1e1e1e;
+    --bg-secondary: #2d2d2d;
+    --text-primary: rgba(255, 255, 255, 0.9);
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-muted: rgba(255, 255, 255, 0.5);
+    --border-color: rgba(255, 255, 255, 0.085);
+    --box-shadow-light: rgba(0, 0, 0, 0.3);
+    --box-shadow-dark: rgba(0, 0, 0, 0.5);
+    --accent-color: #4db8ff;
+    --code-bg: rgb(0 0 0 / 16%);
+    --code-text: #f0f0f0;
+    --link-color: #4db8ff;
+    --blockquote-color: rgba(255, 255, 255, 0.9);
+    --highlight-bg: rgba(20, 25, 35, 0.95);
+    --highlight-border: rgba(77, 184, 255, 0.25);
+    --tag-bg: rgba(255, 255, 255, 0.1);
+    --tag-text: rgba(255, 255, 255, 0.9);
+    --tag-bg-hover: rgba(255, 255, 255, 0.1);
+    --tag-shadow:
+      rgba(0, 0, 0, 0.2) 0px 2px 8px, rgba(0, 0, 0, 0.1) 0px 4px 16px;
+    --tag-shadow-hover:
+      rgba(0, 0, 0, 0.3) 0px 3px 10px, rgba(0, 0, 0, 0.2) 0px 6px 18px;
+    --note-bg: rgba(255, 255, 255, 0.05);
+    --note-border: rgba(255, 255, 255, 0.15);
+    --note-warning-bg: rgba(245, 208, 104, 0.15);
+    --note-warning-border: rgba(245, 208, 104, 0.4);
+    --note-tip-bg: rgba(110, 213, 147, 0.15);
+    --note-tip-border: rgba(110, 213, 147, 0.4);
+    --table-border: rgba(255, 255, 255, 0.2);
+    --blockquote-border: rgba(255, 255, 255, 0.25);
+    --anchor-color: rgba(255, 255, 255, 0.4);
+
+    color-scheme: dark;
+  }
+}
+
+/* Dark theme - manual override */
+:root[data-theme='dark'] {
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #2d2d2d;
+  --text-primary: rgba(255, 255, 255, 0.9);
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.5);
+  --border-color: rgba(255, 255, 255, 0.085);
+  --box-shadow-light: rgba(0, 0, 0, 0.3);
+  --box-shadow-dark: rgba(0, 0, 0, 0.5);
+  --accent-color: #4db8ff;
+  --code-bg: rgb(0 0 0 / 16%);
+  --code-text: #f0f0f0;
+  --link-color: #4db8ff;
+  --blockquote-color: rgba(255, 255, 255, 0.9);
+  --highlight-bg: rgba(20, 25, 35, 0.95);
+  --highlight-border: rgba(77, 184, 255, 0.25);
+  --tag-bg: rgba(255, 255, 255, 0.1);
+  --tag-text: rgba(255, 255, 255, 0.9);
+  --tag-bg-hover: rgba(255, 255, 255, 0.1);
+  --tag-shadow: rgba(0, 0, 0, 0.2) 0px 2px 8px, rgba(0, 0, 0, 0.1) 0px 4px 16px;
+  --tag-shadow-hover:
+    rgba(0, 0, 0, 0.3) 0px 3px 10px, rgba(0, 0, 0, 0.2) 0px 6px 18px;
+  --note-bg: rgba(255, 255, 255, 0.05);
+  --note-border: rgba(255, 255, 255, 0.15);
+  --note-warning-bg: rgba(245, 208, 104, 0.15);
+  --note-warning-border: rgba(245, 208, 104, 0.4);
+  --note-tip-bg: rgba(110, 213, 147, 0.15);
+  --note-tip-border: rgba(110, 213, 147, 0.4);
+  --table-border: rgba(255, 255, 255, 0.2);
+  --blockquote-border: rgba(255, 255, 255, 0.25);
+  --anchor-color: rgba(255, 255, 255, 0.4);
+
+  color-scheme: dark;
+}
+
+/* Light theme - manual override (already default, but explicit for clarity) */
+:root[data-theme='light'] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --text-primary: rgba(0, 0, 0, 0.9);
+  --text-secondary: rgba(0, 0, 0, 0.7);
+  --text-muted: rgba(0, 0, 0, 0.5);
+  --border-color: rgba(0, 0, 0, 0.1);
+  --box-shadow-light: rgba(17, 17, 26, 0.05);
+  --box-shadow-dark: rgba(17, 17, 26, 0.08);
+  --accent-color: #007acc;
+  --code-bg: rgba(255, 229, 100, 0.2);
+  --code-text: #1a1a1a;
+  --link-color: #007acc;
+  --blockquote-color: black;
+  --highlight-bg: #f0f4f8;
+  --highlight-border: rgba(0, 122, 204, 0.15);
+  --tag-bg: rgb(241, 241, 241);
+  --tag-text: #333;
+  --tag-bg-hover: rgb(237, 237, 237);
+  --tag-shadow:
+    rgba(0, 0, 0, 0.1) 0px 2px 8px, rgba(0, 0, 0, 0.05) 0px 4px 16px;
+  --tag-shadow-hover:
+    rgba(0, 0, 0, 0.12) 0px 3px 10px, rgba(0, 0, 0, 0.08) 0px 6px 18px;
+  --note-bg: #f9f9f9;
+  --note-border: rgba(0, 0, 0, 0.1);
+  --note-warning-bg: #fff4cc;
+  --note-warning-border: #f5d068;
+  --note-tip-bg: #d1f4dd;
+  --note-tip-border: #6ed593;
+  --table-border: rgba(0, 0, 0, 0.12);
+  --blockquote-border: rgba(0, 0, 0, 0.15);
+  --anchor-color: rgba(0, 0, 0, 0.3);
+
+  color-scheme: light;
+}
+
 /* Rotate on hover */
 .logo-inner {
   transition: transform 1.3s cubic-bezier(0.41, 0.57, 0, 1.41);
@@ -8,13 +158,52 @@
   transform: rotate(345deg);
 }
 
+/* Logo colors - invert in dark mode */
+.logo-inner path[fill='rgb(0,0,0)'],
+.logo-inner path[fill='rgb(23,23,23)'] {
+  transition: fill 0.3s ease;
+}
+
+.logo-inner path[fill='rgb(255,255,255)'] {
+  transition: fill 0.3s ease;
+}
+
+/* Dark theme logo colors */
+:root[data-theme='dark'] .logo-inner path[fill='rgb(0,0,0)'],
+:root[data-theme='dark'] .logo-inner path[fill='rgb(23,23,23)'] {
+  fill: rgb(255, 255, 255) !important;
+}
+
+:root[data-theme='dark'] .logo-inner path[fill='rgb(255,255,255)'] {
+  fill: rgb(30, 30, 30) !important;
+}
+
+:root[data-theme='dark'] .logo-inner polygon[fill='rgb(23,23,23)'] {
+  fill: rgb(255, 255, 255) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .logo-inner path[fill='rgb(0,0,0)'],
+  :root:not([data-theme='light']) .logo-inner path[fill='rgb(23,23,23)'] {
+    fill: rgb(255, 255, 255) !important;
+  }
+
+  :root:not([data-theme='light']) .logo-inner path[fill='rgb(255,255,255)'] {
+    fill: rgb(30, 30, 30) !important;
+  }
+
+  :root:not([data-theme='light']) .logo-inner polygon[fill='rgb(23,23,23)'] {
+    fill: rgb(255, 255, 255) !important;
+  }
+}
+
 li {
   margin-bottom: 0;
 }
 
 summary {
   cursor: pointer;
-  background-color: #007acc;
+  background-color: var(--accent-color);
   color: white;
   padding: 10px;
   border-radius: 4px;
@@ -41,7 +230,8 @@ details {
   padding: 1.5rem;
   position: relative;
   border-radius: 4px;
-  background: #fff;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
 }
 
 .box:after {
@@ -52,38 +242,17 @@ details {
   bottom: 0;
   left: 0;
   box-shadow:
-    rgba(17, 17, 26, 0.05) 0px 4px 16px,
-    rgba(17, 17, 26, 0.05) 0px 8px 32px;
+    var(--box-shadow-light) 0px 4px 16px,
+    var(--box-shadow-light) 0px 8px 32px;
   z-index: -1;
   transition: box-shadow 0.2s ease;
+  border-radius: 4px;
 }
 
-.box:hover:not(.sponsor-card):not(.bio):after {
+.box:hover:not(.bio):not(.service-card):after {
   box-shadow:
-    rgba(17, 17, 26, 0.08) 0px 6px 20px,
-    rgba(17, 17, 26, 0.08) 0px 12px 36px;
-}
-
-.sponsor-card {
-  background: rgba(0, 0, 0, 0.9);
-  transition: transform 0.2s ease;
-}
-
-.sponsor-card:hover {
-  transform: translateY(-2px);
-}
-
-.sponsor-card:after {
-  box-shadow:
-    rgba(0, 0, 0, 0.2) 0px 4px 16px,
-    rgba(0, 0, 0, 0.15) 0px 8px 32px;
-  transition: box-shadow 0.2s ease;
-}
-
-.sponsor-card:hover:after {
-  box-shadow:
-    rgba(0, 0, 0, 0.3) 0px 6px 20px,
-    rgba(0, 0, 0, 0.2) 0px 12px 36px;
+    var(--box-shadow-dark) 0px 6px 20px,
+    var(--box-shadow-dark) 0px 12px 36px;
 }
 
 .iframe {
@@ -96,6 +265,10 @@ details {
 
 a.anchor {
   box-shadow: none;
+}
+
+a.anchor svg {
+  fill: var(--anchor-color);
 }
 
 .anchor.before {
@@ -130,6 +303,20 @@ p > img {
   max-width: 26px;
   max-height: 26px;
   margin: 0;
+  transition: filter 0.3s ease;
+}
+
+/* Invert only GitHub and Twitter icons in dark mode (not LinkedIn and Bluesky) */
+:root[data-theme='dark'] .social-icon-github,
+:root[data-theme='dark'] .social-icon-twitter {
+  filter: invert(1) brightness(1.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .social-icon-github,
+  :root:not([data-theme='light']) .social-icon-twitter {
+    filter: invert(1) brightness(1.1);
+  }
 }
 
 .projects ul {

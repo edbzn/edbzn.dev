@@ -4,7 +4,7 @@ import { rhythm } from '../utils/typography';
 
 export const Service = () => {
   return (
-    <section style={styles.section} className="box">
+    <section style={styles.section} className="box service-card">
       <img style={styles.img} src={nxBadge2025} alt="Nx Badge 2025" />
       <h2 style={styles.heading}>Interested in collaborating?</h2>
       <p style={styles.services}>
@@ -29,23 +29,24 @@ const styles = {
   },
   section: {
     margin: rhythm(2.4) + ' auto',
-    backgroundColor: 'rgb(10 25 47)',
-    color: '#ccd6f6',
+    backgroundColor: 'var(--highlight-bg)',
+    color: 'var(--text-primary)',
     textAlign: 'center',
     fontFamily: '"Public Sans", sans-serif',
     padding: '20px',
+    borderColor: 'var(--highlight-border)',
   },
   heading: {
     fontSize: '1.5rem',
     fontFamily: '"Public Sans", sans-serif',
     fontWeight: 'bold',
-    color: 'rgb(232 236 248)',
+    color: 'var(--text-primary)',
     margin: '10px 0',
   },
   contactLink: {
     display: 'inline-block',
-    color: '#64ffda',
-    border: '1px solid #64ffda',
+    color: 'var(--accent-color)',
+    border: '1px solid var(--accent-color)',
     borderRadius: '4px',
     padding: '10px 20px',
     textDecoration: 'none',
@@ -58,10 +59,11 @@ const styles = {
     maxWidth: '472px',
     margin: '0 auto',
     marginBottom: '22px',
+    color: 'var(--text-secondary)',
   },
   img: {
     width: '100px',
     margin: '0 auto',
-    filter: 'drop-shadow(rgb(255, 255, 255, 0.1) 0px 0px 8px)',
+    filter: 'brightness(0.95)',
   },
 };

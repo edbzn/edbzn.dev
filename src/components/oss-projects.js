@@ -1,7 +1,7 @@
 import React from 'react';
 import { rhythm } from '../utils/typography';
 
-export const Projects = ({ ossProjects, sponsorUrl }) => (
+export const Projects = ({ ossProjects }) => (
   <ul
     style={{
       margin: 0,
@@ -15,7 +15,7 @@ export const Projects = ({ ossProjects, sponsorUrl }) => (
         <a
           href={project.url}
           style={{
-            color: 'initial',
+            color: 'var(--text-primary)',
             fontWeight: 400,
             textDecoration: 'none',
             display: 'block',
@@ -40,43 +40,5 @@ export const Projects = ({ ossProjects, sponsorUrl }) => (
         </a>
       </li>
     ))}
-    <li className="box sponsor-card" key="sponsor">
-      <a
-        href={sponsorUrl}
-        style={{
-          color: '#fff',
-          textDecoration: 'none',
-          display: 'block',
-          boxShadow: 'none',
-          fontWeight: 400,
-        }}
-      >
-        <div
-          style={{
-            fontSize: '2rem',
-            marginBottom: rhythm(0.3),
-            height: '34px',
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          ⭐
-        </div>
-        <div style={{ marginBottom: rhythm(0.2), fontWeight: 600 }}>
-          Sponsor me on GitHub
-        </div>
-        <p
-          style={{
-            marginTop: rhythm(0.2),
-            color: '#fff',
-            opacity: 0.95,
-            marginBottom: 0,
-          }}
-        >
-          Support my open source work and help me continue building useful tools
-          for the community.
-        </p>
-      </a>
-    </li>
   </ul>
 );

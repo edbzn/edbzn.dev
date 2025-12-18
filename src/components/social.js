@@ -13,28 +13,36 @@ export const Social = ({ social }) => {
         href={social.bluesky}
         title="@edbzn.bsky.social on Bluesky"
       >
-        <img src={bluesky} alt="Bluesky profile" />
+        <img
+          src={bluesky}
+          alt="Bluesky profile"
+          className="social-icon-bluesky"
+        />
       </a>
       <a
         style={{ boxShadow: 'none' }}
         href={social.twitter}
         title="@edbzn on X (Twitter)"
       >
-        <img src={twitter} alt="X profile" />
+        <img src={twitter} alt="X profile" className="social-icon-twitter" />
       </a>
       <a
         style={{ boxShadow: 'none' }}
         href={social.github}
         title="@edbzn on GitHub"
       >
-        <img src={github} alt="Github profile" />
+        <img src={github} alt="Github profile" className="social-icon-github" />
       </a>
       <a
         style={{ boxShadow: 'none' }}
         href={social.linkedin}
         title="@edouardbozon on LinkedIn"
       >
-        <img src={linkedin} alt="Linkedin profile" />
+        <img
+          src={linkedin}
+          alt="Linkedin profile"
+          className="social-icon-linkedin"
+        />
       </a>
     </div>
   );

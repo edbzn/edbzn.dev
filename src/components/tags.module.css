@@ -9,22 +9,18 @@
   display: inline-flex;
   align-items: center;
   padding: 0.15rem 0.5rem;
-  background-color: rgb(241, 241, 241);
-  color: #333 !important;
+  background-color: var(--tag-bg);
+  color: var(--tag-text) !important;
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 400;
   font-family: 'Public Sans', sans-serif;
   text-decoration: none;
-  box-shadow:
-    rgba(0, 0, 0, 0.1) 0px 2px 8px,
-    rgba(0, 0, 0, 0.05) 0px 4px 16px;
+  box-shadow: var(--tag-shadow);
   transition: all 0.2s ease;
 }
 
 .tag:hover {
-  box-shadow:
-    rgba(0, 0, 0, 0.12) 0px 3px 10px,
-    rgba(0, 0, 0, 0.08) 0px 6px 18px;
-  background-color: rgb(237, 237, 237);
+  box-shadow: var(--tag-shadow-hover);
+  background-color: var(--tag-bg-hover);
 }

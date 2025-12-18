@@ -31,6 +31,7 @@ export function Seo({ title, description, article, canonical }) {
       }
     >
       <html lang="en" />
+      <meta name="color-scheme" content="light dark" />
       <meta name="description" content={seo.description} />
       {seo.url && <meta property="og:url" content={seo.url} />}
       {(article ? true : null) && <meta property="og:type" content="article" />}

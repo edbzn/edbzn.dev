@@ -1,23 +1,24 @@
 .container {
   margin-bottom: 20px;
-  border-left: 0.31237rem solid rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9;
+  border-left: 0.31237rem solid var(--note-border);
+  background-color: var(--note-bg);
   margin: 2.25em -1rem;
   padding: 1rem;
   border-radius: 0.25rem;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0 1px var(--note-border);
+  color: var(--text-primary);
 }
 
 .container.warning {
-  background-color: #fff3cd;
-  border-left-color: #ecdfb7;
-  box-shadow: 0 0 0 1px #ecdfb7;
+  background-color: var(--note-warning-bg);
+  border-left-color: var(--note-warning-border);
+  box-shadow: 0 0 0 1px var(--note-warning-border);
 }
 
 .container.tip {
-  background-color: #d4edda;
-  border-left-color: #c3e6cb;
-  box-shadow: 0 0 0 1px #c3e6cb;
+  background-color: var(--note-tip-bg);
+  border-left-color: var(--note-tip-border);
+  box-shadow: 0 0 0 1px var(--note-tip-border);
 }
 
 .container p {
@@ -30,6 +31,7 @@
   margin-bottom: 10px;
   font-family: 'Public Sans', sans-serif;
   margin-bottom: 0.6rem;
+  color: var(--text-primary);
 }
 
 @media screen and (max-width: 700px) {

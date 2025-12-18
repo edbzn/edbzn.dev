@@ -13,7 +13,7 @@
   width: 12px;
   height: 12px;
   left: 0;
-  background-color: #000000;
+  background-color: var(--text-primary);
   top: calc(50% - 6px);
   border-radius: 50%;
 }
@@ -25,7 +25,7 @@
   height: 100%;
   top: 50%;
   left: 6px;
-  background-color: #000000;
+  background-color: var(--text-primary);
 }
 
 .container:last-child::before {
@@ -50,12 +50,12 @@
 }
 
 .current::before {
-  background: linear-gradient(to bottom, #2563eb 0%, #000000 100%);
+  background: linear-gradient(to bottom, #2563eb 0%, var(--text-primary) 100%);
   left: 6px;
 }
 
 .content {
-  background-color: white;
+  background-color: var(--bg-primary);
   position: relative;
 }
 
@@ -119,12 +119,13 @@
 }
 
 .companyLink:hover {
-  border-bottom-color: #000;
+  border-bottom-color: var(--text-primary);
 }
 
 .position {
   font-size: 0.9rem;
   font-weight: 200;
+  color: var(--text-secondary);
 }
 
 .partial {
@@ -140,27 +141,37 @@
   right: 0;
   height: 70px;
   width: 100%;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 1)
-  );
+  background: linear-gradient(to bottom, transparent, var(--bg-primary));
   z-index: 1;
 }
 
 button {
   margin-top: 24px;
-  background-color: #f1f1f1;
-  border: none;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   padding: 6px 12px;
   font-size: 1rem;
   font-family: '"Public Sans"', sans-serif;
   cursor: pointer;
   border-radius: 4px;
+  color: var(--text-primary);
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+button:hover {
+  background-color: var(--border-color);
+  transform: translateY(-1px);
 }
 
 button:last-child {
   margin-left: 12px;
-  background-color: rgba(0, 0, 0, 0.9);
-  color: #fff;
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
+  border-color: var(--text-primary);
+}
+
+button:last-child:hover {
+  opacity: 0.9;
 }
