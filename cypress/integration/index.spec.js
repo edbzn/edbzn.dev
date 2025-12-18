@@ -18,6 +18,24 @@ function terminalLog(violations) {
   );
 
   cy.task('table', violationData);
+
+  // Log detailed information about each violation
+  violations.forEach((violation) => {
+    cy.task('log', `\n❌ ${violation.id}: ${violation.description}`);
+    violation.nodes.forEach((node) => {
+      cy.task('log', `   Element: ${node.html}`);
+      cy.task('log', `   Target: ${node.target.join(' ')}`);
+      if (node.any.length > 0) {
+        cy.task('log', `   Issue: ${node.any[0].message}`);
+        if (node.any[0].data) {
+          cy.task(
+            'log',
+            `   Data: ${JSON.stringify(node.any[0].data, null, 2)}`
+          );
+        }
+      }
+    });
+  });
 }
 
 describe('Accessibility tests', () => {
