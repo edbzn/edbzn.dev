@@ -16,7 +16,7 @@
   --highlight-bg: #f0f4f8;
   --highlight-border: rgba(0, 122, 204, 0.15);
   --tag-bg: rgb(241, 241, 241);
-  --tag-text: #333;
+  --tag-text: #1a1a1a;
   --tag-bg-hover: rgb(237, 237, 237);
   --tag-shadow:
     rgba(0, 0, 0, 0.1) 0px 2px 8px, rgba(0, 0, 0, 0.05) 0px 4px 16px;
@@ -129,7 +129,7 @@
   --highlight-bg: #f0f4f8;
   --highlight-border: rgba(0, 122, 204, 0.15);
   --tag-bg: rgb(241, 241, 241);
-  --tag-text: #333;
+  --tag-text: #1a1a1a;
   --tag-bg-hover: rgb(237, 237, 237);
   --tag-shadow:
     rgba(0, 0, 0, 0.1) 0px 2px 8px, rgba(0, 0, 0, 0.05) 0px 4px 16px;

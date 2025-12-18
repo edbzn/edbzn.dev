@@ -21,16 +21,12 @@ function terminalLog(violations) {
 }
 
 describe('Accessibility tests', () => {
-  beforeEach(() => {
-    // Explicitly set to light mode to make tests deterministic
+  it('Has no detectable accessibility violations on home (light mode)', () => {
+    cy.visit('/');
     cy.window().then((win) => {
       win.document.documentElement.removeAttribute('data-theme');
     });
-  });
-
-  it('Has no detectable accessibility violations on home (light mode)', () => {
-    cy.visit('/')
-      .get('main')
+    cy.get('main', { timeout: 10000 })
       .should('be.visible')
       .injectAxe()
       .checkA11y(
@@ -43,8 +39,11 @@ describe('Accessibility tests', () => {
   });
 
   it('Has no detectable accessibility violations on blog (light mode)', () => {
-    cy.visit('/blog')
-      .get('main')
+    cy.visit('/blog');
+    cy.window().then((win) => {
+      win.document.documentElement.removeAttribute('data-theme');
+    });
+    cy.get('main', { timeout: 10000 })
       .should('be.visible')
       .injectAxe()
       .checkA11y(
@@ -97,19 +96,14 @@ describe('Accessibility tests', () => {
   });
 
   it('should navigate to blog page', () => {
-    cy.visit('/')
-      .get('a[href="/blog/"]')
-      .click()
-      .url()
-      .should('include', '/blog');
+    cy.visit('/');
+    cy.get('a[href="/blog/"]', { timeout: 10000 }).click();
+    cy.url().should('include', '/blog');
   });
 
   it('should navigate to blog post', () => {
-    cy.visit('/blog/')
-      .get('main article a')
-      .first()
-      .click()
-      .get('h1')
-      .should('exist');
+    cy.visit('/blog/');
+    cy.get('main article a', { timeout: 10000 }).first().click();
+    cy.get('h1', { timeout: 10000 }).should('exist');
   });
 });
