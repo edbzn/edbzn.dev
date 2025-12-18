@@ -31,6 +31,13 @@ jobs:
         with:
           node-version: 24
           cache: 'pnpm'
+      - name: Cache Cypress binary
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            cypress-${{ runner.os }}-
       - run: pnpm install --frozen-lockfile
       - name: Install Playwright Browsers
         run: pnpm playwright install chromium --with-deps
