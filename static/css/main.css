@@ -287,6 +287,85 @@ p > img {
   margin: 2.25em auto !important;
 }
 
+/* Mermaid diagram dark mode support */
+/* Override inline styles to make diagrams readable in dark mode */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) svg[id^='mermaid-'] {
+    /* Invert colors for shapes and backgrounds */
+    filter: invert(1) hue-rotate(180deg);
+  }
+
+  /* Counter-invert the text content inside foreignObject to make it white */
+  :root:not([data-theme='light']) svg[id^='mermaid-'] .label foreignObject {
+    filter: invert(1) hue-rotate(180deg);
+  }
+
+  /* Also handle direct text elements if any */
+  :root:not([data-theme='light']) svg[id^='mermaid-'] text {
+    filter: invert(1) hue-rotate(180deg);
+  }
+
+  /* Edge labels: remove background and make text use code text color */
+  :root:not([data-theme='light']) svg[id^='mermaid-'] .edgeLabel rect {
+    fill: transparent !important;
+  }
+
+  :root:not([data-theme='light']) svg[id^='mermaid-'] .edgeLabel .labelBkg {
+    background-color: transparent !important;
+  }
+
+  :root:not([data-theme='light'])
+    svg[id^='mermaid-']
+    .edgeLabel
+    foreignObject
+    div {
+    color: var(--code-text) !important;
+    background-color: transparent !important;
+  }
+
+  :root:not([data-theme='light']) svg[id^='mermaid-'] .edgeLabel p {
+    color: var(--code-text) !important;
+    margin: 0 !important;
+    background-color: transparent !important;
+  }
+}
+
+/* Manual dark mode toggle */
+:root[data-theme='dark'] svg[id^='mermaid-'] {
+  /* Invert colors for shapes and backgrounds */
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Counter-invert the text content inside foreignObject to make it white */
+:root[data-theme='dark'] svg[id^='mermaid-'] .label foreignObject {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Also handle direct text elements if any */
+:root[data-theme='dark'] svg[id^='mermaid-'] text {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Edge labels: remove background and make text use code text color */
+:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel rect {
+  fill: transparent !important;
+}
+
+:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel .labelBkg {
+  background-color: transparent !important;
+}
+
+:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel foreignObject div {
+  color: var(--code-text) !important;
+  background-color: transparent !important;
+}
+
+:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel p {
+  color: var(--code-text) !important;
+  margin: 0 !important;
+  background-color: transparent !important;
+}
+
 #gatsby-focus-wrapper > div {
   padding: 0 1rem;
 }

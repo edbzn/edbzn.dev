@@ -141,8 +141,27 @@ export default {
             resolve: `gatsby-remark-mermaid`,
             options: /** @type {import('gatsby-remark-mermaid').Options} */ ({
               mermaidConfig: {
-                theme: 'neutral',
+                theme: 'base',
                 look: 'handDrawn',
+                themeVariables: {
+                  // Neutral colors optimized for CSS inversion in dark mode
+                  primaryColor: '#e8f4f8',
+                  primaryTextColor: '#1a1a1a',
+                  primaryBorderColor: '#666666',
+                  lineColor: '#666666',
+                  secondaryColor: '#f5f5f5',
+                  tertiaryColor: '#eeeeee',
+                  background: '#ffffff',
+                  mainBkg: '#ffffff',
+                  secondBkg: '#f8f8f8',
+                  mainContrastColor: '#ffffff',
+                  darkTextColor: '#1a1a1a',
+                  textColor: '#1a1a1a',
+                  labelTextColor: '#1a1a1a',
+                  lineColor: '#666666',
+                  border1: '#666666',
+                  border2: '#666666',
+                },
               },
             }),
           },
