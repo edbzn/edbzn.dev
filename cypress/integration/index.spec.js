@@ -21,10 +21,17 @@ function terminalLog(violations) {
 }
 
 describe('Accessibility tests', () => {
-  it('Has no detectable accessibility violations on home', () => {
+  beforeEach(() => {
+    // Explicitly set to light mode to make tests deterministic
+    cy.window().then((win) => {
+      win.document.documentElement.removeAttribute('data-theme');
+    });
+  });
+
+  it('Has no detectable accessibility violations on home (light mode)', () => {
     cy.visit('/')
-      .wait(1000)
       .get('main')
+      .should('be.visible')
       .injectAxe()
       .checkA11y(
         null,
@@ -35,10 +42,50 @@ describe('Accessibility tests', () => {
       );
   });
 
-  it('Has no detectable accessibility violations on blog', () => {
+  it('Has no detectable accessibility violations on blog (light mode)', () => {
     cy.visit('/blog')
-      .wait(1000)
       .get('main')
+      .should('be.visible')
+      .injectAxe()
+      .checkA11y(
+        null,
+        {
+          includedImpacts: ['critical', 'serious'],
+        },
+        terminalLog
+      );
+  });
+
+  it('Has no detectable accessibility violations on home (dark mode)', () => {
+    cy.visit('/')
+      .get('main')
+      .should('be.visible')
+      .then(() => {
+        cy.window().then((win) => {
+          win.document.documentElement.setAttribute('data-theme', 'dark');
+        });
+      })
+      .wait(500) // Wait for theme transition
+      .injectAxe()
+      .checkA11y(
+        null,
+        {
+          includedImpacts: ['critical', 'serious'],
+        },
+        terminalLog
+      );
+  });
+
+  it('Has no detectable accessibility violations on blog (dark mode)', () => {
+    cy.visit('/blog')
+      .get('main')
+      .should('be.visible')
+      .then(() => {
+        cy.window().then((win) => {
+          win.document.documentElement.setAttribute('data-theme', 'dark');
+        });
+      })
+      .wait(500) // Wait for theme transition
       .injectAxe()
       .checkA11y(
         null,
