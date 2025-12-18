@@ -8,27 +8,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - name: Enable Corepack
+        run: corepack enable
       - name: Use Node.js v20
         uses: actions/setup-node@v6
         with:
           node-version: 24
-      - run: yarn --frozen-lock
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
       - name: Install Playwright Browsers
-        run: yarn playwright install chromium --with-deps
-      - run: yarn build
+        run: pnpm playwright install chromium --with-deps
+      - run: pnpm build
 
   e2e:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - name: Enable Corepack
+        run: corepack enable
       - name: Use Node.js v20
         uses: actions/setup-node@v6
         with:
           node-version: 24
-      - run: yarn --frozen-lock
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
       - name: Install Playwright Browsers
-        run: yarn playwright install chromium --with-deps
-      - run: yarn test:e2e:ci
+        run: pnpm playwright install chromium --with-deps
+      - run: pnpm test:e2e:ci
 
   deploy:
     permissions:
@@ -38,14 +44,17 @@ jobs:
     needs: [build, e2e]
     steps:
       - uses: actions/checkout@v6
+      - name: Enable Corepack
+        run: corepack enable
       - name: Use Node.js v20
         uses: actions/setup-node@v6
         with:
           node-version: 24
-      - run: yarn --frozen-lock
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
       - name: Install Playwright Browsers
-        run: yarn playwright install chromium --with-deps
-      - run: yarn build
+        run: pnpm playwright install chromium --with-deps
+      - run: pnpm build
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:

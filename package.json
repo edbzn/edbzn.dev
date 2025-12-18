@@ -9,7 +9,7 @@
     "build": "gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,css}\"",
-    "start": "yarn develop",
+    "start": "pnpm develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "cy:open": "cypress open",
@@ -23,13 +23,10 @@
       "prettier --write"
     ]
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
+  "packageManager": "pnpm@9.15.0",
   "engines": {
     "node": ">=20.x"
   },
-  "workspaces": [
-    "plugins/*"
-  ],
   "dependencies": {
     "@fontsource/merriweather": "^5.1.0",
     "@fontsource/public-sans": "^5.1.1",
@@ -59,6 +56,7 @@
     "gatsby-source-filesystem": "^5.0.0",
     "gatsby-transformer-sharp": "^5.0.0",
     "mdx-embed": "^1.1.2",
+    "prop-types": "^15.8.1",
     "react": "^18.0.0",
     "react-dom": "18.3.1",
     "react-helmet": "6.1.0",
