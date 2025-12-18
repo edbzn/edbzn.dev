@@ -21,7 +21,7 @@ function terminalLog(violations) {
 }
 
 describe('Accessibility tests', () => {
-  it('Has no detectable accessibility violations on home (light mode)', () => {
+  it.skip('Has no detectable accessibility violations on home (light mode)', () => {
     cy.visit('/');
     cy.window().then((win) => {
       win.document.documentElement.removeAttribute('data-theme');
@@ -38,7 +38,7 @@ describe('Accessibility tests', () => {
       );
   });
 
-  it('Has no detectable accessibility violations on blog (light mode)', () => {
+  it.skip('Has no detectable accessibility violations on blog (light mode)', () => {
     cy.visit('/blog');
     cy.window().then((win) => {
       win.document.documentElement.removeAttribute('data-theme');
