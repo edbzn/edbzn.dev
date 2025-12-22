@@ -352,7 +352,7 @@ p > img {
 }
 
 :root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel .labelBkg {
-  background-color: transparent !important;
+  background-color: #000000d4 !important;
 }
 
 :root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel foreignObject div {
