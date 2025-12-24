@@ -53,7 +53,7 @@
     --box-shadow-light: rgba(0, 0, 0, 0.3);
     --box-shadow-dark: rgba(0, 0, 0, 0.5);
     --accent-color: #4db8ff;
-    --code-bg: rgba(255, 212, 0, 0.08);
+    --code-bg: rgb(255 253 100 / 7%);
     --code-text: #f0f0f0;
     --link-color: #4db8ff;
     --blockquote-color: rgba(255, 255, 255, 0.9);
@@ -90,7 +90,7 @@
   --box-shadow-light: rgba(0, 0, 0, 0.3);
   --box-shadow-dark: rgba(0, 0, 0, 0.5);
   --accent-color: #4db8ff;
-  --code-bg: rgba(255, 212, 0, 0.08);
+  --code-bg: rgb(255 253 100 / 7%);
   --code-text: #f0f0f0;
   --link-color: #4db8ff;
   --blockquote-color: rgba(255, 255, 255, 0.9);
@@ -292,11 +292,11 @@ p > img {
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) svg[id^='mermaid-'] {
-    filter: invert(1) hue-rotate(180deg);
+    filter: invert(1) hue-rotate(180deg) saturate(50%);
   }
 
   :root:not([data-theme='light']) svg[id^='mermaid-'] .label foreignObject {
-    filter: invert(1) hue-rotate(180deg);
+    filter: invert(1) hue-rotate(180deg) saturate(50%);
   }
 
   :root:not([data-theme='light']) svg[id^='mermaid-'] text {
@@ -323,7 +323,7 @@ p > img {
   :root:not([data-theme='light']) svg[id^='mermaid-'] .edgeLabel p {
     color: var(--code-text) !important;
     margin: 0 !important;
-    background-color: transparent !important;
+    background-color: var(--bg-primary) !important;
   }
 }
 
