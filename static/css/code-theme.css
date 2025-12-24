@@ -1,21 +1,3 @@
-/* CSS Variables for code theming - sync with main.css */
-:root {
-  --code-bg: rgba(255, 229, 100, 0.2);
-  --code-text: #1a1a1a;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --code-bg: rgb(0 0 0 / 16%);
-    --code-text: #f0f0f0;
-  }
-}
-
-:root[data-theme='dark'] {
-  --code-bg: rgb(0 0 0 / 16%);
-  --code-text: #f0f0f0;
-}
-
 @font-face {
   font-family: 'Fira Code';
   src: url('/fonts/FiraCode/woff2/FiraCode-Light.woff2') format('woff2');

@@ -1,4 +1,5 @@
 /* CSS Variables for theming */
+/* Light theme (default) */
 :root {
   --bg-primary: #ffffff;
   --bg-secondary: #f8f9fa;
@@ -32,11 +33,15 @@
   --blockquote-border: rgba(0, 0, 0, 0.15);
   --anchor-color: rgba(0, 0, 0, 0.3);
 
-  /* Smooth transitions for theme changes */
   color-scheme: light;
 }
 
-/* Dark theme - system preference */
+/* Dark theme - for system preference and manual override
+   NOTE: Due to CSS limitations, we need separate declarations for:
+   1. @media (prefers-color-scheme: dark) - for system dark mode
+   2. [data-theme='dark'] - for manual toggle (overrides media query)
+   They must have identical values. Keep them in sync when updating. */
+
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     --bg-primary: #1e1e1e;
@@ -48,12 +53,12 @@
     --box-shadow-light: rgba(0, 0, 0, 0.3);
     --box-shadow-dark: rgba(0, 0, 0, 0.5);
     --accent-color: #4db8ff;
-    --code-bg: rgb(0 0 0 / 16%);
+    --code-bg: rgba(255, 212, 0, 0.08);
     --code-text: #f0f0f0;
     --link-color: #4db8ff;
     --blockquote-color: rgba(255, 255, 255, 0.9);
     --highlight-bg: rgba(20, 25, 35, 0.95);
-    --highlight-border: rgba(77, 184, 255, 0.25);
+    --highlight-border: rgba(60, 152, 213, 0.25);
     --tag-bg: rgba(255, 255, 255, 0.1);
     --tag-text: rgba(255, 255, 255, 0.9);
     --tag-bg-hover: rgba(255, 255, 255, 0.1);
@@ -75,7 +80,6 @@
   }
 }
 
-/* Dark theme - manual override */
 :root[data-theme='dark'] {
   --bg-primary: #1e1e1e;
   --bg-secondary: #2d2d2d;
@@ -86,7 +90,7 @@
   --box-shadow-light: rgba(0, 0, 0, 0.3);
   --box-shadow-dark: rgba(0, 0, 0, 0.5);
   --accent-color: #4db8ff;
-  --code-bg: rgb(0 0 0 / 16%);
+  --code-bg: rgba(255, 212, 0, 0.08);
   --code-text: #f0f0f0;
   --link-color: #4db8ff;
   --blockquote-color: rgba(255, 255, 255, 0.9);
@@ -111,43 +115,6 @@
   color-scheme: dark;
 }
 
-/* Light theme - manual override (already default, but explicit for clarity) */
-:root[data-theme='light'] {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: rgba(0, 0, 0, 0.9);
-  --text-secondary: rgba(0, 0, 0, 0.7);
-  --text-muted: rgba(0, 0, 0, 0.5);
-  --border-color: rgba(0, 0, 0, 0.1);
-  --box-shadow-light: rgba(17, 17, 26, 0.05);
-  --box-shadow-dark: rgba(17, 17, 26, 0.08);
-  --accent-color: #007acc;
-  --code-bg: rgba(255, 229, 100, 0.2);
-  --code-text: #1a1a1a;
-  --link-color: #007acc;
-  --blockquote-color: black;
-  --highlight-bg: #f0f4f8;
-  --highlight-border: rgba(0, 122, 204, 0.15);
-  --tag-bg: rgb(241, 241, 241);
-  --tag-text: #1a1a1a;
-  --tag-bg-hover: rgb(237, 237, 237);
-  --tag-shadow:
-    rgba(0, 0, 0, 0.1) 0px 2px 8px, rgba(0, 0, 0, 0.05) 0px 4px 16px;
-  --tag-shadow-hover:
-    rgba(0, 0, 0, 0.12) 0px 3px 10px, rgba(0, 0, 0, 0.08) 0px 6px 18px;
-  --note-bg: #f9f9f9;
-  --note-border: rgba(0, 0, 0, 0.1);
-  --note-warning-bg: #fff4cc;
-  --note-warning-border: #f5d068;
-  --note-tip-bg: #d1f4dd;
-  --note-tip-border: #6ed593;
-  --table-border: rgba(0, 0, 0, 0.12);
-  --blockquote-border: rgba(0, 0, 0, 0.15);
-  --anchor-color: rgba(0, 0, 0, 0.3);
-
-  color-scheme: light;
-}
-
 /* Rotate on hover */
 .logo-inner {
   transition: transform 1.3s cubic-bezier(0.41, 0.57, 0, 1.41);
@@ -168,7 +135,8 @@
   transition: fill 0.3s ease;
 }
 
-/* Dark theme logo colors */
+/* Dark theme logo colors - for both system preference and manual override
+   NOTE: Keep manual override and media query in sync */
 :root[data-theme='dark'] .logo-inner path[fill='rgb(0,0,0)'],
 :root[data-theme='dark'] .logo-inner path[fill='rgb(23,23,23)'] {
   fill: rgb(255, 255, 255) !important;
@@ -289,23 +257,52 @@ p > img {
 
 /* Mermaid diagram dark mode support */
 /* Override inline styles to make diagrams readable in dark mode */
+/* Mermaid diagram dark mode support
+   NOTE: Keep manual override and media query in sync */
+:root[data-theme='dark'] svg[id^='mermaid-'] {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+:root[data-theme='dark'] svg[id^='mermaid-'] .label foreignObject {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+:root[data-theme='dark'] svg[id^='mermaid-'] text {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel rect {
+  fill: transparent !important;
+}
+
+:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel .labelBkg {
+  background-color: #000000d4 !important;
+}
+
+:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel foreignObject div {
+  color: var(--code-text) !important;
+  background-color: transparent !important;
+}
+
+:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel p {
+  color: var(--code-text) !important;
+  margin: 0 !important;
+  background-color: transparent !important;
+}
+
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) svg[id^='mermaid-'] {
-    /* Invert colors for shapes and backgrounds */
     filter: invert(1) hue-rotate(180deg);
   }
 
-  /* Counter-invert the text content inside foreignObject to make it white */
   :root:not([data-theme='light']) svg[id^='mermaid-'] .label foreignObject {
     filter: invert(1) hue-rotate(180deg);
   }
 
-  /* Also handle direct text elements if any */
   :root:not([data-theme='light']) svg[id^='mermaid-'] text {
     filter: invert(1) hue-rotate(180deg);
   }
 
-  /* Edge labels: remove background and make text use code text color */
   :root:not([data-theme='light']) svg[id^='mermaid-'] .edgeLabel rect {
     fill: transparent !important;
   }
@@ -330,42 +327,6 @@ p > img {
   }
 }
 
-/* Manual dark mode toggle */
-:root[data-theme='dark'] svg[id^='mermaid-'] {
-  /* Invert colors for shapes and backgrounds */
-  filter: invert(1) hue-rotate(180deg);
-}
-
-/* Counter-invert the text content inside foreignObject to make it white */
-:root[data-theme='dark'] svg[id^='mermaid-'] .label foreignObject {
-  filter: invert(1) hue-rotate(180deg);
-}
-
-/* Also handle direct text elements if any */
-:root[data-theme='dark'] svg[id^='mermaid-'] text {
-  filter: invert(1) hue-rotate(180deg);
-}
-
-/* Edge labels: remove background and make text use code text color */
-:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel rect {
-  fill: transparent !important;
-}
-
-:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel .labelBkg {
-  background-color: #000000d4 !important;
-}
-
-:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel foreignObject div {
-  color: var(--code-text) !important;
-  background-color: transparent !important;
-}
-
-:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel p {
-  color: var(--code-text) !important;
-  margin: 0 !important;
-  background-color: transparent !important;
-}
-
 #gatsby-focus-wrapper > div {
   padding: 0 1rem;
 }
@@ -385,7 +346,8 @@ p > img {
   transition: filter 0.3s ease;
 }
 
-/* Invert only GitHub and Twitter icons in dark mode (not LinkedIn and Bluesky) */
+/* Invert only GitHub and Twitter icons in dark mode (not LinkedIn and Bluesky)
+   NOTE: Keep manual override and media query in sync */
 :root[data-theme='dark'] .social-icon-github,
 :root[data-theme='dark'] .social-icon-twitter {
   filter: invert(1) brightness(1.1);
