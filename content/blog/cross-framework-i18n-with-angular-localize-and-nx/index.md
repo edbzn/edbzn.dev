@@ -310,26 +310,35 @@ In your `project.json`, define separate build targets per locale:
 ```json
 {
   "targets": {
-    "build:en": {
-      "executor": "@nx/vite:build",
-      "options": {
-        "outputPath": "dist/apps/react-app/en"
-      }
-    },
-    "build:fr": {
-      "executor": "@nx/vite:build",
-      "options": {
-        "outputPath": "dist/apps/react-app/fr"
-      }
-    },
     "build": {
       "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/apps/react-app"],
       "options": {
         "commands": [
-          "LOCALE=en nx build:en react-app",
-          "LOCALE=fr nx build:fr react-app"
-        ],
-        "parallel": false
+          "LOCALE=en nx build:locale react-app -c en",
+          "LOCALE=fr nx build:locale react-app -c fr"
+        ]
+      }
+    },
+    "build:locale": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/react-app/{configuration}"
+      },
+      "configurations": {
+        "en": {
+          "outputPath": "dist/apps/react-app/en"
+        },
+        "fr": {
+          "outputPath": "dist/apps/react-app/fr"
+        },
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
       }
     }
   }
@@ -343,16 +352,11 @@ nx build react-app  # → dist/apps/react-app/en/
                     # → dist/apps/react-app/fr/
 ```
 
-Or build individual locales:
-
-```bash
-LOCALE=en nx build:en react-app  # → dist/apps/react-app/en/
-LOCALE=fr nx build:fr react-app  # → dist/apps/react-app/fr/
-```
+![Build output](./build-output.png)
 
 ## Supporting ICU Message Format
 
-One challenge with `@angular/localize` is that ICU expressions are typically handled by Angular's template compiler, not by the `@angular/localize` runtime itself. For non-Angular frameworks, we need to implement runtime ICU evaluation.
+One challenge with `@angular/localize` is that ICU expressions are typically handled by Angular's compiler, not by `@angular/localize` itself. For non-Angular frameworks, we need to implement **runtime ICU evaluation**.
 
 ### The transformation approach
 
@@ -508,13 +512,81 @@ export function renderICUMessage(
 }
 ```
 
-**The result:** ICU expressions work seamlessly across locales, with proper plural rules for each language.
+With custom Babel transformation and runtime ICU evaluation, `$localize` now handles complex pluralization. The `Intl.PluralRules` API ensures correct plural forms for each locale, whether English's two forms or Polish's five.
+
+## Message extraction with a custom Nx executor
+
+To complete the workflow, we can create a custom Nx executor that extracts `$localize` messages from any framework. The executor leverages Angular's `MessageExtractor` to scan source files and output translation templates.
+
+```ts
+import { ExecutorContext } from '@nx/devkit';
+import { MessageExtractor } from '@angular/localize/tools';
+import * as glob from 'glob';
+
+export default async function runExecutor(
+  options: { sourceRoot: string; outputPath: string; format?: 'json' },
+  context: ExecutorContext
+) {
+  const sourceFiles = glob.sync('**/*.{ts,tsx,js,jsx}', {
+    cwd: path.resolve(context.root, options.sourceRoot),
+    absolute: true,
+    ignore: ['**/node_modules/**', '**/dist/**'],
+  });
+
+  const extractor = new MessageExtractor(require('@babel/core'), {
+    plugins: ['@babel/plugin-syntax-typescript', '@babel/plugin-syntax-jsx'],
+  });
+
+  const messages = extractor.extractMessages(sourceFiles);
+
+  // Convert to JSON format
+  const translations = {};
+  Array.from(messages.values()).forEach((msg) => {
+    if (msg.id || msg.customId) {
+      translations[msg.id || msg.customId] = msg.text;
+    }
+  });
+
+  fs.writeFileSync(
+    path.resolve(context.root, options.outputPath),
+    JSON.stringify({ locale: 'en', translations }, null, 2)
+  );
+
+  return { success: true };
+}
+```
+
+Register the target in `project.json`:
+
+```json
+{
+  "targets": {
+    "extract-i18n": {
+      "executor": "@myorg/tools:i18n-extract",
+      "options": {
+        "sourceRoot": "apps/react-app/src",
+        "outputPath": "apps/react-app/src/i18n/messages.json"
+      }
+    }
+  }
+}
+```
+
+Then extract messages:
+
+```bash
+nx extract-i18n react-app
+```
+
+This approach provides automated extraction similar to [Angular CLI extract-i18n](https://angular.dev/cli/extract-i18n), but works across any framework in the monorepo.
 
 ## Conclusion
 
-By leveraging `@angular/localize` tooling as a universal i18n foundation, we can build a consistent and robust internationalization system across different frameworks. The same Babel plugins, the same `$localize` API, and the same translation format work everywhere, whether you're working with Webpack, Vite, or any other build tool, the core transformation logic remains identical.
+By leveraging `@angular/localize` tooling as a universal i18n foundation, we can build a consistent and robust internationalization system across different frameworks.
 
-<Note>Explore the complete implementation with working examples at **[github.com/edbzn/i18n-sandbox](https://github.com/edbzn/i18n-sandbox)**.</Note>
+The same Babel plugins, the same `$localize` API, and the same translation format work everywhere, whether you're working with Webpack, Vite, or any other build tool, the core transformation logic remains identical.
+
+<Note type="tip">Explore the complete implementation with working examples at **[github.com/edbzn/i18n-sandbox](https://github.com/edbzn/i18n-sandbox)**.</Note>
 
 ## References:
 
