@@ -584,34 +584,43 @@ While we've focused on browser applications, the same `$localize` approach works
 
 Unlike browsers where bundlers handle the transformation, **Node.js requires runtime setup**. The goal is to make `$localize` work transparently in server code without manual bundling steps.
 
-### Runtime polyfill for Node.js
+### Runtime initialization
 
-Create a setup module that initializes `$localize` for Node.js:
+Create a setup module that initializes `$localize` and provides helpers for dynamic locale switching:
 
 ```ts
+// i18n-init.ts
 import '@angular/localize/init';
 import { loadTranslations } from '@angular/localize';
 
-let translations = {};
-let locale = 'en';
+let currentTranslations = {};
+let currentLocale = 'en';
+
+export const setLocale = (locale: string) => {
+  currentLocale = locale;
+};
+
+export const setTranslations = (translations: Record<string, string>) => {
+  currentTranslations = translations;
+};
 
 export const initTranslations = () => {
   locale = process.env.LOCALE || 'en';
   const content = JSON.parse(fs.readFileSync(`./assets/i18n/${locale}.json`, 'utf-8'));
-  translations = content.translations;
-  loadTranslations(translations);
+  currentTranslations = content.translations;
+  loadTranslations(currentTranslations);
 
   // Override $localize for runtime ICU evaluation
   (globalThis as any).$localize = function(parts: TemplateStringsArray, ...values: any[]) {
     const messageId = parts[0].match(/:@@([^:]+):/)?.[1];
-    let message = messageId && translations[messageId]
-      ? translations[messageId]
+    let message = messageId && currentTranslations[messageId]
+      ? currentTranslations[messageId]
       : parts[0].replace(/:@@[^:]+:/, '');
 
     // Handle ICU plural/select expressions
     if (/\{[^}]+,\s*(plural|select)/.test(message)) {
       const icu = parseICUMessage(message);
-      return renderICUMessage(icu, { count: values[0] }, locale);
+      return renderICUMessage(icu, { count: values[0] }, currentLocale);
     }
 
     return message;
@@ -619,15 +628,86 @@ export const initTranslations = () => {
 };
 ```
 
-Initialize at your app entry point:
+### Integration with NestJS
+
+For frameworks like NestJS, use middleware to handle locale switching automatically per-request:
 
 ```ts
-import { initTranslations } from './i18n-init';
+import { Injectable, NestMiddleware } from '@nestjs/common';
+import { loadTranslations } from '@angular/localize';
+import { setLocale, setTranslations } from '../i18n-init';
 
-initTranslations();
+import EN from '../i18n/en.json';
+import FR from '../i18n/fr.json';
 
-// Use $localize with ICU expressions
-console.log($localize`:@@items.count:{${count}:VAR_PLURAL:, plural, =0 {No items} other {${count}:INTERPOLATION: items}}`);
+const locales = { en: EN, fr: FR };
+
+@Injectable()
+export class I18nMiddleware implements NestMiddleware {
+  use(req: any, res: any, next: () => void) {
+    // Extract locale from path (e.g., /api/fr, /api/en)
+    const pathLocale = req.path.split('/')[2];
+    const locale = pathLocale === 'en' || pathLocale === 'fr' ? pathLocale : 'en';
+
+    // Load translations for this request
+    const localeData = locales[locale];
+    setLocale(locale);
+    setTranslations(localeData.translations);
+    loadTranslations(localeData.translations);
+
+    next();
+  }
+}
+```
+
+Register the middleware in your module:
+
+```ts
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { I18nMiddleware } from './i18n.middleware';
+
+@Module({
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(I18nMiddleware).forRoutes('*');
+  }
+}
+```
+
+Now your services can use `$localize` directly—translations are already loaded:
+
+```ts
+@Injectable()
+export class AppService {
+  getData(itemCount = 3, minutes = 5) {
+    return {
+      message: $localize`:@@api.welcome:Hello API`,
+      itemsExample: $localize`:@@api.items.count:{${itemCount}:VAR_PLURAL:, plural, =0 {No items} =1 {One item} other {${itemCount}:INTERPOLATION: items}}`,
+    };
+  }
+}
+```
+
+Map routes to different locales:
+
+```ts
+@Controller()
+export class AppController {
+  constructor(private readonly appService: AppService) {}
+
+  @Get('en')
+  getDataEn() {
+    return this.appService.getData('en');
+  }
+
+  @Get('fr')
+  getDataFr() {
+    return this.appService.getData('fr');
+  }
+}
 ```
 
 Configure your bundler to copy translation files:
@@ -639,24 +719,19 @@ assets: [
 ]
 ```
 
-Now you can run your Node.js app with locale support:
+Now your API serves localized responses:
 
 ```bash
 > curl -s http://localhost:3000/api/en | jq
 {
   "message": "Hello API",
-  "description": "This is a Node.js API with internationalization",
-  "language": "Current Language: English",
-  "locale": "en",
   "itemsExample": "3 items",
   "timeExample": "5 minutes ago"
 }
+
 > curl -s http://localhost:3000/api/fr | jq
 {
   "message": "Bonjour API",
-  "description": "Ceci est une API Node.js avec internationalisation",
-  "language": "Langue actuelle : Français",
-  "locale": "fr",
   "itemsExample": "3 éléments",
   "timeExample": "il y a 5 minutes"
 }
@@ -669,6 +744,18 @@ Now you can run your Node.js app with locale support:
 By leveraging `@angular/localize` tooling as a universal i18n foundation, we can build a consistent and robust internationalization system across different **frameworks** and **platforms**.
 
 The same Babel plugins, the same `$localize` API, and the same translation format work everywhere, whether you're working with Webpack, Vite, or any other build tool, the core transformation logic remains identical.
+
+Because we've standardized on a single i18n approach across our entire monorepo, we can now build upon this foundation and continuously improve the system. Here are some ideas to take it further:
+
+- **Enforce conventions with [Nx Powerpack](https://nx.dev/docs/enterprise/conformance)**: Use conformance rules to validate that all message IDs follow your naming conventions (e.g., `feature.component.message`), ensure ICU syntax is correct, or prevent hardcoded strings in components.
+
+- **Automated translation workflows**: Integrate with translation management systems (like Crowdin or Lokalise) through Nx executors to automatically extract messages, push them for translation, and pull completed translations back into your repository.
+
+- **Type-safe i18n**: Generate TypeScript types from your message IDs to get autocomplete and compile-time validation when using `$localize`, preventing typos and missing translations.
+
+- **Testing infrastructure**: Build shared testing utilities that mock `$localize` consistently across all frameworks, ensuring your i18n behavior is testable and reliable.
+
+The standardization is what makes all of this possible, once you have a unified system, every improvement benefits the entire organization.
 
 <Note type="tip">Explore the complete implementation with working examples at **[github.com/edbzn/i18n-sandbox](https://github.com/edbzn/i18n-sandbox)**.</Note>
 
