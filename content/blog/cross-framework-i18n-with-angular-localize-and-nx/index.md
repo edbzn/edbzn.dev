@@ -1,7 +1,7 @@
 ---
 title: Cross-framework i18n with Angular localize and Nx
 description: How to use @angular/localize across different frameworks for consistent internationalization in large monorepos.
-date: '2025-12-24'
+draft: true
 tags: [i18n, angular, vite, webpack, nx, monorepo]
 ---
 
