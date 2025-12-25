@@ -366,6 +366,10 @@ p > img {
 }
 
 @media screen and (max-width: 640px) {
+  html {
+    font-size: 90%;
+  }
+
   .gatsby-resp-image-wrapper img {
     border-radius: 0px;
   }
