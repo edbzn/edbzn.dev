@@ -1,13 +1,13 @@
 ---
-title: Cross-framework i18n with Angular localize and Nx
-description: How to use @angular/localize across different frameworks for consistent internationalization in large monorepos.
-draft: true
-tags: [i18n, angular, vite, webpack, nx, monorepo]
+title: Framework-agnostic internationalization with Angular's localize tools and Nx
+description: Implementing a universal i18n system for consistent internationalization in large monorepos.
+date: '2025-12-25T00:00:00.000Z'
+tags: [i18n, angular, vite, nx, monorepo]
 ---
 
-Recently, I worked on [Rosa](https://rosa.be)’s internationalization (i18n) system, and wanted to share what I learned along the way.
+Recently, I worked on [Rosa](https://rosa.be)’s _internationalization_ (i18n) system, I dived deep into the subject so I wanted to share what I learned along the way.
 
-Many tools offer i18n support, but maintaining consistency in large monorepos is essential. At Rosa, we standardized on Angular’s official `@angular/localize` tooling and use it everywhere, regardless of the **framework**.
+Many tools offer i18n support, but maintaining consistency in large monorepos is essential. At Rosa, we standardized on Angular’s official `@angular/localize` tooling and use it everywhere, regardless of the **framework** or **platform**.
 
 **Why a unified approach matters**: In large monorepos with dozens of apps and libraries, ad-hoc i18n quickly becomes unmaintainable. Standardizing gives:
 
@@ -263,7 +263,6 @@ export function angularLocalize(options: LocalizePluginOptions = {}): Plugin {
 With the plugin ready, integrate it into your Vite config. Here's a real-world setup that handles both development and production builds:
 
 ```ts
-// vite.config.ts
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { angularLocalize } from './path/to/plugin';
@@ -427,7 +426,6 @@ export function App() {
 The Babel plugin transforms ICU templates into `$localize._icu()` calls. We implement this function to parse and evaluate ICU syntax:
 
 ```ts
-// i18n-init.ts
 import '@angular/localize/init';
 
 // Implement the ICU runtime handler
@@ -580,9 +578,95 @@ nx extract-i18n react-app
 
 This approach provides automated extraction similar to [Angular CLI extract-i18n](https://angular.dev/cli/extract-i18n), but works across any framework in the monorepo.
 
+## Bringing Node.js platform support
+
+While we've focused on browser applications, the same `$localize` approach works for Node.js applications, useful for backend APIs, CLI tools, or server-side rendering.
+
+Unlike browsers where bundlers handle the transformation, **Node.js requires runtime setup**. The goal is to make `$localize` work transparently in server code without manual bundling steps.
+
+### Runtime polyfill for Node.js
+
+Create a setup module that initializes `$localize` for Node.js:
+
+```ts
+import '@angular/localize/init';
+import { loadTranslations } from '@angular/localize';
+
+let translations = {};
+let locale = 'en';
+
+export const initTranslations = () => {
+  locale = process.env.LOCALE || 'en';
+  const content = JSON.parse(fs.readFileSync(`./assets/i18n/${locale}.json`, 'utf-8'));
+  translations = content.translations;
+  loadTranslations(translations);
+
+  // Override $localize for runtime ICU evaluation
+  (globalThis as any).$localize = function(parts: TemplateStringsArray, ...values: any[]) {
+    const messageId = parts[0].match(/:@@([^:]+):/)?.[1];
+    let message = messageId && translations[messageId]
+      ? translations[messageId]
+      : parts[0].replace(/:@@[^:]+:/, '');
+
+    // Handle ICU plural/select expressions
+    if (/\{[^}]+,\s*(plural|select)/.test(message)) {
+      const icu = parseICUMessage(message);
+      return renderICUMessage(icu, { count: values[0] }, locale);
+    }
+
+    return message;
+  };
+};
+```
+
+Initialize at your app entry point:
+
+```ts
+import { initTranslations } from './i18n-init';
+
+initTranslations();
+
+// Use $localize with ICU expressions
+console.log($localize`:@@items.count:{${count}:VAR_PLURAL:, plural, =0 {No items} other {${count}:INTERPOLATION: items}}`);
+```
+
+Configure your bundler to copy translation files:
+
+```js
+// webpack.config.js
+assets: [
+  { input: './src/i18n', glob: '*.json', output: 'assets/i18n' }
+]
+```
+
+Now you can run your Node.js app with locale support:
+
+```bash
+> curl -s http://localhost:3000/api/en | jq
+{
+  "message": "Hello API",
+  "description": "This is a Node.js API with internationalization",
+  "language": "Current Language: English",
+  "locale": "en",
+  "itemsExample": "3 items",
+  "timeExample": "5 minutes ago"
+}
+> curl -s http://localhost:3000/api/fr | jq
+{
+  "message": "Bonjour API",
+  "description": "Ceci est une API Node.js avec internationalisation",
+  "language": "Langue actuelle : Français",
+  "locale": "fr",
+  "itemsExample": "3 éléments",
+  "timeExample": "il y a 5 minutes"
+}
+```
+
+<Note>This runtime approach requires no build-time transformation, just load translations and override `$localize` for ICU evaluation.</Note>
+
 ## Conclusion
 
-By leveraging `@angular/localize` tooling as a universal i18n foundation, we can build a consistent and robust internationalization system across different frameworks.
+By leveraging `@angular/localize` tooling as a universal i18n foundation, we can build a consistent and robust internationalization system across different **frameworks** and **platforms**.
 
 The same Babel plugins, the same `$localize` API, and the same translation format work everywhere, whether you're working with Webpack, Vite, or any other build tool, the core transformation logic remains identical.
 
@@ -590,5 +674,6 @@ The same Babel plugins, the same `$localize` API, and the same translation forma
 
 ## References:
 
-- [Angular i18n Guide](https://angular.io/guide/i18n)
-- [compiled-i18n](https://github.com/wmertens/compiled-i18n)
+- [i18n Guide - Angular.io](https://angular.io/guide/i18n)
+- [Intl API - MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
+- [compiled-i18n - Static i18n support in js bundles](https://github.com/wmertens/compiled-i18n)
