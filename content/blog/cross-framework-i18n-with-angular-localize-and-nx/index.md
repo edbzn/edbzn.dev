@@ -743,8 +743,6 @@ Now your API serves localized responses:
 
 By leveraging `@angular/localize` tooling as a universal i18n foundation, we can build a consistent and robust internationalization system across different **frameworks** and **platforms**.
 
-The same Babel plugins, the same `$localize` API, and the same translation format work everywhere, whether you're working with Webpack, Vite, or any other build tool, the core transformation logic remains identical.
-
 Because we've standardized on a single i18n approach across our entire monorepo, we can now build upon this foundation and continuously improve the system. Here are some ideas to take it further:
 
 - **Enforce conventions with [Nx Powerpack](https://nx.dev/docs/enterprise/conformance)**: Use conformance rules to validate that all message IDs follow your naming conventions (e.g., `feature.component.message`), ensure ICU syntax is correct, or prevent hardcoded strings in components.
@@ -752,8 +750,6 @@ Because we've standardized on a single i18n approach across our entire monorepo,
 - **Automated translation workflows**: Integrate with translation management systems (like Crowdin or Lokalise) through Nx executors to automatically extract messages, push them for translation, and pull completed translations back into your repository.
 
 - **Type-safe i18n**: Generate TypeScript types from your message IDs to get autocomplete and compile-time validation when using `$localize`, preventing typos and missing translations.
-
-- **Testing infrastructure**: Build shared testing utilities that mock `$localize` consistently across all frameworks, ensuring your i18n behavior is testable and reliable.
 
 The standardization is what makes all of this possible, once you have a unified system, every improvement benefits the entire organization.
 
