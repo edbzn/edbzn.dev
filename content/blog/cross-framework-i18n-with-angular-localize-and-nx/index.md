@@ -582,20 +582,23 @@ This approach provides automated extraction similar to [Angular CLI extract-i18n
 
 While we've focused on browser applications, the same `$localize` approach works for Node.js applications, useful for backend APIs, CLI tools, or server-side rendering.
 
-Unlike browsers where bundlers handle the transformation, **Node.js requires runtime setup**. The goal is to make `$localize` work transparently in server code without manual bundling steps.
+Unlike client-side apps where bundlers handle the transformation, **Node.js requires runtime setup**. The goal is to make `$localize` work on the server without compilation step.
 
 ### Runtime initialization
 
-Create a setup module that initializes `$localize` and provides helpers for dynamic locale switching:
+Create a setup module that overrides `$localize` and provides dynamic locale management with runtime ICU evaluation.
 
 ```ts
-// i18n-init.ts
 import '@angular/localize/init';
 import { loadTranslations } from '@angular/localize';
+import { parseICUMessage, renderICUMessage } from '@i18n-sandbox/i18n-webpack/runtime';
+import * as fs from 'fs';
+import * as path from 'path';
 
-let currentTranslations = {};
+let currentTranslations: Record<string, string> = {};
 let currentLocale = 'en';
 
+// Export helpers for middleware to update per-request state
 export const setLocale = (locale: string) => {
   currentLocale = locale;
 };
@@ -604,33 +607,62 @@ export const setTranslations = (translations: Record<string, string>) => {
   currentTranslations = translations;
 };
 
+export const getTranslations = (): Record<string, string> => {
+  return currentTranslations;
+};
+
 export const initTranslations = () => {
-  locale = process.env.LOCALE || 'en';
-  const content = JSON.parse(fs.readFileSync(`./assets/i18n/${locale}.json`, 'utf-8'));
-  currentTranslations = content.translations;
-  loadTranslations(currentTranslations);
+  // Load translations based on environment variable (for startup)
+  const locale = process.env.LOCALE || 'en';
+  currentLocale = locale;
+
+  const translationsPath = path.join(__dirname, 'assets', 'i18n', `${locale}.json`);
+
+  if (fs.existsSync(translationsPath)) {
+    const content = JSON.parse(fs.readFileSync(translationsPath, 'utf-8'));
+    currentTranslations = content.translations || {};
+    loadTranslations(currentTranslations);
+    console.log(`✓ Loaded ${Object.keys(currentTranslations).length} translations for ${locale}`);
+  }
+
+  // Set the locale globally
+  ($localize as any).locale = locale;
 
   // Override $localize for runtime ICU evaluation
-  (globalThis as any).$localize = function(parts: TemplateStringsArray, ...values: any[]) {
+  (globalThis as any).$localize = function (
+    parts: TemplateStringsArray,
+    ...values: any[]
+  ) {
     const messageId = parts[0].match(/:@@([^:]+):/)?.[1];
-    let message = messageId && currentTranslations[messageId]
-      ? currentTranslations[messageId]
-      : parts[0].replace(/:@@[^:]+:/, '');
+    let translatedMessage = parts[0].replace(/:@@[^:]+:/, '');
 
-    // Handle ICU plural/select expressions
-    if (/\{[^}]+,\s*(plural|select)/.test(message)) {
-      const icu = parseICUMessage(message);
-      return renderICUMessage(icu, { count: values[0] }, currentLocale);
+    // Get translated template from current locale
+    if (messageId && currentTranslations[messageId]) {
+      translatedMessage = currentTranslations[messageId];
+
+      // Handle ICU plural/select expressions
+      if (/\{[^}]+,\s*(plural|select|selectordinal)/.test(translatedMessage)) {
+        const icuVarMatch = translatedMessage.match(/\{([^,}]+),\s*(plural|select|selectordinal)/);
+        if (icuVarMatch && values.length > 0) {
+          const varName = icuVarMatch[1].trim();
+          const valuesMap: Record<string, any> = { [varName]: values[0] };
+
+          const icu = parseICUMessage(translatedMessage);
+          if (icu) {
+            return renderICUMessage(icu, valuesMap, currentLocale);
+          }
+        }
+      }
     }
 
-    return message;
+    return translatedMessage;
   };
 };
 ```
 
 ### Integration with NestJS
 
-For frameworks like NestJS, use middleware to handle locale switching automatically per-request:
+A middleware can handle locale switching automatically per-request:
 
 ```ts
 import { Injectable, NestMiddleware } from '@nestjs/common';
@@ -644,11 +676,10 @@ const locales = { en: EN, fr: FR };
 
 @Injectable()
 export class I18nMiddleware implements NestMiddleware {
-  use(req: any, res: any, next: () => void) {
+  use(req: Request, res: Response, next: NextFunction) {
     // Extract locale from path (e.g., /api/fr, /api/en)
     const pathLocale = req.path.split('/')[2];
     const locale = pathLocale === 'en' || pathLocale === 'fr' ? pathLocale : 'en';
-
     // Load translations for this request
     const localeData = locales[locale];
     setLocale(locale);
@@ -677,7 +708,7 @@ export class AppModule implements NestModule {
 }
 ```
 
-Now your services can use `$localize` directly—translations are already loaded:
+Now your services can use `$localize` directly, translations are already loaded:
 
 ```ts
 @Injectable()
@@ -685,6 +716,8 @@ export class AppService {
   getData(itemCount = 3, minutes = 5) {
     return {
       message: $localize`:@@api.welcome:Hello API`,
+      language: $localize`:@@api.language:English`,
+      timeExample: $localize`:@@api.time.ago:{${minutes}:VAR_PLURAL:, plural, =0 {just now} =1 {one minute ago} other {${minutes}:INTERPOLATION: minutes ago}}`,
       itemsExample: $localize`:@@api.items.count:{${itemCount}:VAR_PLURAL:, plural, =0 {No items} =1 {One item} other {${itemCount}:INTERPOLATION: items}}`,
     };
   }
@@ -714,9 +747,7 @@ Configure your bundler to copy translation files:
 
 ```js
 // webpack.config.js
-assets: [
-  { input: './src/i18n', glob: '*.json', output: 'assets/i18n' }
-]
+assets: [{ input: './src/i18n', glob: '*.json', output: 'assets/i18n' }];
 ```
 
 Now your API serves localized responses:
@@ -725,6 +756,7 @@ Now your API serves localized responses:
 > curl -s http://localhost:3000/api/en | jq
 {
   "message": "Hello API",
+  "language": "English",
   "itemsExample": "3 items",
   "timeExample": "5 minutes ago"
 }
@@ -732,6 +764,7 @@ Now your API serves localized responses:
 > curl -s http://localhost:3000/api/fr | jq
 {
   "message": "Bonjour API",
+  "language": "Français",
   "itemsExample": "3 éléments",
   "timeExample": "il y a 5 minutes"
 }
@@ -745,15 +778,15 @@ By leveraging `@angular/localize` tooling as a universal i18n foundation, we can
 
 Because we've standardized on a single i18n approach across our entire monorepo, we can now build upon this foundation and continuously improve the system. Here are some ideas to take it further:
 
-- **Enforce conventions with [Nx Powerpack](https://nx.dev/docs/enterprise/conformance)**: Use conformance rules to validate that all message IDs follow your naming conventions (e.g., `feature.component.message`), ensure ICU syntax is correct, or prevent hardcoded strings in components.
+- **Enforce conventions with [Nx Powerpack](https://nx.dev/docs/enterprise/conformance)**: Use conformance rules to validate that all projects use `$localize` for i18n and prevent usage of other i18n libraries.
 
-- **Automated translation workflows**: Integrate with translation management systems (like Crowdin or Lokalise) through Nx executors to automatically extract messages, push them for translation, and pull completed translations back into your repository.
+- **Automated translation workflows**: Integrate with translation management systems (like [Phrase](https://phrase.com/) or [Lokalise](https://lokalise.com/)) to automatically extract messages, push them for translation, and pull completed translations back into your repository.
 
-- **Type-safe i18n**: Generate TypeScript types from your message IDs to get autocomplete and compile-time validation when using `$localize`, preventing typos and missing translations.
+- **Type-safe i18n**: Generate TypeScript types from your message IDs to get autocomplete and compile-time validation when using `$localize`, preventing typos.
 
 The standardization is what makes all of this possible, once you have a unified system, every improvement benefits the entire organization.
 
-<Note type="tip">Explore the complete implementation with working examples at **[github.com/edbzn/i18n-sandbox](https://github.com/edbzn/i18n-sandbox)**.</Note>
+<Note type="tip">Explore the complete implementation with working examples for Angular, React, and Node.js at **[github.com/edbzn/i18n-sandbox](https://github.com/edbzn/i18n-sandbox)**.</Note>
 
 ## References:
 
