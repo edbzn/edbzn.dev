@@ -122,13 +122,13 @@ importers:
         version: 8.0.7(cypress@9.7.0)
       axe-core:
         specifier: ^4.1.1
-        version: 4.11.0
+        version: 4.11.1
       cypress:
         specifier: ^9.0.0
         version: 9.7.0
       cypress-axe:
         specifier: ^1.0.0
-        version: 1.7.0(axe-core@4.11.0)(cypress@9.7.0)
+        version: 1.7.0(axe-core@4.11.1)(cypress@9.7.0)
       husky:
         specifier: ^9.0.0
         version: 9.1.7
@@ -2480,8 +2480,8 @@ packages:
   aws4@1.13.2:
     resolution: {integrity: sha512-lHe62zvbTB5eEABUVi/AwVh0ZKY9rMMDhmm+eeyuuUQbQ3+J+fONVQOZyj+DdrvD4BY33uYniyRJ4UJIaSKAfw==}
 
-  axe-core@4.11.0:
-    resolution: {integrity: sha512-ilYanEU8vxxBexpJd8cWM4ElSQq4QctCLKih0TSfjIfCQTeyH/6zVrmIJfLPrKTKJRbiG+cfnZbQIjAlJmF1jQ==}
+  axe-core@4.11.1:
+    resolution: {integrity: sha512-BASOg+YwO2C+346x3LZOeoovTIoTrRqEsqMa6fmfAV0P+U9mFr9NsyOEpiYvFjbc64NMrSswhV50WdXzdb/Z5A==}
     engines: {node: '>=4'}
 
   axios@0.27.2:
@@ -10797,7 +10797,7 @@ snapshots:
 
   aws4@1.13.2: {}
 
-  axe-core@4.11.0: {}
+  axe-core@4.11.1: {}
 
   axios@0.27.2:
     dependencies:
@@ -11650,9 +11650,9 @@ snapshots:
 
   csstype@3.2.3: {}
 
-  cypress-axe@1.7.0(axe-core@4.11.0)(cypress@9.7.0):
+  cypress-axe@1.7.0(axe-core@4.11.1)(cypress@9.7.0):
     dependencies:
-      axe-core: 4.11.0
+      axe-core: 4.11.1
       cypress: 9.7.0
 
   cypress@9.7.0:
@@ -12454,7 +12454,7 @@ snapshots:
       array-includes: 3.1.9
       array.prototype.flatmap: 1.3.3
       ast-types-flow: 0.0.8
-      axe-core: 4.11.0
+      axe-core: 4.11.1
       axobject-query: 4.1.0
       damerau-levenshtein: 1.0.8
       emoji-regex: 9.2.2
