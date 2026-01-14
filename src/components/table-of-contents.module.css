@@ -1,0 +1,129 @@
+/* TOC wrapper - collapsible container */
+.toc-wrapper {
+  border: 1px solid var(--border-color, #e1e4e8);
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: var(--bg-secondary, #f6f8fa);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin: 2.25em -1rem;
+}
+
+[data-theme='dark'] .toc-wrapper {
+  background-color: var(--bg-secondary, #1c1e21);
+  border-color: var(--border-color, #30363d);
+}
+
+/* Toggle button */
+.toc-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-primary, #24292e);
+}
+
+.toc-toggle:hover {
+  background-color: inherit;
+}
+
+[data-theme='dark'] .toc-toggle {
+  color: var(--text-primary, #e6edf3);
+}
+
+.toc-toggle:focus-visible {
+  outline: 2px solid var(--link-color, #0969da);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Toggle button icons */
+.toc-toggle-icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.toc-toggle-text {
+  flex: 1;
+  text-align: left;
+}
+
+.toc-chevron {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.toc-chevron-open {
+  transform: rotate(180deg);
+}
+
+/* Collapsible content */
+.toc-content {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    max-height 0.4s ease,
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+}
+
+.toc-content-open {
+  max-height: 3000px;
+  opacity: 1;
+  visibility: visible;
+  margin-top: 0.75rem;
+}
+
+/* TOC Lists */
+.toc-list {
+  list-style: decimal;
+  margin: 0;
+  padding-left: 1.5rem;
+  line-height: 1.8;
+}
+
+.toc-list .toc-list {
+  list-style: lower-alpha;
+  margin-top: 0.25rem;
+}
+
+.toc-list .toc-list .toc-list {
+  list-style: circle;
+}
+
+/* TOC Items */
+.toc-item {
+  margin: 0.25rem 0;
+}
+
+/* TOC Links */
+.toc-link {
+  color: var(--text-primary, #24292e);
+  text-decoration: none;
+  display: inline-block;
+}
+
+[data-theme='dark'] .toc-link {
+  color: var(--text-primary, #e6edf3);
+}
+
+.toc-link-active {
+  color: var(--text-primary, #24292e);
+  font-weight: 600;
+}
+
+[data-theme='dark'] .toc-link-active {
+  color: var(--text-primary, #e6edf3);
+}

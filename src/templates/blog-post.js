@@ -8,6 +8,7 @@ import { Note } from '../components/note';
 import { PostNav } from '../components/post-nav';
 import { Seo } from '../components/seo';
 import { Tags } from '../components/tags';
+import { TableOfContents } from '../components/table-of-contents';
 import { rhythm } from '../utils/typography';
 
 const shortcodes = { Note };
@@ -124,6 +125,7 @@ const BlogPostTemplate = (props) => {
             )}
           </p>
         </header>
+        <TableOfContents headings={post.tableOfContents?.items} />
         <MDXProvider components={shortcodes}>
           <section style={{ marginBottom: rhythm(2) }}>{children}</section>
         </MDXProvider>
@@ -169,6 +171,7 @@ export const pageQuery = graphql`
     mdx(published: { eq: true }, fields: { slug: { eq: $slug } }) {
       id
       excerpt(pruneLength: 160)
+      tableOfContents
       frontmatter {
         description
         title

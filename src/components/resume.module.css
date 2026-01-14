@@ -155,14 +155,11 @@ button {
   cursor: pointer;
   border-radius: 4px;
   color: var(--text-primary);
-  transition:
-    background-color 0.2s ease,
-    transform 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 button:hover {
   background-color: var(--border-color);
-  transform: translateY(-1px);
 }
 
 button:last-child {
