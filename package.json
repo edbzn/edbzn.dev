@@ -23,7 +23,7 @@
       "prettier --write"
     ]
   },
-  "packageManager": "pnpm@9.15.9",
+  "packageManager": "pnpm@10.30.3",
   "engines": {
     "node": ">=20.x"
   },
