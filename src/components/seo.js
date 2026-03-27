@@ -4,8 +4,15 @@ import { useLocation } from '@reach/router';
 import { Helmet } from 'react-helmet';
 import { useStaticQuery, graphql } from 'gatsby';
 
-export function Seo({ title, description, article, canonical }) {
-  const { pathname } = useLocation();
+export function Seo({
+  title,
+  description,
+  article,
+  canonical,
+  pathname: pathnameProp,
+}) {
+  const { pathname: locationPathname } = useLocation();
+  const pathname = pathnameProp || locationPathname;
   const { site } = useStaticQuery(query);
 
   const {
@@ -56,6 +63,7 @@ Seo.propTypes = {
   description: PropTypes.string,
   article: PropTypes.bool,
   canonical: PropTypes.string,
+  pathname: PropTypes.string,
 };
 
 const query = graphql`

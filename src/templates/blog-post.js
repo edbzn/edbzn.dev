@@ -89,6 +89,7 @@ const BlogPostTemplate = (props) => {
         description={post.frontmatter.description ?? post.excerpt}
         article={true}
         canonical={post.frontmatter.canonical}
+        pathname={location.pathname}
       />
       <article>
         <header>
