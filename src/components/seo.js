@@ -20,7 +20,6 @@ export function Seo({ title, description, article, canonical, pathname }) {
 
   return (
     <>
-      <html lang="en" />
       <title>{seo.title}</title>
       <meta name="color-scheme" content="light dark" />
       <meta name="description" content={seo.description} />

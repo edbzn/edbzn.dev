@@ -1,6 +1,12 @@
 import * as React from 'react';
 
-export const onRenderBody = ({ setHeadComponents, setPreBodyComponents }) => {
+export const onRenderBody = ({
+  setHeadComponents,
+  setPreBodyComponents,
+  setHtmlAttributes,
+}) => {
+  setHtmlAttributes({ lang: 'en' });
+
   setHeadComponents(
     [
       'FiraCode-Regular',
