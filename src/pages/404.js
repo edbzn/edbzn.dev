@@ -11,7 +11,6 @@ class NotFoundPage extends React.Component {
 
     return (
       <Layout location={this.props.location} author={author} github={github}>
-        <Seo title="Page Not Found" />
         <h1>Not Found</h1>
         <img
           style={{ diplay: 'block', width: '100%' }}
@@ -25,6 +24,8 @@ class NotFoundPage extends React.Component {
 }
 
 export default NotFoundPage;
+
+export const Head = () => <Seo title="Page Not Found" />;
 
 export const pageQuery = graphql`
   query {

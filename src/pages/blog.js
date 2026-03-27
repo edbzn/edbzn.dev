@@ -24,7 +24,6 @@ class BlogIndex extends React.Component {
 
     return (
       <Layout location={this.props.location} author={author} github={github}>
-        <Seo title={tag ? `${tag} posts` : 'All posts'} />
         <Bio />
         <section role="main" style={{ marginTop: rhythm(2) }}>
           <div
@@ -52,6 +51,10 @@ class BlogIndex extends React.Component {
 }
 
 export default BlogIndex;
+
+export const Head = ({ pageContext: { tag } }) => (
+  <Seo title={tag ? `${tag} posts` : 'All posts'} />
+);
 
 export const pageQuery = graphql`
   {

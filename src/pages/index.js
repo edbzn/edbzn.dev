@@ -17,7 +17,6 @@ class AboutMe extends React.Component {
 
     return (
       <Layout location={this.props.location} author={author} github={github}>
-        <Seo title="About me" />
         <Bio />
 
         <section style={{ marginTop: rhythm(2) }}>
@@ -85,6 +84,8 @@ class AboutMe extends React.Component {
 }
 
 export default AboutMe;
+
+export const Head = () => <Seo title="About me" />;
 
 export const pageQuery = graphql`
   {

@@ -84,13 +84,6 @@ const BlogPostTemplate = (props) => {
 
   return (
     <Layout location={location} author={author} github={github}>
-      <Seo
-        title={post.frontmatter.title}
-        description={post.frontmatter.description ?? post.excerpt}
-        article={true}
-        canonical={post.frontmatter.canonical}
-        pathname={location.pathname}
-      />
       <article>
         <header>
           <h1
@@ -157,6 +150,19 @@ const BlogPostTemplate = (props) => {
 };
 
 export default BlogPostTemplate;
+
+export const Head = ({ data, location }) => {
+  const post = data.mdx;
+  return (
+    <Seo
+      title={post.frontmatter.title}
+      description={post.frontmatter.description ?? post.excerpt}
+      article={true}
+      canonical={post.frontmatter.canonical}
+      pathname={location.pathname}
+    />
+  );
+};
 
 export const pageQuery = graphql`
   query BlogPostBySlug($slug: String!) {

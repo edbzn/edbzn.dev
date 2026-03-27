@@ -1,18 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { useLocation } from '@reach/router';
-import { Helmet } from 'react-helmet';
 import { useStaticQuery, graphql } from 'gatsby';
 
-export function Seo({
-  title,
-  description,
-  article,
-  canonical,
-  pathname: pathnameProp,
-}) {
-  const { pathname: locationPathname } = useLocation();
-  const pathname = pathnameProp || locationPathname;
+export function Seo({ title, description, article, canonical, pathname }) {
   const { site } = useStaticQuery(query);
 
   const {
@@ -24,41 +13,31 @@ export function Seo({
   } = site.siteMetadata;
 
   const seo = {
-    title: title || defaultTitle,
+    title: title ? titleTemplate.replace('%s', title) : defaultTitle,
     description: description || defaultDescription,
-    url: `${siteUrl}${pathname}`,
+    url: pathname ? `${siteUrl}${pathname}` : siteUrl,
   };
 
   return (
-    <Helmet title={seo.title} titleTemplate={titleTemplate}>
+    <>
       <html lang="en" />
+      <title>{seo.title}</title>
       <meta name="color-scheme" content="light dark" />
       <meta name="description" content={seo.description} />
-      {seo.url && <meta property="og:url" content={seo.url} />}
-      {(article ? true : null) && <meta property="og:type" content="article" />}
-      {seo.title && <meta property="og:title" content={seo.title} />}
-      {seo.description && (
-        <meta property="og:description" content={seo.description} />
-      )}
+      {canonical && <link rel="canonical" href={canonical} />}
+      <meta property="og:url" content={seo.url} />
+      {article && <meta property="og:type" content="article" />}
+      <meta property="og:title" content={seo.title} />
+      <meta property="og:description" content={seo.description} />
       <meta name="twitter:card" content="summary_large_image" />
       {twitterUsername && (
         <meta name="twitter:creator" content={twitterUsername} />
       )}
-      {seo.title && <meta name="twitter:title" content={seo.title} />}
-      {seo.description && (
-        <meta name="twitter:description" content={seo.description} />
-      )}
-    </Helmet>
+      <meta name="twitter:title" content={seo.title} />
+      <meta name="twitter:description" content={seo.description} />
+    </>
   );
 }
-
-Seo.propTypes = {
-  title: PropTypes.string,
-  description: PropTypes.string,
-  article: PropTypes.bool,
-  canonical: PropTypes.string,
-  pathname: PropTypes.string,
-};
 
 const query = graphql`
   query SEO {
