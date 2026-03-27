@@ -1,7 +1,7 @@
 ---
-title: J'ai perdu mon intérêt pour l'open source dans un monde transformé par l'IA
+title: "J'ai perdu mon intérêt pour l'open source dans un monde transformé par l'IA"
 date: '2026-03-27'
-description: Réflexion personnelle sur mon désintérêt pour l'open source, les raisons derrière ce changement, et ce que cela signifie pour moi.
+description: "Réflexion personnelle sur mon désintérêt pour l'open source, les raisons derrière ce changement, et ce que cela signifie pour moi."
 tags: [open source, ai, software development]
 ---
 
