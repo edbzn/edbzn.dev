@@ -30,13 +30,7 @@ export function Seo({
   };
 
   return (
-    <Helmet
-      title={seo.title}
-      titleTemplate={titleTemplate}
-      link={
-        canonical ? [{ rel: 'canonical', key: canonical, href: canonical }] : []
-      }
-    >
+    <Helmet title={seo.title} titleTemplate={titleTemplate}>
       <html lang="en" />
       <meta name="color-scheme" content="light dark" />
       <meta name="description" content={seo.description} />
