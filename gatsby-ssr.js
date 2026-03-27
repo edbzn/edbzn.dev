@@ -7,8 +7,9 @@ export const onRenderBody = ({
 }) => {
   setHtmlAttributes({ lang: 'en' });
 
-  setHeadComponents(
-    [
+  setHeadComponents([
+    <title key="default-title">edbzn.dev</title>,
+    ...[
       'FiraCode-Regular',
       'FiraCode-Bold',
       'FiraCode-Medium',
@@ -22,8 +23,8 @@ export const onRenderBody = ({
         crossOrigin="anonymous"
         key={font}
       />
-    ))
-  );
+    )),
+  ]);
 
   // Prevent flash of wrong theme on page load
   setPreBodyComponents([
