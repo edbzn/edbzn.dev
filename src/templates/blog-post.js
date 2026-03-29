@@ -8,6 +8,7 @@ import { Note } from '../components/note';
 import { PostNav } from '../components/post-nav';
 import { Seo } from '../components/seo';
 import { Tags } from '../components/tags';
+import { LanguageIndicator } from '../components/language-indicator';
 import { TableOfContents } from '../components/table-of-contents';
 import { rhythm } from '../utils/typography';
 
@@ -101,6 +102,10 @@ const BlogPostTemplate = (props) => {
               marginBottom: rhythm(0.5),
             }}
           />
+          <LanguageIndicator
+            lang={post.frontmatter.lang}
+            style={{ marginBottom: rhythm(0.5) }}
+          />
           <p
             style={{
               marginBottom: rhythm(2),
@@ -136,7 +141,7 @@ const BlogPostTemplate = (props) => {
           inputPosition="bottom"
           theme={giscusTheme}
           loading="lazy"
-          lang="en"
+          lang={post.frontmatter.lang ?? 'en'}
           crossorigin="anonymous"
           async
         />
@@ -186,6 +191,7 @@ export const pageQuery = graphql`
         canonical
         draft
         tags
+        lang
       }
     }
   }

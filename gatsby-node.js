@@ -139,6 +139,7 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
       description: String
       tags: [String]
       draft: Boolean
+      lang: String
     }
     `,
   ];
