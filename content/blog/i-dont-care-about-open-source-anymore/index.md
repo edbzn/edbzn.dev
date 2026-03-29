@@ -3,6 +3,7 @@ title: "J'ai perdu mon intérêt pour l'open source dans un monde transformé pa
 date: '2026-03-27'
 description: "Réflexion personnelle sur mon désintérêt pour l'open source, les raisons derrière ce changement, et ce que cela signifie pour moi."
 tags: [open source, ai, software development]
+lang: fr
 ---
 
 J'ai longtemps été passionné par l'open source, contribuant à plusieurs bibliothèques, créant mes propres outils de développement, jusqu'à maintenir des projets reconnus dans l'écosystème.
