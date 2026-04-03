@@ -3,7 +3,7 @@ import * as styles from './table-of-contents.module.css';
 
 export const TableOfContents = ({ headings }) => {
   const [activeId, setActiveId] = useState('');
-  const [isOpen, setIsOpen] = useState(false); // Start closed
+  const [isOpen, setIsOpen] = useState(true);
 
   // Flatten headings for intersection observer - memoized
   const flatHeadings = useMemo(() => {
@@ -121,9 +121,7 @@ export const TableOfContents = ({ headings }) => {
             strokeLinecap="round"
           />
         </svg>
-        <span className={styles.tocToggleText}>
-          {isOpen ? 'Hide' : 'Table of contents'}
-        </span>
+        <span className={styles.tocToggleText}>Table of contents</span>
         <svg
           className={`${styles.tocChevron} ${isOpen ? styles.tocChevronOpen : ''}`}
           width="16"
