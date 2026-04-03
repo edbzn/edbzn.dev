@@ -209,7 +209,7 @@ class Layout extends React.Component {
                 fontWeight: '700',
               }}
             >
-              About
+              About me
             </Link>
             <Link
               to="/blog"
@@ -226,7 +226,7 @@ class Layout extends React.Component {
                 fontWeight: '700',
               }}
             >
-              Posts
+              Blog
             </Link>
             <ThemeToggle />
           </nav>
