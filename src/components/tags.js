@@ -11,8 +11,6 @@ export const Tags = ({ tags, style }) => {
     <div
       className={styles.tagsContainer}
       style={{
-        marginTop: rhythm(0.2),
-        marginBottom: rhythm(0),
         ...style,
       }}
     >

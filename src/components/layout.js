@@ -246,13 +246,16 @@ class Layout extends React.Component {
           >
             <a
               href="https://creativecommons.org/licenses/by-sa/4.0"
-              style={{ boxShadow: 'none' }}
+              style={{ boxShadow: 'none', color: 'var(--text-color)' }}
             >
               CC BY-SA 4.0
             </a>
             &nbsp;
             {new Date().getFullYear()}&nbsp;&copy;&nbsp;{author} ·{' '}
-            <a href="/rss.xml" style={{ boxShadow: 'none' }}>
+            <a
+              href="/rss.xml"
+              style={{ boxShadow: 'none', color: 'var(--text-color)' }}
+            >
               <img
                 src={rss}
                 alt="RSS feed icon"
@@ -266,11 +269,17 @@ class Layout extends React.Component {
               RSS
             </a>{' '}
             ·{' '}
-            <a href={github.repositoryUrl} style={{ boxShadow: 'none' }}>
+            <a
+              href={github.repositoryUrl}
+              style={{ boxShadow: 'none', color: 'var(--text-color)' }}
+            >
               🔑&nbsp;Source&nbsp;code
             </a>{' '}
             ·{' '}
-            <a href={github.sponsorUrl} style={{ boxShadow: 'none' }}>
+            <a
+              href={github.sponsorUrl}
+              style={{ boxShadow: 'none', color: 'var(--text-color)' }}
+            >
               ❤️&nbsp;Become&nbsp;a&nbsp;GitHub&nbsp;Sponsor
             </a>
           </div>

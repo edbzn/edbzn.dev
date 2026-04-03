@@ -95,17 +95,19 @@ const BlogPostTemplate = (props) => {
           >
             {post.frontmatter.title}
           </h1>
-          <Tags
-            tags={post.frontmatter.tags}
+          <div
             style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              gap: '0.5rem',
               marginTop: rhythm(0.5),
               marginBottom: rhythm(0.5),
             }}
-          />
-          <LanguageIndicator
-            lang={post.frontmatter.lang}
-            style={{ marginBottom: rhythm(0.5) }}
-          />
+          >
+            <Tags tags={post.frontmatter.tags} />
+            <LanguageIndicator lang={post.frontmatter.lang} />
+          </div>
           <p
             style={{
               marginBottom: rhythm(2),

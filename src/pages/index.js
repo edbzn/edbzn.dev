@@ -128,6 +128,7 @@ export const pageQuery = graphql`
           title
           draft
           tags
+          lang
         }
       }
     }

@@ -10,6 +10,9 @@
   font-weight: 400;
   font-family: 'Public Sans', sans-serif;
   box-shadow: var(--tag-shadow);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+}
+
+.badge [role='img'] {
+  font-size: 0.65rem;
+  line-height: 1;
 }
