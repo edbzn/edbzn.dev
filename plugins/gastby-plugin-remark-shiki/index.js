@@ -3,10 +3,15 @@
 import { getSingletonHighlighter } from 'shiki';
 import { visit } from 'unist-util-visit';
 
+const themeConfig = {
+  light: 'dark-plus',
+  dark: 'github-dark-default',
+  abyss: 'aurora-x',
+};
+
 export default async function (
   { markdownAST },
   {
-    theme = 'github-dark-default',
     langs = [
       'text',
       'vue',
@@ -31,7 +36,8 @@ export default async function (
     return markdownAST;
   }
 
-  const highlighter = await getSingletonHighlighter({ themes: [theme], langs });
+  const themes = Object.values(themeConfig);
+  const highlighter = await getSingletonHighlighter({ themes, langs });
 
   visit(markdownAST, 'code', (node) => {
     node.type = 'html';
@@ -44,7 +50,8 @@ export default async function (
 
     node.value = highlighter.codeToHtml(node.value, {
       lang: node.lang,
-      theme,
+      themes: themeConfig,
+      defaultColor: false,
     });
   });
 

@@ -59,6 +59,10 @@
   position: relative;
 }
 
+:global(:root[data-theme='abyss']) .content {
+  background-color: transparent;
+}
+
 .content > * {
   margin: 0;
 }
@@ -143,6 +147,29 @@
   width: 100%;
   background: linear-gradient(to bottom, transparent, var(--bg-primary));
   z-index: 1;
+}
+
+:global(:root[data-theme='abyss']) .partial::after {
+  background: none;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+:global(:root[data-theme='abyss']) .partial {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    rgba(0, 0, 0, 0.8) 30%,
+    rgba(0, 0, 0, 0.4) 60%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    rgba(0, 0, 0, 0.8) 30%,
+    rgba(0, 0, 0, 0.4) 60%,
+    transparent 100%
+  );
 }
 
 button {

@@ -1,36 +1,30 @@
 import React, { useState, useEffect } from 'react';
 
 export const ThemeToggle = () => {
-  const [theme, setTheme] = useState('system');
+  const [theme, setTheme] = useState('abyss');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const savedTheme = localStorage.getItem('theme') || 'system';
+    const savedTheme = localStorage.getItem('theme') || 'abyss';
     setTheme(savedTheme);
     applyTheme(savedTheme);
   }, []);
 
   const applyTheme = (newTheme) => {
     const root = document.documentElement;
-
-    if (newTheme === 'system') {
-      root.removeAttribute('data-theme');
-      localStorage.removeItem('theme');
-    } else {
-      root.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-    }
+    root.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
   };
 
   const toggleTheme = () => {
     let newTheme;
-    if (theme === 'system') {
-      newTheme = 'light';
-    } else if (theme === 'light') {
+    if (theme === 'light') {
       newTheme = 'dark';
+    } else if (theme === 'dark') {
+      newTheme = 'abyss';
     } else {
-      newTheme = 'system';
+      newTheme = 'light';
     }
 
     setTheme(newTheme);
@@ -45,7 +39,7 @@ export const ThemeToggle = () => {
   return (
     <button
       onClick={toggleTheme}
-      aria-label={`Switch to ${theme === 'system' ? 'light' : theme === 'light' ? 'dark' : 'system'} mode`}
+      aria-label={`Switch to ${theme === 'light' ? 'dark' : theme === 'dark' ? 'abyss' : 'light'} mode`}
       title={`Current: ${theme} theme (click to switch)`}
       style={{
         background: 'transparent',
@@ -71,23 +65,7 @@ export const ThemeToggle = () => {
         e.currentTarget.style.backgroundColor = 'transparent';
       }}
     >
-      {theme === 'system' ? (
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          style={{ display: 'block' }}
-        >
-          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-          <line x1="8" y1="21" x2="16" y2="21"></line>
-          <line x1="12" y1="17" x2="12" y2="21"></line>
-        </svg>
-      ) : theme === 'light' ? (
+      {theme === 'light' ? (
         <svg
           width="20"
           height="20"
@@ -109,7 +87,7 @@ export const ThemeToggle = () => {
           <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
           <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
         </svg>
-      ) : (
+      ) : theme === 'dark' ? (
         <svg
           width="20"
           height="20"
@@ -122,6 +100,20 @@ export const ThemeToggle = () => {
           style={{ display: 'block' }}
         >
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      ) : (
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{ display: 'block' }}
+        >
+          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
         </svg>
       )}
     </button>

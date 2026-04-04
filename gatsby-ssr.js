@@ -34,10 +34,8 @@ export const onRenderBody = ({
         __html: `
           (function() {
             try {
-              const savedTheme = localStorage.getItem('theme');
-              if (savedTheme && savedTheme !== 'system') {
-                document.documentElement.setAttribute('data-theme', savedTheme);
-              }
+              const savedTheme = localStorage.getItem('theme') || 'abyss';
+              document.documentElement.setAttribute('data-theme', savedTheme);
             } catch (e) {
               console.error('Error loading theme:', e);
             }

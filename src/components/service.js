@@ -29,7 +29,7 @@ const styles = {
   },
   section: {
     margin: rhythm(2.4) + ' auto',
-    backgroundColor: 'var(--highlight-bg)',
+    backgroundColor: 'var(--bg-secondary)',
     color: 'var(--text-primary)',
     textAlign: 'center',
     fontFamily: '"Public Sans", sans-serif',

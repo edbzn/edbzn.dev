@@ -1,4 +1,33 @@
 /* CSS Variables for theming */
+
+/* Shiki multi-theme: map theme-specific token colors */
+.shiki {
+  color: var(--shiki-abyss) !important;
+  background-color: rgba(7, 9, 15, 0.6) !important;
+}
+
+.shiki span {
+  color: var(--shiki-abyss) !important;
+}
+
+:root[data-theme='light'] .shiki {
+  color: var(--shiki-light) !important;
+  background-color: var(--shiki-light-bg) !important;
+}
+
+:root[data-theme='light'] .shiki span {
+  color: var(--shiki-light) !important;
+}
+
+:root[data-theme='dark'] .shiki {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+:root[data-theme='dark'] .shiki span {
+  color: var(--shiki-dark) !important;
+}
+
 /* Light theme (default) */
 :root {
   --bg-primary: #ffffff;
@@ -36,50 +65,7 @@
   color-scheme: light;
 }
 
-/* Dark theme - for system preference and manual override
-   NOTE: Due to CSS limitations, we need separate declarations for:
-   1. @media (prefers-color-scheme: dark) - for system dark mode
-   2. [data-theme='dark'] - for manual toggle (overrides media query)
-   They must have identical values. Keep them in sync when updating. */
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --bg-primary: #1e1e1e;
-    --bg-secondary: #2d2d2d;
-    --text-primary: rgba(255, 255, 255, 0.9);
-    --text-secondary: rgba(255, 255, 255, 0.7);
-    --text-muted: rgba(255, 255, 255, 0.5);
-    --border-color: rgba(255, 255, 255, 0.085);
-    --box-shadow-light: rgba(0, 0, 0, 0.3);
-    --box-shadow-dark: rgba(0, 0, 0, 0.5);
-    --accent-color: #4db8ff;
-    --code-bg: rgb(255 253 100 / 7%);
-    --code-text: #f0f0f0;
-    --link-color: #4db8ff;
-    --blockquote-color: rgba(255, 255, 255, 0.9);
-    --highlight-bg: rgba(20, 25, 35, 0.95);
-    --highlight-border: rgba(60, 152, 213, 0.25);
-    --tag-bg: rgba(255, 255, 255, 0.1);
-    --tag-text: rgba(255, 255, 255, 0.9);
-    --tag-bg-hover: rgba(255, 255, 255, 0.1);
-    --tag-shadow:
-      rgba(0, 0, 0, 0.2) 0px 2px 8px, rgba(0, 0, 0, 0.1) 0px 4px 16px;
-    --tag-shadow-hover:
-      rgba(0, 0, 0, 0.3) 0px 3px 10px, rgba(0, 0, 0, 0.2) 0px 6px 18px;
-    --note-bg: rgba(255, 255, 255, 0.05);
-    --note-border: rgba(255, 255, 255, 0.15);
-    --note-warning-bg: rgba(245, 208, 104, 0.15);
-    --note-warning-border: rgba(245, 208, 104, 0.4);
-    --note-tip-bg: rgba(110, 213, 147, 0.15);
-    --note-tip-border: rgba(110, 213, 147, 0.4);
-    --table-border: rgba(255, 255, 255, 0.2);
-    --blockquote-border: rgba(255, 255, 255, 0.25);
-    --anchor-color: rgba(255, 255, 255, 0.4);
-
-    color-scheme: dark;
-  }
-}
-
+/* Dark theme */
 :root[data-theme='dark'] {
   --bg-primary: #1e1e1e;
   --bg-secondary: #2d2d2d;
@@ -115,6 +101,47 @@
   color-scheme: dark;
 }
 
+/* Abyss theme - inspired by VS Code Abyss */
+:root[data-theme='abyss'] {
+  --bg-primary: #000c18;
+  --bg-secondary: #060621;
+  --text-primary: #8da6d8;
+  --text-secondary: rgba(141, 166, 216, 0.75);
+  --text-muted: rgba(141, 166, 216, 0.55);
+  --border-color: rgba(89, 111, 153, 0.25);
+  --box-shadow-light: rgba(0, 0, 0, 0.4);
+  --box-shadow-dark: rgba(0, 0, 0, 0.6);
+  --accent-color: #2277ff;
+  --code-bg: rgba(34, 119, 255, 0.15);
+  --code-text: #8da6d8;
+  --link-color: #2277ff;
+  --blockquote-color: rgba(102, 136, 204, 0.9);
+  --highlight-bg: rgba(5, 19, 54, 0.95);
+  --highlight-border: rgba(34, 119, 255, 0.25);
+  --tag-bg: rgba(102, 136, 204, 0.1);
+  --tag-text: rgba(102, 136, 204, 0.9);
+  --tag-bg-hover: rgba(102, 136, 204, 0.15);
+  --tag-shadow: rgba(0, 0, 0, 0.3) 0px 2px 8px, rgba(0, 0, 0, 0.2) 0px 4px 16px;
+  --tag-shadow-hover:
+    rgba(0, 0, 0, 0.4) 0px 3px 10px, rgba(0, 0, 0, 0.3) 0px 6px 18px;
+  --note-bg: rgba(102, 136, 204, 0.05);
+  --note-border: rgba(102, 136, 204, 0.15);
+  --note-warning-bg: rgba(255, 238, 187, 0.1);
+  --note-warning-border: rgba(255, 238, 187, 0.3);
+  --note-tip-bg: rgba(34, 170, 68, 0.1);
+  --note-tip-border: rgba(34, 170, 68, 0.3);
+  --table-border: rgba(89, 111, 153, 0.3);
+  --blockquote-border: rgba(89, 111, 153, 0.35);
+  --anchor-color: rgba(102, 136, 204, 0.4);
+
+  color-scheme: dark;
+}
+
+:root[data-theme='abyss'] body {
+  background: linear-gradient(180deg, #000c18 0%, #050a30 40%, #060621 100%)
+    fixed;
+}
+
 /* Rotate on hover */
 .logo-inner {
   transition: transform 1.3s cubic-bezier(0.41, 0.57, 0, 1.41);
@@ -135,34 +162,32 @@
   transition: fill 0.3s ease;
 }
 
-/* Dark theme logo colors - for both system preference and manual override
-   NOTE: Keep manual override and media query in sync */
+/* Dark theme logo colors */
 :root[data-theme='dark'] .logo-inner path[fill='rgb(0,0,0)'],
 :root[data-theme='dark'] .logo-inner path[fill='rgb(23,23,23)'] {
   fill: rgb(255, 255, 255) !important;
+}
+
+/* Abyss theme logo colors */
+:root[data-theme='abyss'] .logo-inner path[fill='rgb(0,0,0)'],
+:root[data-theme='abyss'] .logo-inner path[fill='rgb(23,23,23)'] {
+  fill: #6688cc !important;
 }
 
 :root[data-theme='dark'] .logo-inner path[fill='rgb(255,255,255)'] {
   fill: rgb(30, 30, 30) !important;
 }
 
+:root[data-theme='abyss'] .logo-inner path[fill='rgb(255,255,255)'] {
+  fill: #000c18 !important;
+}
+
 :root[data-theme='dark'] .logo-inner polygon[fill='rgb(23,23,23)'] {
   fill: rgb(255, 255, 255) !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .logo-inner path[fill='rgb(0,0,0)'],
-  :root:not([data-theme='light']) .logo-inner path[fill='rgb(23,23,23)'] {
-    fill: rgb(255, 255, 255) !important;
-  }
-
-  :root:not([data-theme='light']) .logo-inner path[fill='rgb(255,255,255)'] {
-    fill: rgb(30, 30, 30) !important;
-  }
-
-  :root:not([data-theme='light']) .logo-inner polygon[fill='rgb(23,23,23)'] {
-    fill: rgb(255, 255, 255) !important;
-  }
+:root[data-theme='abyss'] .logo-inner polygon[fill='rgb(23,23,23)'] {
+  fill: #6688cc !important;
 }
 
 li {
@@ -256,75 +281,42 @@ p > img {
 }
 
 /* Mermaid diagram dark mode support */
-/* Override inline styles to make diagrams readable in dark mode */
-/* Mermaid diagram dark mode support
-   NOTE: Keep manual override and media query in sync */
-:root[data-theme='dark'] svg[id^='mermaid-'] {
+:root[data-theme='dark'] svg[id^='mermaid-'],
+:root[data-theme='abyss'] svg[id^='mermaid-'] {
   filter: invert(1) hue-rotate(180deg);
 }
 
-:root[data-theme='dark'] svg[id^='mermaid-'] .label foreignObject {
+:root[data-theme='dark'] svg[id^='mermaid-'] .label foreignObject,
+:root[data-theme='abyss'] svg[id^='mermaid-'] .label foreignObject {
   filter: invert(1) hue-rotate(180deg);
 }
 
-:root[data-theme='dark'] svg[id^='mermaid-'] text {
+:root[data-theme='dark'] svg[id^='mermaid-'] text,
+:root[data-theme='abyss'] svg[id^='mermaid-'] text {
   filter: invert(1) hue-rotate(180deg);
 }
 
-:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel rect {
+:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel rect,
+:root[data-theme='abyss'] svg[id^='mermaid-'] .edgeLabel rect {
   fill: transparent !important;
 }
 
-:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel .labelBkg {
+:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel .labelBkg,
+:root[data-theme='abyss'] svg[id^='mermaid-'] .edgeLabel .labelBkg {
   background-color: #000000d4 !important;
 }
 
-:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel foreignObject div {
+:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel foreignObject div,
+:root[data-theme='abyss'] svg[id^='mermaid-'] .edgeLabel foreignObject div {
   color: var(--code-text) !important;
   background-color: transparent !important;
 }
 
-:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel p {
+:root[data-theme='dark'] svg[id^='mermaid-'] .edgeLabel p,
+:root[data-theme='abyss'] svg[id^='mermaid-'] .edgeLabel p {
   color: var(--code-text) !important;
   margin: 0 !important;
   background-color: transparent !important;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) svg[id^='mermaid-'] {
-    filter: invert(1) hue-rotate(180deg) saturate(50%);
-  }
-
-  :root:not([data-theme='light']) svg[id^='mermaid-'] .label foreignObject {
-    filter: invert(1) hue-rotate(180deg) saturate(50%);
-  }
-
-  :root:not([data-theme='light']) svg[id^='mermaid-'] text {
-    filter: invert(1) hue-rotate(180deg);
-  }
-
-  :root:not([data-theme='light']) svg[id^='mermaid-'] .edgeLabel rect {
-    fill: transparent !important;
-  }
-
-  :root:not([data-theme='light']) svg[id^='mermaid-'] .edgeLabel .labelBkg {
-    background-color: transparent !important;
-  }
-
-  :root:not([data-theme='light'])
-    svg[id^='mermaid-']
-    .edgeLabel
-    foreignObject
-    div {
-    color: var(--code-text) !important;
-    background-color: transparent !important;
-  }
-
-  :root:not([data-theme='light']) svg[id^='mermaid-'] .edgeLabel p {
-    color: var(--code-text) !important;
-    margin: 0 !important;
-    background-color: var(--bg-primary) !important;
-  }
 }
 
 #gatsby-focus-wrapper > div {
@@ -346,18 +338,12 @@ p > img {
   transition: filter 0.3s ease;
 }
 
-/* Invert only GitHub and Twitter icons in dark mode (not LinkedIn and Bluesky)
-   NOTE: Keep manual override and media query in sync */
+/* Invert only GitHub and Twitter icons in dark mode (not LinkedIn and Bluesky) */
 :root[data-theme='dark'] .social-icon-github,
-:root[data-theme='dark'] .social-icon-twitter {
+:root[data-theme='dark'] .social-icon-twitter,
+:root[data-theme='abyss'] .social-icon-github,
+:root[data-theme='abyss'] .social-icon-twitter {
   filter: invert(1) brightness(1.1);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .social-icon-github,
-  :root:not([data-theme='light']) .social-icon-twitter {
-    filter: invert(1) brightness(1.1);
-  }
 }
 
 .projects ul {
