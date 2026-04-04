@@ -13,7 +13,7 @@ class Layout extends React.Component {
         style={{
           marginLeft: `auto`,
           marginRight: `auto`,
-          marginTop: rhythm(0.4),
+          marginTop: 0,
           marginBottom: rhythm(1.4),
           maxWidth: '698px',
           hyphens: 'auto',
@@ -25,12 +25,22 @@ class Layout extends React.Component {
       >
         <header
           style={{
-            background: 'var(--bg-primary)',
+            background: 'rgba(var(--bg-primary-rgb, 255, 255, 255), 0.7)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
             paddingBottom: 18,
             paddingTop: 18,
+            paddingLeft: 'max(1rem, calc((100vw - 698px) / 2 + 1rem))',
+            paddingRight: 'max(1rem, calc((100vw - 698px) / 2 + 1rem))',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            position: 'sticky',
+            top: 0,
+            zIndex: 100,
+            marginLeft: 'calc(-50vw + 50%)',
+            marginRight: 'calc(-50vw + 50%)',
+            width: '100vw',
           }}
         >
           <Link

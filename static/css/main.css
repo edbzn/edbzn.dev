@@ -31,6 +31,7 @@
 /* Light theme (default) */
 :root {
   --bg-primary: #ffffff;
+  --bg-primary-rgb: 255, 255, 255;
   --bg-secondary: #f8f9fa;
   --text-primary: rgba(0, 0, 0, 0.9);
   --text-secondary: rgba(0, 0, 0, 0.7);
@@ -68,6 +69,7 @@
 /* Dark theme */
 :root[data-theme='dark'] {
   --bg-primary: #1e1e1e;
+  --bg-primary-rgb: 30, 30, 30;
   --bg-secondary: #2d2d2d;
   --text-primary: rgba(255, 255, 255, 0.9);
   --text-secondary: rgba(255, 255, 255, 0.7);
@@ -104,6 +106,7 @@
 /* Abyss theme - inspired by VS Code Abyss */
 :root[data-theme='abyss'] {
   --bg-primary: #000c18;
+  --bg-primary-rgb: 0, 12, 24;
   --bg-secondary: #060621;
   --text-primary: #8da6d8;
   --text-secondary: rgba(141, 166, 216, 0.75);
