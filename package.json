@@ -58,7 +58,7 @@
     "mdx-embed": "^1.1.2",
     "prop-types": "^15.8.1",
     "react": "^19.0.0",
-    "react-dom": "19.2.4",
+    "react-dom": "19.2.5",
     "react-helmet": "6.1.0",
     "react-typography": "0.16.23",
     "remark-gfm": "^3.0.0",
