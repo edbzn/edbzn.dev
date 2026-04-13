@@ -1,7 +1,7 @@
 ---
-title: "Souveraineté numérique : entre ambition et contradictions"
+title: "Souveraineté numérique: entre ambition et contradictions"
 date: '2026-04-13'
-description: "L'État annonce sa sortie de Windows et accélère la réduction de ses dépendances numériques extra-européennes. La Gendarmerie nationale, avec GendBuntu, avait ouvert la voie dès 2008."
+description: "L'État annonce sa sortie de Windows, mais l'Éducation nationale prolonge son contrat avec Microsoft jusqu'en 2029. Entre ambitions souveraines et dépendances reconduites, la stratégie numérique de l'État est floue."
 tags: [linux, open source, souveraineté numérique]
 lang: fr
 ---
