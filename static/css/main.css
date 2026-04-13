@@ -63,19 +63,9 @@
   --blockquote-border: rgba(0, 0, 0, 0.15);
   --anchor-color: rgba(0, 0, 0, 0.3);
 
-  /* Background texture + color wash (inspired by revu.cards) */
-  --site-bg-noise-opacity: 0.04;
-  --site-bg-wash:
-    radial-gradient(
-      1100px circle at 12% -10%,
-      color-mix(in srgb, var(--accent-color) 12%, transparent),
-      transparent 62%
-    ),
-    radial-gradient(
-      900px circle at 88% 0%,
-      color-mix(in srgb, var(--accent-color) 8%, transparent),
-      transparent 66%
-    );
+  /* Background texture + color wash */
+  --site-bg-noise-opacity: 0.15;
+  --site-bg-wash: none;
 
   color-scheme: light;
 }
@@ -114,18 +104,8 @@
   --blockquote-border: rgba(255, 255, 255, 0.25);
   --anchor-color: rgba(255, 255, 255, 0.4);
 
-  --site-bg-noise-opacity: 0.12;
-  --site-bg-wash:
-    radial-gradient(
-      1200px circle at 10% -20%,
-      color-mix(in srgb, var(--accent-color) 16%, transparent),
-      transparent 58%
-    ),
-    radial-gradient(
-      1000px circle at 90% 10%,
-      color-mix(in srgb, var(--accent-color) 10%, transparent),
-      transparent 64%
-    );
+  --site-bg-noise-opacity: 0.15;
+  --site-bg-wash: none;
 
   color-scheme: dark;
 }
@@ -149,7 +129,7 @@
   --highlight-bg: rgba(5, 19, 54, 0.95);
   --highlight-border: rgba(34, 119, 255, 0.25);
   --tag-bg: rgba(102, 136, 204, 0.1);
-  --tag-text: rgba(102, 136, 204, 0.9);
+  --tag-text: #8da6d8;
   --tag-bg-hover: rgba(102, 136, 204, 0.15);
   --tag-shadow: rgba(0, 0, 0, 0.3) 0px 2px 8px, rgba(0, 0, 0, 0.2) 0px 4px 16px;
   --tag-shadow-hover:
@@ -164,18 +144,12 @@
   --blockquote-border: rgba(89, 111, 153, 0.35);
   --anchor-color: rgba(102, 136, 204, 0.4);
 
-  --site-bg-noise-opacity: 0.12;
-  --site-bg-wash:
-    radial-gradient(
-      1200px circle at 12% -25%,
-      color-mix(in srgb, var(--accent-color) 18%, transparent),
-      transparent 58%
-    ),
-    radial-gradient(
-      900px circle at 86% 6%,
-      color-mix(in srgb, var(--accent-color) 12%, transparent),
-      transparent 66%
-    );
+  --site-bg-noise-opacity: 0.15;
+  --site-bg-wash: radial-gradient(
+    120% 80% at 30% 20%,
+    color-mix(in srgb, var(--accent-color) 8%, transparent),
+    transparent 70%
+  );
 
   color-scheme: dark;
 }
@@ -194,29 +168,60 @@ body {
 }
 
 @keyframes site-bg-wash-pan {
-  from {
+  0% {
     background-position:
       0% 0%,
-      100% 10%,
       0% 0%;
+    background-size:
+      200% 160%,
+      100% 100%;
   }
-  to {
+  20% {
     background-position:
-      100% 100%,
-      0% 90%,
+      80% 30%,
       0% 0%;
+    background-size:
+      160% 220%,
+      100% 100%;
+  }
+  40% {
+    background-position:
+      100% 80%,
+      0% 0%;
+    background-size:
+      220% 170%,
+      100% 100%;
+  }
+  60% {
+    background-position:
+      40% 100%,
+      0% 0%;
+    background-size:
+      170% 200%,
+      100% 100%;
+  }
+  80% {
+    background-position:
+      10% 60%,
+      0% 0%;
+    background-size:
+      240% 180%,
+      100% 100%;
+  }
+  100% {
+    background-position:
+      0% 0%,
+      0% 0%;
+    background-size:
+      200% 160%,
+      100% 100%;
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   body {
-    /* Make the wash larger than viewport so panning feels smooth. */
-    background-size:
-      160% 160%,
-      160% 160%,
-      100% 100%;
-    animation: site-bg-wash-pan 20s ease-in-out infinite alternate;
-    will-change: background-position;
+    animation: site-bg-wash-pan 50s ease-in-out infinite;
+    will-change: background-position, background-size;
   }
 }
 

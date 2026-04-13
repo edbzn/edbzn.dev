@@ -74,15 +74,13 @@ describe('Accessibility tests', () => {
   });
 
   it('Has no detectable accessibility violations on home (dark mode)', () => {
-    cy.visit('/')
-      .get('main')
+    cy.visit('/', {
+      onBeforeLoad: (win) => {
+        win.localStorage.setItem('theme', 'dark');
+      },
+    });
+    cy.get('main', { timeout: 10000 })
       .should('be.visible')
-      .then(() => {
-        cy.window().then((win) => {
-          win.document.documentElement.setAttribute('data-theme', 'dark');
-        });
-      })
-      .wait(500) // Wait for theme transition
       .injectAxe()
       .checkA11y(
         null,
@@ -94,15 +92,49 @@ describe('Accessibility tests', () => {
   });
 
   it('Has no detectable accessibility violations on blog (dark mode)', () => {
-    cy.visit('/blog')
-      .get('main', { timeout: 10000 })
+    cy.visit('/blog', {
+      onBeforeLoad: (win) => {
+        win.localStorage.setItem('theme', 'dark');
+      },
+    });
+    cy.get('main', { timeout: 10000 })
       .should('be.visible')
-      .then(() => {
-        cy.window().then((win) => {
-          win.document.documentElement.setAttribute('data-theme', 'dark');
-        });
-      })
-      .wait(500) // Wait for theme transition
+      .injectAxe()
+      .checkA11y(
+        null,
+        {
+          includedImpacts: ['critical', 'serious'],
+        },
+        terminalLog
+      );
+  });
+
+  it('Has no detectable accessibility violations on home (abyss mode)', () => {
+    cy.visit('/', {
+      onBeforeLoad: (win) => {
+        win.localStorage.setItem('theme', 'abyss');
+      },
+    });
+    cy.get('main', { timeout: 10000 })
+      .should('be.visible')
+      .injectAxe()
+      .checkA11y(
+        null,
+        {
+          includedImpacts: ['critical', 'serious'],
+        },
+        terminalLog
+      );
+  });
+
+  it('Has no detectable accessibility violations on blog (abyss mode)', () => {
+    cy.visit('/blog', {
+      onBeforeLoad: (win) => {
+        win.localStorage.setItem('theme', 'abyss');
+      },
+    });
+    cy.get('main', { timeout: 10000 })
+      .should('be.visible')
       .injectAxe()
       .checkA11y(
         null,

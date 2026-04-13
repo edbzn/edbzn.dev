@@ -29,12 +29,12 @@ const styles = {
   },
   section: {
     margin: rhythm(2.4) + ' auto',
-    backgroundColor: 'var(--bg-secondary)',
+    backgroundColor: 'var(--bg-primary)',
     color: 'var(--text-primary)',
     textAlign: 'center',
     fontFamily: '"Public Sans", sans-serif',
     padding: '20px',
-    borderColor: 'var(--highlight-border)',
+    borderColor: 'var(--border-color)',
   },
   heading: {
     fontSize: '1.5rem',
