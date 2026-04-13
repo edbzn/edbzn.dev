@@ -24,6 +24,7 @@ class Layout extends React.Component {
         }}
       >
         <header
+          className="site-header"
           style={{
             background: 'rgba(var(--bg-primary-rgb, 255, 255, 255), 0.7)',
             backdropFilter: 'blur(12px)',
@@ -45,6 +46,7 @@ class Layout extends React.Component {
         >
           <Link
             aria-label="Home"
+            className="site-logo-link"
             style={{
               display: 'block',
               width: 'fit-content',
@@ -186,6 +188,7 @@ class Layout extends React.Component {
                 </g>
               </svg>
               <span
+                className="site-logo-text"
                 style={{
                   marginLeft: '12px',
                   background: 'var(--text-primary)',
@@ -198,6 +201,7 @@ class Layout extends React.Component {
             </div>
           </Link>
           <nav
+            className="site-nav"
             style={{
               display: 'flex',
               gap: '24px',
@@ -206,6 +210,7 @@ class Layout extends React.Component {
           >
             <Link
               to="/"
+              className="site-nav-link"
               style={{
                 boxShadow: 'none',
                 fontFamily: '"Public Sans", sans-serif',
@@ -223,6 +228,7 @@ class Layout extends React.Component {
             </Link>
             <Link
               to="/blog"
+              className="site-nav-link"
               style={{
                 boxShadow: 'none',
                 fontFamily: '"Public Sans", sans-serif',
