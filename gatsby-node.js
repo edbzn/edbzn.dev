@@ -85,8 +85,9 @@ exports.createPages = async ({ graphql, actions }) => {
   });
 
   tags.forEach((tag) => {
+    const slugifiedTag = tag.fieldValue.toLowerCase().replace(/\s+/g, '-');
     createPage({
-      path: `/tags/${tag.fieldValue}`,
+      path: `/tags/${slugifiedTag}`,
       component: blogList,
       context: {
         tag: tag.fieldValue,
