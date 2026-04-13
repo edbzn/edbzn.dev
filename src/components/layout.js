@@ -247,7 +247,7 @@ class Layout extends React.Component {
             <ThemeToggle />
           </nav>
         </header>
-        <main style={{ marginTop: rhythm(1) }}>{children}</main>
+        <main style={{ marginTop: rhythm(2) }}>{children}</main>
         <Service />
         <footer
           role="contentinfo"
