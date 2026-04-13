@@ -63,6 +63,20 @@
   --blockquote-border: rgba(0, 0, 0, 0.15);
   --anchor-color: rgba(0, 0, 0, 0.3);
 
+  /* Background texture + color wash (inspired by revu.cards) */
+  --site-bg-noise-opacity: 0.04;
+  --site-bg-wash:
+    radial-gradient(
+      1100px circle at 12% -10%,
+      color-mix(in srgb, var(--accent-color) 12%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      900px circle at 88% 0%,
+      color-mix(in srgb, var(--accent-color) 8%, transparent),
+      transparent 66%
+    );
+
   color-scheme: light;
 }
 
@@ -99,6 +113,19 @@
   --table-border: rgba(255, 255, 255, 0.2);
   --blockquote-border: rgba(255, 255, 255, 0.25);
   --anchor-color: rgba(255, 255, 255, 0.4);
+
+  --site-bg-noise-opacity: 0.12;
+  --site-bg-wash:
+    radial-gradient(
+      1200px circle at 10% -20%,
+      color-mix(in srgb, var(--accent-color) 16%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      1000px circle at 90% 10%,
+      color-mix(in srgb, var(--accent-color) 10%, transparent),
+      transparent 64%
+    );
 
   color-scheme: dark;
 }
@@ -137,12 +164,79 @@
   --blockquote-border: rgba(89, 111, 153, 0.35);
   --anchor-color: rgba(102, 136, 204, 0.4);
 
+  --site-bg-noise-opacity: 0.12;
+  --site-bg-wash:
+    radial-gradient(
+      1200px circle at 12% -25%,
+      color-mix(in srgb, var(--accent-color) 18%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      900px circle at 86% 6%,
+      color-mix(in srgb, var(--accent-color) 12%, transparent),
+      transparent 66%
+    );
+
   color-scheme: dark;
 }
 
+body {
+  background-color: var(--bg-primary);
+  background-image: var(--site-bg-wash);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
 :root[data-theme='abyss'] body {
-  background: linear-gradient(180deg, #000c18 0%, #050a30 40%, #060621 100%)
-    fixed;
+  background-image:
+    var(--site-bg-wash),
+    linear-gradient(180deg, #000c18 0%, #050a30 40%, #060621 100%);
+}
+
+@keyframes site-bg-wash-pan {
+  from {
+    background-position:
+      0% 0%,
+      100% 10%,
+      0% 0%;
+  }
+  to {
+    background-position:
+      100% 100%,
+      0% 90%,
+      0% 0%;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body {
+    /* Make the wash larger than viewport so panning feels smooth. */
+    background-size:
+      160% 160%,
+      160% 160%,
+      100% 100%;
+    animation: site-bg-wash-pan 20s ease-in-out infinite alternate;
+    will-change: background-position;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    animation: none;
+    will-change: auto;
+  }
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: var(--site-bg-noise-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
 }
 
 /* Rotate on hover */
