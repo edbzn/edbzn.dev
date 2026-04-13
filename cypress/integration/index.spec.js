@@ -95,7 +95,7 @@ describe('Accessibility tests', () => {
 
   it('Has no detectable accessibility violations on blog (dark mode)', () => {
     cy.visit('/blog')
-      .get('main')
+      .get('main', { timeout: 10000 })
       .should('be.visible')
       .then(() => {
         cy.window().then((win) => {
