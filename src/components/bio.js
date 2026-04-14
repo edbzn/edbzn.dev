@@ -55,13 +55,20 @@ const Bio = () => {
         />
       </div>
       <div>
-        <p style={{ margin: 0, fontSize: 14, fontWeight: 'lighter' }}>
+        <p
+          style={{
+            margin: 0,
+            fontSize: 14,
+            fontWeight: 'lighter',
+            textWrap: 'balance',
+          }}
+        >
           I’m <span style={{ textDecoration: 'underline' }}>{author}</span>, a{' '}
-          <strong>software engineer</strong> focusing on
-          <em>web development</em> and <em>platform engineering</em>. I work
-          extensively with Angular, Node.js, and Nx to build scalable
-          applications. As an open source contributor, I love collaborating with
-          people and enjoy solving problems with clean solutions.
+          <strong>software engineer</strong> with deep expertise in{' '}
+          <em>web development</em>, focusing on <em>architecture</em>,{' '}
+          <em>DevOps</em>, <em>dev tooling</em>, and <em>agentic workflows</em>.
+          As an open source contributor, I love collaborating with people and
+          enjoy solving problems with clean solutions.
         </p>
         <div style={{ marginTop: rhythm(0.4) }}>
           <Social social={social} />

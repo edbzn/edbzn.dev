@@ -26,11 +26,11 @@ class Layout extends React.Component {
         <header
           className="site-header"
           style={{
-            background: 'rgba(var(--bg-primary-rgb, 255, 255, 255), 0.7)',
+            background: 'rgba(var(--bg-primary-rgb, 255, 255, 255), 0.4)',
             backdropFilter: 'blur(12px)',
             WebkitBackdropFilter: 'blur(12px)',
-            paddingBottom: 18,
-            paddingTop: 18,
+            paddingBottom: 14,
+            paddingTop: 14,
             paddingLeft: 'max(1rem, calc((100vw - 698px) / 2 + 1rem))',
             paddingRight: 'max(1rem, calc((100vw - 698px) / 2 + 1rem))',
             display: 'flex',
@@ -59,7 +59,7 @@ class Layout extends React.Component {
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 71 71"
-                width="48px"
+                width="42px"
                 shapeRendering="geometricprecision"
               >
                 <g className="logo-inner">
