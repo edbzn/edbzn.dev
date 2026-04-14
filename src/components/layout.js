@@ -2,8 +2,9 @@ import { Link } from 'gatsby';
 import React from 'react';
 import rss from '../../static/icons/rss.svg';
 import { rhythm } from '../utils/typography';
-import { Service } from './service';
 import { ThemeToggle } from './theme-toggle';
+import { AsciiHexagon } from './ascii-hexagon';
+import { Service } from './service';
 
 class Layout extends React.Component {
   render() {
@@ -248,7 +249,9 @@ class Layout extends React.Component {
           </nav>
         </header>
         <main style={{ marginTop: rhythm(2) }}>{children}</main>
-        <Service />
+        <div style={{ marginTop: rhythm(2) }}>
+          <AsciiHexagon />
+        </div>
         <footer
           role="contentinfo"
           style={{ marginTop: rhythm(2), fontSize: 14, fontWeight: 100 }}
