@@ -3,7 +3,7 @@ import React from 'react';
 import rss from '../../static/icons/rss.svg';
 import { rhythm } from '../utils/typography';
 import { ThemeToggle } from './theme-toggle';
-import { AsciiHexagon } from './ascii-hexagon';
+import { AsciiSphere } from './ascii-sphere';
 import { Service } from './service';
 
 class Layout extends React.Component {
@@ -250,7 +250,7 @@ class Layout extends React.Component {
         </header>
         <main style={{ marginTop: rhythm(2) }}>{children}</main>
         <div style={{ marginTop: rhythm(2) }}>
-          <AsciiHexagon />
+          <AsciiSphere />
         </div>
         <footer
           role="contentinfo"
