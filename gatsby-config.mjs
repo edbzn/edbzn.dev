@@ -12,7 +12,7 @@ export default {
     titleTemplate: '%s · edbzn.dev',
     author: `Edouard Bozon`,
     description:
-      'Edouard Bozon · A software engineer with deep expertise in web development, focusing on DevOps, architecture, dev tooling, and agentic workflows. As an open source contributor, I focus on collaboration—whether improving code, sharing knowledge, or helping others learn. I enjoy solving problems with clean solutions and love working with teams and communities that push the craft forward.',
+      'Edouard Bozon · A software engineer with deep expertise in web development, focusing on Architecture, DevOps, DevTools, and Agentic workflows.',
     twitterUsername: '@edbzn',
     github: {
       sponsorUrl: 'https://github.com/sponsors/edbzn',
