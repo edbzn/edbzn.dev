@@ -1,5 +1,6 @@
 import React from 'react';
 import { rhythm } from '../utils/typography';
+import { GitHubRepo } from './github-repo';
 
 export const Projects = ({ ossProjects }) => (
   <ul
@@ -11,33 +12,13 @@ export const Projects = ({ ossProjects }) => (
     }}
   >
     {ossProjects.map((project) => (
-      <li className="box" key={project.name}>
-        <a
-          href={project.url}
-          style={{
-            color: 'var(--text-primary)',
-            fontWeight: 400,
-            textDecoration: 'none',
-            display: 'block',
-            boxShadow: 'none',
-          }}
-        >
-          <img
-            style={{
-              height: '34px',
-              marginBottom: rhythm(0.3),
-              display: 'block',
-            }}
-            alt="Project logo"
-            src={project.img}
-          />
-          <div style={{ marginBottom: rhythm(0.2) }}>{project.name}</div>
-          <p
-            style={{ marginTop: rhythm(0.2), marginBottom: 0, fontWeight: 300 }}
-          >
-            {project.description}
-          </p>
-        </a>
+      <li key={project.name}>
+        <GitHubRepo
+          name={project.name}
+          description={project.description}
+          url={project.url}
+          img={project.img}
+        />
       </li>
     ))}
   </ul>
