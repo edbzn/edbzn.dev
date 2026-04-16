@@ -5,7 +5,7 @@ const { createFilePath } = require(`gatsby-source-filesystem`);
  * @type {import('gatsby').GatsbyNode['createPages']}
  */
 exports.createPages = async ({ graphql, actions }) => {
-  const { createPage } = actions;
+  const { createPage, createRedirect } = actions;
 
   const blogPost = path.resolve(`./src/templates/blog-post.js`);
   const blogList = path.resolve(`./src/pages/blog.js`);
@@ -66,7 +66,12 @@ exports.createPages = async ({ graphql, actions }) => {
     const previous =
       relatedPosts.find((p) => p.relation === 'previous') || null;
 
-    // TODO: create redirect
+    const oldPath = post.fields.slug.replace(/^\/blog/, '');
+    createRedirect({
+      fromPath: oldPath,
+      toPath: post.fields.slug,
+      isPermanent: true,
+    });
     createPage({
       path: post.fields.slug,
       component: `${blogPost}?__contentFilePath=${post.internal.contentFilePath}`,
@@ -107,7 +112,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     createNodeField({
       name: `slug`,
       node,
-      value,
+      value: `/blog${value}`,
     });
   }
 };
