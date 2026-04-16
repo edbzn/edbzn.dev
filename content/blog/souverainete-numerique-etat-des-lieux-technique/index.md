@@ -6,6 +6,8 @@ tags: [linux, open source, souveraineté numérique, nixos]
 lang: fr
 ---
 
+![NixOS](./nixos.jpeg)
+
 Le 8 avril 2026, la DINUM a organisé un [séminaire interministériel](https://www.numerique.gouv.fr/sinformer/espace-presse/souverainete-numerique-reduction-dependances-extra-europeennes/) pour accélérer la réduction des dépendances numériques extra-européennes de l'État. Parmi les annonces phares: **la sortie de Windows au profit de postes sous Linux**, la migration de 80 000 agents de la CNAM vers des outils souverains (Tchap, Visio, FranceTransfert), et la migration de la plateforme des données de santé vers une solution de confiance d'ici fin 2026.
 
 Chaque ministère devra formaliser son propre plan de réduction des dépendances d'ici l'automne, couvrant le poste de travail, les outils collaboratifs, l'anti-virus, l'IA, les bases de données, la virtualisation et les équipements réseau.
