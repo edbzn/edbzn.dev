@@ -4,7 +4,6 @@ import rss from '../../static/icons/rss.svg';
 import { rhythm } from '../utils/typography';
 import { ThemeToggle } from './theme-toggle';
 import { AsciiSphere } from './ascii-sphere';
-import { Service } from './service';
 
 class Layout extends React.Component {
   render() {
