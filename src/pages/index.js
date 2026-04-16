@@ -17,7 +17,7 @@ class AboutMe extends React.Component {
 
     return (
       <Layout location={this.props.location} author={author} github={github}>
-        <Bio />
+        <Bio short={false} />
 
         <section style={{ marginTop: rhythm(2) }}>
           <div
