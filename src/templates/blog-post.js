@@ -162,6 +162,7 @@ export default BlogPostTemplate;
 
 export const Head = ({ data, location }) => {
   const post = data.mdx;
+  const cover = post.frontmatter.cover?.publicURL;
   return (
     <Seo
       title={post.frontmatter.title}
@@ -169,6 +170,7 @@ export const Head = ({ data, location }) => {
       article={true}
       canonical={post.frontmatter.canonical}
       pathname={location.pathname}
+      image={cover}
     />
   );
 };
@@ -196,6 +198,9 @@ export const pageQuery = graphql`
         draft
         tags
         lang
+        cover {
+          publicURL
+        }
       }
     }
   }

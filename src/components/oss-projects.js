@@ -6,7 +6,9 @@ export const Projects = ({ ossProjects }) => (
   <ul
     style={{
       margin: 0,
+      padding: 0,
       listStyle: 'none',
+      display: 'grid',
       gap: rhythm(0.5),
       fontFamily: '"Public Sans", sans-serif',
     }}

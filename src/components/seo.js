@@ -1,7 +1,14 @@
 import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 
-export function Seo({ title, description, article, canonical, pathname }) {
+export function Seo({
+  title,
+  description,
+  article,
+  canonical,
+  pathname,
+  image,
+}) {
   const { site } = useStaticQuery(query);
 
   const {
@@ -16,6 +23,11 @@ export function Seo({ title, description, article, canonical, pathname }) {
     title: title ? titleTemplate.replace('%s', title) : defaultTitle,
     description: description || defaultDescription,
     url: pathname ? `${siteUrl}${pathname}` : siteUrl,
+    image: image
+      ? image.startsWith('http')
+        ? image
+        : `${siteUrl}${image}`
+      : null,
   };
 
   return (
@@ -28,12 +40,17 @@ export function Seo({ title, description, article, canonical, pathname }) {
       {article && <meta property="og:type" content="article" />}
       <meta property="og:title" content={seo.title} />
       <meta property="og:description" content={seo.description} />
-      <meta name="twitter:card" content="summary_large_image" />
+      {seo.image && <meta property="og:image" content={seo.image} />}
+      <meta
+        name="twitter:card"
+        content={seo.image ? 'summary_large_image' : 'summary'}
+      />
       {twitterUsername && (
         <meta name="twitter:creator" content={twitterUsername} />
       )}
       <meta name="twitter:title" content={seo.title} />
       <meta name="twitter:description" content={seo.description} />
+      {seo.image && <meta name="twitter:image" content={seo.image} />}
     </>
   );
 }

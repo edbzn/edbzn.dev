@@ -24,7 +24,6 @@ export const GitHubRepo = ({ name, description, url, img }) => {
         flexDirection: 'column',
         boxShadow: 'none',
         height: '100%',
-        margin: '2.25em 0',
       }}
     >
       {img && (
