@@ -281,4 +281,5 @@ const preStyle = {
   padding: 0,
   whiteSpace: 'pre',
   opacity: 0.85,
+  overflow: 'hidden',
 };
