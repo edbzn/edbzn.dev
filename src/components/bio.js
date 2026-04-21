@@ -94,21 +94,8 @@ const Bio = ({ short = true }) => {
               @jscutlery/semver
             </a>{' '}
             for automated semantic versioning in Nx workspaces, and contributing
-            to the broader <em>Nx</em> and <em>Angular</em> ecosystems through
-            plugins, developer tooling, and build infrastructure like{' '}
-            <em>Rspack</em> and <em>Module Federation</em>.
-          </p>
-          <p
-            style={{
-              margin: 0,
-              marginTop: rhythm(0.4),
-              fontSize: 14,
-              fontWeight: 'lighter',
-            }}
-          >
-            Beyond code, I enjoy benchmarking developer tools, crafting dev
-            environment setups, and exploring ways to improve CI/CD pipelines
-            and developer experience at scale.
+            to the broader <em>Node.js</em> ecosystem through plugins, developer
+            tooling, and build infrastructure.
           </p>
           <div style={{ marginTop: rhythm(0.8) }}>
             <Social social={social} />
