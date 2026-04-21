@@ -1,0 +1,74 @@
+.figure {
+  margin: 1.5em 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.title {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.95em;
+  margin: 0 0 0.6rem 0;
+  color: var(--text-secondary, var(--text-primary));
+}
+
+.chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.9rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr 6rem;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text-primary);
+}
+
+.label {
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary, var(--text-primary));
+  white-space: nowrap;
+}
+
+.track {
+  background-color: var(--note-border);
+  border-radius: 3px;
+  height: 1.4rem;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  background: linear-gradient(90deg, #7aa2f7, #4a7bd6);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+  min-width: 2px;
+}
+
+.bar.best {
+  background: linear-gradient(90deg, #9ece6a, #5a8f3a);
+}
+
+.bar.regression {
+  background: linear-gradient(90deg, #f7768e, #c74c64);
+}
+
+.value {
+  font-variant-numeric: tabular-nums;
+  font-family: 'Fira Mono', 'SF Mono', Menlo, monospace;
+  font-size: 0.85rem;
+}
+
+@media screen and (max-width: 700px) {
+  .row {
+    grid-template-columns: 5.5rem 1fr 5rem;
+    font-size: 0.8rem;
+  }
+}

@@ -6,6 +6,7 @@ import Bio from '../components/bio';
 import Layout from '../components/layout';
 import { Note } from '../components/note';
 import { GitHubRepo, GitHubRepoGrid } from '../components/github-repo';
+import { BenchChart } from '../components/bench-chart';
 import { PostNav } from '../components/post-nav';
 import { Seo } from '../components/seo';
 import { Tags } from '../components/tags';
@@ -13,7 +14,7 @@ import { LanguageIndicator } from '../components/language-indicator';
 import { TableOfContents } from '../components/table-of-contents';
 import { rhythm } from '../utils/typography';
 
-const shortcodes = { Note, GitHubRepo, GitHubRepoGrid };
+const shortcodes = { Note, GitHubRepo, GitHubRepoGrid, BenchChart };
 
 const BlogPostTemplate = (props) => {
   const [giscusTheme, setGiscusTheme] = useState('light');
