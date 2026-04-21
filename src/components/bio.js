@@ -4,6 +4,7 @@ import React from 'react';
 
 import { rhythm } from '../utils/typography';
 import { Social } from './social';
+import * as styles from './bio.module.css';
 
 const Bio = ({ short = true }) => {
   const data = useStaticQuery(graphql`
@@ -31,12 +32,8 @@ const Bio = ({ short = true }) => {
 
   return (
     <div className="bio box">
-      <div
-        style={{
-          display: `flex`,
-        }}
-      >
-        <div className="avatar" style={{ paddingRight: rhythm(0.7) }}>
+      <div className={styles.container}>
+        <div className={`avatar ${styles.avatar}`}>
           <GatsbyImage
             image={data.avatar.childImageSharp.gatsbyImageData}
             layout="fixed"

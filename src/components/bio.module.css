@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+}
+
+.avatar {
+  padding-right: var(--bio-avatar-padding, 1rem);
+}
+
+@media (max-width: 480px) {
+  .container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .avatar {
+    padding-right: 0;
+    margin-bottom: 0.75rem;
+  }
+}
