@@ -112,7 +112,6 @@
 .toc-link {
   color: var(--text-primary, #24292e);
   text-decoration: none;
-  display: inline-block;
 }
 
 [data-theme='dark'] .toc-link {

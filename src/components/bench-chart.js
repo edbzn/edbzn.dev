@@ -23,7 +23,12 @@ export const BenchChart = ({
   const values = data.map((d) => d.value);
   const max = Math.max(...values);
   const best = lowerIsBetter ? Math.min(...values) : Math.max(...values);
-  const bestIndex = values.indexOf(best);
+  // Prefer an explicit highlight="best" marker if provided; otherwise fall back
+  // to the min/max of the dataset. This lets authors mark the intended sweet
+  // spot even when later noisy data points technically beat it.
+  const explicitBestIndex = data.findIndex((d) => d.highlight === 'best');
+  const bestIndex =
+    explicitBestIndex >= 0 ? explicitBestIndex : values.indexOf(best);
 
   return (
     <figure className={styles.figure}>
@@ -32,7 +37,8 @@ export const BenchChart = ({
         {data.map((d, i) => {
           const pct = (d.value / max) * 100;
           const isBest =
-            d.highlight === 'best' || (!d.highlight && d.value === best);
+            d.highlight === 'best' ||
+            (explicitBestIndex < 0 && !d.highlight && d.value === best);
           const isRegression =
             d.highlight === 'regression' || (!d.highlight && i > bestIndex);
           const barClass = [

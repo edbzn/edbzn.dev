@@ -24,6 +24,7 @@ export const GitHubRepo = ({ name, description, url, img }) => {
         flexDirection: 'column',
         boxShadow: 'none',
         height: '100%',
+        margin: '2.25em 0',
       }}
     >
       {img && (
@@ -164,10 +165,12 @@ function languageColor(language) {
 
 export const GitHubRepoGrid = ({ children }) => (
   <div
+    className="github-repo-grid"
     style={{
       display: 'grid',
       gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
       gap: rhythm(0.5),
+      margin: '2.25em 0',
     }}
   >
     {children}

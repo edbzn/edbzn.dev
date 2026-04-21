@@ -73,6 +73,7 @@ pre {
   color: var(--code-text);
   padding: 0.15em 0.2em 0.05em;
   border-radius: 0px !important;
+  font-size: 0.9em;
   word-break: break-word;
   overflow-wrap: break-word;
   white-space: pre-wrap;

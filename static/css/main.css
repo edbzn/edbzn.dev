@@ -122,7 +122,7 @@
   --box-shadow-light: rgba(0, 0, 0, 0.4);
   --box-shadow-dark: rgba(0, 0, 0, 0.6);
   --accent-color: #2277ff;
-  --code-bg: rgba(34, 119, 255, 0.15);
+  --code-bg: rgb(255 253 100 / 7%);
   --code-text: #8da6d8;
   --link-color: #2277ff;
   --blockquote-color: rgba(102, 136, 204, 0.9);
@@ -342,6 +342,10 @@ details {
   z-index: -1;
   transition: box-shadow 0.2s ease;
   border-radius: 4px;
+}
+
+.github-repo-grid > .box {
+  margin: 0 !important;
 }
 
 .box:hover:not(.bio):not(.service-card):after {

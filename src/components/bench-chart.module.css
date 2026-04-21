@@ -8,8 +8,6 @@
 
 .title {
   font-family: 'Public Sans', sans-serif;
-  font-weight: 600;
-  font-size: 0.95em;
   margin: 0 0 0.6rem 0;
   color: var(--text-secondary, var(--text-primary));
 }
