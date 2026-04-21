@@ -1,8 +1,9 @@
 ---
-title: "The hidden cost of Nx parallelism: when two layers of parallelism compete"
+title: "The hidden cost of Nx parallelism: when two layers compete"
 date: '2026-04-21'
 description: "Bumping Nx's parallel flag looks free, but tools like esbuild and Vitest already parallelize internally. Stacking both on top of each other can flatline or regress your builds. Here's a small benchmark that shows the crossover."
 tags: [nx, monorepo, performance, benchmark]
+cover: ./chart.png
 ---
 
 Increasing Nx's parallelism looks like a free speedup, but it's not as simple as it seems. Most modern build and test tools already parallelize internally, and Nx's parallel flag stacks on top of that. Past a certain threshold, you pay the cost of oversubscription without getting any speedup in return, and sometimes you actually regress.
@@ -11,7 +12,9 @@ Increasing Nx's parallelism looks like a free speedup, but it's not as simple as
 
 A synthetic Nx workspace with 96 packages (60 source files and 12 test files each), pinned to 16 logical CPUs via `taskset` to reflect a typical mid-tier CI runner. The build target calls esbuild directly, and the test target runs Vitest with its default inner thread pool of 7 workers. Each data point is a warmup run plus 3 measured runs, with the Nx cache disabled.
 
-<GitHubRepo name="edbzn/nx-parallelism-benchmark" />
+<div style={{ margin: '2.25em 0' }}>
+  <GitHubRepo name="edbzn/nx-parallelism-benchmark" />
+</div>
 
 I ran the benchmark on a Ryzen 9 9950X3D (16 physical cores, 32 threads) with 64 GB of RAM running Ubuntu 25.10.
 
