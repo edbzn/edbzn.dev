@@ -162,7 +162,15 @@ export default BlogPostTemplate;
 
 export const Head = ({ data, location }) => {
   const post = data.mdx;
-  const cover = post.frontmatter.cover?.publicURL;
+  const cover = post.frontmatter.cover;
+  const image = cover?.publicURL
+    ? {
+        url: cover.publicURL,
+        width: cover.childImageSharp?.original?.width,
+        height: cover.childImageSharp?.original?.height,
+        alt: post.frontmatter.title,
+      }
+    : null;
   return (
     <Seo
       title={post.frontmatter.title}
@@ -170,7 +178,7 @@ export const Head = ({ data, location }) => {
       article={true}
       canonical={post.frontmatter.canonical}
       pathname={location.pathname}
-      image={cover}
+      image={image}
     />
   );
 };
@@ -200,6 +208,13 @@ export const pageQuery = graphql`
         lang
         cover {
           publicURL
+          extension
+          childImageSharp {
+            original {
+              width
+              height
+            }
+          }
         }
       }
     }
