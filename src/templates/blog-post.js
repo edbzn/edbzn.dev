@@ -7,6 +7,8 @@ import Layout from '../components/layout';
 import { Note } from '../components/note';
 import { GitHubRepo, GitHubRepoGrid } from '../components/github-repo';
 import { BenchChart } from '../components/bench-chart';
+import { BlogIdeas } from '../components/blog-ideas';
+import { blogIdeas } from '../data/blog-ideas';
 import { PostNav } from '../components/post-nav';
 import { Seo } from '../components/seo';
 import { Tags } from '../components/tags';
@@ -150,6 +152,31 @@ const BlogPostTemplate = (props) => {
           async
         />
         <PostNav previous={previous} next={next} relatedPosts={relatedPosts} />
+        <section
+          style={{
+            margin: rhythm(2.4) + ' auto',
+            fontFamily: '"Public Sans", sans-serif',
+          }}
+        >
+          <div
+            style={{
+              fontSize: '1.1rem',
+              marginBottom: rhythm(0.6),
+              fontWeight: 'light',
+            }}
+          >
+            Blog ideas
+          </div>
+          <p
+            style={{
+              marginBottom: rhythm(0.8),
+              color: 'var(--text-secondary, var(--text-primary))',
+            }}
+          >
+            Upvote what you'd like me to write about next.
+          </p>
+          <BlogIdeas ideas={blogIdeas} />
+        </section>
         <footer>
           <Bio />
         </footer>
