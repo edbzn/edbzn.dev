@@ -36,7 +36,7 @@ I ran the benchmark on a Ryzen 9 9950X3D (16 physical cores, 32 threads) with 64
   ]}
 />
 
-The curve bends hard at parallel=16 and then flatlines. esbuild already saturates all 16 CPUs from inside a single process, so adding more Nx slots just duplicates work the Go runtime was going to do anyway. You pay RAM and scheduling overhead for no wall-clock win.
+The curve bends hard at `parallel=16` and then flatlines. esbuild already saturates all 16 CPUs from inside a single process, so adding more Nx slots just duplicates work the Go runtime was going to do anyway. You pay RAM and scheduling overhead for no wall-clock win.
 
 ### Test with Vitest (inner pool of 7 threads, its default), on 16 CPUs, 96 packages
 
@@ -54,7 +54,7 @@ The curve bends hard at parallel=16 and then flatlines. esbuild already saturate
   ]}
 />
 
-This one is worse than the build. Notice the sweet spot is at parallel=8, not 16, even though we have 16 CPUs: Vitest's own 7-thread pool already fills the machine. At parallel=8 we're running 8 × 7 = 56 threads on 16 cores, and that's already the optimum. Past there, the curve climbs back up monotonically and parallel=32 ends up ~3.5% slower than parallel=8, with 32 × 7 = 224 threads fighting over 16 cores.
+This one is worse than the build. Notice the sweet spot is at `parallel=8`, not 16, even though we have 16 CPUs: Vitest's own 7-thread pool already fills the machine. At `parallel=8` we're running 8 × 7 = 56 threads on 16 cores, and that's already the optimum. Past there, the curve climbs back up monotonically and `parallel=32` ends up ~3.5% slower than parallel=8, with 32 × 7 = 224 threads fighting over 16 cores.
 
 <Note>These numbers come from a synthetic workspace. On a real large monorepo with hundreds of packages, heavier bundles and bigger test suites, the degradation past the sweet spot is typically steeper: more RAM pressure, more GC, and more process startup cost. Treat the shape of the curve as the signal, not the absolute percentages.</Note>
 
@@ -97,6 +97,24 @@ Pin the tool to a single worker and let Nx do the parallelization:
 - **esbuild**: not really tunable, but since it's already CPU-bound inside its own process, dropping Nx's parallel value is usually the right lever.
 
 With the inner pool pinned to 1, `--parallel=N` is the only knob that matters, and N ≈ your CPU count becomes a safe default. Measure from there.
+
+Here's the same Vitest sweep as above, but with `--no-file-parallelism`:
+
+<BenchChart
+  title="nx run-many -t test --no-file-parallelism (lower is better)"
+  unit="ms"
+  data={[
+    { label: '--parallel=1',  value: 128705 },
+    { label: '--parallel=2',  value: 64672 },
+    { label: '--parallel=4',  value: 33987 },
+    { label: '--parallel=8',  value: 19265 },
+    { label: '--parallel=16', value: 13881 },
+    { label: '--parallel=24', value: 13859, highlight: 'best' },
+    { label: '--parallel=32', value: 13905 },
+  ]}
+/>
+
+Two things to notice. First, the best time is ~5% lower than the best time of the stacked setup (13859 ms vs 14552 ms), so pinning the inner pool isn't just about predictability, it's also faster. Second, the curve is monotonically decreasing up to the CPU count and then flat, no regression past the sweet spot. That's the shape you want on CI: one knob, no cliff.
 
 Past a single machine's sweet spot, the next speedup comes from horizontal distribution (Nx Agents, Nx Cloud, CI matrix jobs), not from cranking a single-machine knob. Watch memory too: each extra slot holds another Node process in RAM, which is a common cause of CI OOM-kills.
 
