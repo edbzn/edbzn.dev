@@ -71,3 +71,21 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           command: pages deploy public --project-name=blog
+
+  deploy-worker:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    needs: [build, e2e]
+    # Only deploy the Worker on pushes to main.
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v6
+      - name: Deploy Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: worker
+          wranglerVersion: '4'
+          command: deploy
