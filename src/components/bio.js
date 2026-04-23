@@ -86,7 +86,11 @@ const Bio = ({ short = true }) => {
             I'm an active open source contributor, maintaining projects like{' '}
             <a
               href="https://github.com/jscutlery/semver"
-              style={{ color: 'inherit' }}
+              style={{
+                color: 'inherit',
+                boxShadow: 'none',
+                textDecoration: 'underline',
+              }}
             >
               @jscutlery/semver
             </a>{' '}
