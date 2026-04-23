@@ -1,0 +1,13 @@
+name = "edbzn-reactions"
+main = "src/index.js"
+compatibility_date = "2026-04-23"
+
+[vars]
+ALLOWED_ORIGIN = ["https://edbzn.dev", "http://localhost:*"]
+
+[[kv_namespaces]]
+binding = "REACTIONS"
+id = "1427717347d849a483ae2893105d7bf5"
+
+[observability]
+enabled = true

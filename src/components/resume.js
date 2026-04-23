@@ -67,12 +67,14 @@ export const Resume = ({ experiences }) => {
           </div>
         ))}
       </section>
-      <button type="button" onClick={() => setShowAll(!showAll)}>
-        {showAll ? 'Show Less' : 'Show more'}
-      </button>
-      <button type="button" onClick={() => downloadCV()}>
-        Download CV
-      </button>
+      <div className={css.actions}>
+        <button type="button" onClick={() => setShowAll(!showAll)}>
+          {showAll ? 'Show Less' : 'Show more'}
+        </button>
+        <button type="button" onClick={() => downloadCV()}>
+          Download CV
+        </button>
+      </div>
     </>
   );
 };

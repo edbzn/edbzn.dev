@@ -160,7 +160,13 @@ importers:
         specifier: ^5.0.0
         version: 5.1.0
 
-  worker:
+  worker/blog-ideas:
+    devDependencies:
+      wrangler:
+        specifier: ^4.0.0
+        version: 4.84.1
+
+  worker/reactions:
     devDependencies:
       wrangler:
         specifier: ^4.0.0

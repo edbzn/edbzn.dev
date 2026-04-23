@@ -242,13 +242,14 @@ export const BlogIdeas = ({ ideas = [] }) => {
         ref={widgetHostRef}
         aria-hidden="true"
         style={{
-          position: 'absolute',
+          position: 'fixed',
           left: '-9999px',
-          top: 'auto',
-          width: 0,
-          height: 0,
+          top: '-9999px',
+          width: '1px',
+          height: '1px',
           overflow: 'hidden',
           pointerEvents: 'none',
+          visibility: 'hidden',
         }}
       />
     </>

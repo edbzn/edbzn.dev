@@ -1,0 +1,15 @@
+{
+  "name": "edbzn-reactions-worker",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --port 8788 --inspector-port 9230",
+    "dev:remote": "wrangler dev --remote --port 8788 --inspector-port 9230",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

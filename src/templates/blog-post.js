@@ -9,6 +9,7 @@ import { GitHubRepo, GitHubRepoGrid } from '../components/github-repo';
 import { BenchChart } from '../components/bench-chart';
 import { BlogIdeas } from '../components/blog-ideas';
 import { blogIdeas } from '../data/blog-ideas';
+import { PostReactions } from '../components/post-reactions';
 import { PostNav } from '../components/post-nav';
 import { Seo } from '../components/seo';
 import { Tags } from '../components/tags';
@@ -134,6 +135,14 @@ const BlogPostTemplate = (props) => {
         <MDXProvider components={shortcodes}>
           <section style={{ marginBottom: rhythm(2) }}>{children}</section>
         </MDXProvider>
+        <div style={{ marginBottom: rhythm(2) }}>
+          <PostReactions
+            slug={location.pathname
+              .replace(/^\/|\/$$/g, '')
+              .split('/')
+              .pop()}
+          />
+        </div>
         <Giscus
           id="comments"
           repo="edbzn/edbzn.dev"

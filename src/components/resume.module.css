@@ -172,7 +172,7 @@
   );
 }
 
-button {
+.actions button {
   margin-top: 24px;
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
@@ -185,17 +185,17 @@ button {
   transition: background-color 0.2s ease;
 }
 
-button:hover {
+.actions button:hover {
   background-color: var(--border-color);
 }
 
-button:last-child {
+.actions button:last-child {
   margin-left: 12px;
   background-color: var(--text-primary);
   color: var(--bg-primary);
   border-color: var(--text-primary);
 }
 
-button:last-child:hover {
+.actions button:last-child:hover {
   opacity: 0.9;
 }
