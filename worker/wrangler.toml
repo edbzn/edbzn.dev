@@ -4,10 +4,21 @@ compatibility_date = "2026-04-23"
 
 [vars]
 ALLOWED_ORIGIN = ["https://edbzn.dev", "http://localhost:*"]
+# Maximum votes per idea per UTC day. Acts as a circuit breaker.
+DAILY_CAP = "500"
 
 [[kv_namespaces]]
-binding = "edbzn-blog-ideas"
+binding = "BLOG_IDEAS"
 id = "59223b3111044b8fa5e3baa9e935dd25"
+
+# Per-IP rate limit: 10 requests / 60s bucket, keyed on CF-Connecting-IP in code.
+# Free feature of the Workers platform. Counters are best-effort (per-colo),
+# which is fine as an additional layer on top of the daily cap.
+[[unsafe.bindings]]
+name = "RATE_LIMITER"
+type = "ratelimit"
+namespace_id = "1001"
+simple = { limit = 10, period = 60 }
 
 [observability]
 enabled = true
