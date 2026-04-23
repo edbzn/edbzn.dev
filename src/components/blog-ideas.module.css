@@ -55,6 +55,7 @@
 
 .voted {
   border-color: #5a8f3a;
+  background-color: rgba(90, 143, 58, 0.12);
   color: #5a8f3a;
 }
 
@@ -64,10 +65,20 @@
 }
 
 .voted:hover,
-.voted:active {
+.voted:active,
+.voted:hover:not(:disabled),
+.voted:active:not(:disabled) {
   border-color: #5a8f3a;
+  background-color: rgba(90, 143, 58, 0.12);
   color: #5a8f3a;
   transform: none;
+}
+
+:global(:root[data-theme='dark']) .voted,
+:global(:root[data-theme='abyss']) .voted {
+  border-color: #9ece6a;
+  background-color: rgba(158, 206, 106, 0.15);
+  color: #9ece6a;
 }
 
 :global(:root[data-theme='dark']) .voted:hover,
@@ -75,12 +86,7 @@
 :global(:root[data-theme='abyss']) .voted:hover,
 :global(:root[data-theme='abyss']) .voted:active {
   border-color: #9ece6a;
-  color: #9ece6a;
-}
-
-:global(:root[data-theme='dark']) .voted,
-:global(:root[data-theme='abyss']) .voted {
-  border-color: #9ece6a;
+  background-color: rgba(158, 206, 106, 0.15);
   color: #9ece6a;
 }
 
