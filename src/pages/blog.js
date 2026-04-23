@@ -4,6 +4,8 @@ import Bio from '../components/bio';
 import Layout from '../components/layout';
 import { Seo } from '../components/seo';
 import { PostPreview } from '../components/post-preview';
+import { BlogIdeas } from '../components/blog-ideas';
+import { blogIdeas } from '../data/blog-ideas';
 import { rhythm } from '../utils/typography';
 
 class BlogIndex extends React.Component {
@@ -25,6 +27,30 @@ class BlogIndex extends React.Component {
     return (
       <Layout location={this.props.location} author={author} github={github}>
         <Bio />
+        {!tag && (
+          <section style={{ marginTop: rhythm(2) }}>
+            <div
+              style={{
+                marginBottom: rhythm(1.4),
+                fontFamily: '"Public Sans", sans-serif',
+                textTransform: 'uppercase',
+                fontWeight: '100',
+              }}
+            >
+              Blog ideas
+            </div>
+            <p
+              style={{
+                fontFamily: '"Public Sans", sans-serif',
+                marginBottom: rhythm(0.8),
+                color: 'var(--text-secondary, var(--text-primary))',
+              }}
+            >
+              Upvote what you'd like me to write about next.
+            </p>
+            <BlogIdeas ideas={blogIdeas} />
+          </section>
+        )}
         <section role="main" style={{ marginTop: rhythm(2) }}>
           <div
             style={{
