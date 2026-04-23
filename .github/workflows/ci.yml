@@ -19,6 +19,16 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm playwright install chromium --with-deps
       - run: pnpm build
+        env:
+          GATSBY_IDEAS_API: ${{ vars.GATSBY_IDEAS_API }}
+          GATSBY_REACTIONS_API: ${{ vars.GATSBY_REACTIONS_API }}
+          GATSBY_TURNSTILE_SITE_KEY: ${{ vars.GATSBY_TURNSTILE_SITE_KEY }}
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: public
+          path: public/
+          retention-days: 1
 
   e2e:
     runs-on: ubuntu-latest
@@ -53,21 +63,11 @@ jobs:
     needs: [build, e2e]
     steps:
       - uses: actions/checkout@v6
-      - name: Enable Corepack
-        run: corepack enable
-      - name: Use Node.js v20
-        uses: actions/setup-node@v6
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
         with:
-          node-version: 24
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
-      - name: Install Playwright Browsers
-        run: pnpm playwright install chromium --with-deps
-      - run: pnpm build
-        env:
-          GATSBY_IDEAS_API: ${{ vars.GATSBY_IDEAS_API }}
-          GATSBY_REACTIONS_API: ${{ vars.GATSBY_REACTIONS_API }}
-          GATSBY_TURNSTILE_SITE_KEY: ${{ vars.GATSBY_TURNSTILE_SITE_KEY }}
+          name: public
+          path: public/
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
