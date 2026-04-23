@@ -32,7 +32,7 @@
   background: transparent;
   color: var(--text-primary);
   font-family: inherit;
-  cursor: pointer !important;
+  cursor: pointer;
   transition:
     background-color 0.15s ease,
     border-color 0.15s ease,
@@ -50,11 +50,36 @@
 }
 
 .button:disabled {
-  cursor: default;
-  opacity: 0.75;
+  cursor: not-allowed;
 }
 
 .voted {
+  border-color: #5a8f3a;
+  color: #5a8f3a;
+}
+
+.voted:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.voted:hover,
+.voted:active {
+  border-color: #5a8f3a;
+  color: #5a8f3a;
+  transform: none;
+}
+
+:global(:root[data-theme='dark']) .voted:hover,
+:global(:root[data-theme='dark']) .voted:active,
+:global(:root[data-theme='abyss']) .voted:hover,
+:global(:root[data-theme='abyss']) .voted:active {
+  border-color: #9ece6a;
+  color: #9ece6a;
+}
+
+:global(:root[data-theme='dark']) .voted,
+:global(:root[data-theme='abyss']) .voted {
   border-color: #9ece6a;
   color: #9ece6a;
 }
