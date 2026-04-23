@@ -8,20 +8,27 @@
  *
  * Storage (KV, binding `BLOG_IDEAS`):
  *   count:<id>                  integer as string
+ *   day:<id>:<YYYY-MM-DD>       integer as string (per-day vote tally, 48h TTL)
  *   dedup:<hash>                "1" with 30d TTL, where hash = sha256(ip + id)
  *   ids                         JSON array of known ids (for GET /votes)
  *
- * Anti-abuse without auth: we hash the caller IP (from CF-Connecting-IP) with
- * the idea id and stash a dedup key with a 30-day TTL. Not bulletproof — a
- * determined voter can rotate IPs — but enough to stop casual inflation on a
- * personal blog. Wrap with Cloudflare Turnstile if it ever becomes a problem.
- *
- * Concurrency: KV reads-then-writes are not atomic. Racing writes to the same
- * id can drop an increment. For a blog upvote counter that's acceptable. If
- * you ever need exactness, move the counter to a Durable Object.
+ * Anti-abuse layers (in order on every POST):
+ *   1. Origin allowlist enforced server-side (browsers enforce CORS, bots don't).
+ *   2. Turnstile token verification (when TURNSTILE_SECRET is configured).
+ *   3. Rate-limit binding (`RATE_LIMITER`) keyed on CF-Connecting-IP.
+ *   4. ASN blocklist to reject traffic from common cloud / proxy ASNs.
+ *   5. Per-idea daily cap to bound write amplification during an attack.
+ *   6. Per-(IP, id) dedup with 30d TTL (the only one a legit user ever hits).
  */
 
 const ID_RE = /^[a-z0-9][a-z0-9-]{0,63}$/;
+const DEFAULT_DAILY_CAP = 500;
+const DEFAULT_BLOCKED_ASNS = new Set([
+  16509, 14618, 15169, 396982, 8075, 14061, 16276, 24940, 63949, 20473, 36351,
+  45102,
+]);
+const TURNSTILE_VERIFY_URL =
+  'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
 export default {
   async fetch(request, env) {
@@ -42,44 +49,118 @@ export default {
       if (request.method === 'GET' && voteMatch) {
         const id = decodeURIComponent(voteMatch[1]);
         if (!ID_RE.test(id)) return json({ error: 'invalid id' }, cors, 400);
-        const count = await getCount(env, id);
-        return json({ id, count }, cors);
+        return json({ id, count: await getCount(env, id) }, cors);
       }
 
       const postMatch = url.pathname.match(/^\/vote\/([^/]+)$/);
       if (request.method === 'POST' && postMatch) {
         const id = decodeURIComponent(postMatch[1]);
         if (!ID_RE.test(id)) return json({ error: 'invalid id' }, cors, 400);
-        return json(await castVote(env, request, id), cors);
+
+        if (!isAllowedOrigin(origin, env)) {
+          return json({ error: 'forbidden origin' }, cors, 403);
+        }
+        if (isBlockedAsn(request, env)) {
+          return json({ error: 'forbidden' }, cors, 403);
+        }
+
+        const ip = request.headers.get('CF-Connecting-IP') || '0.0.0.0';
+
+        // Turnstile verification. Only enforced when the secret is configured,
+        // so local dev without the secret still works.
+        if (env.TURNSTILE_SECRET) {
+          const token = request.headers.get('X-Turnstile-Token') || '';
+          if (!token) {
+            return json({ error: 'missing turnstile token' }, cors, 403);
+          }
+          const ok = await verifyTurnstile(env.TURNSTILE_SECRET, token, ip);
+          if (!ok) {
+            return json({ error: 'turnstile failed' }, cors, 403);
+          }
+        }
+
+        if (env.RATE_LIMITER) {
+          const { success } = await env.RATE_LIMITER.limit({ key: ip });
+          if (!success) return json({ error: 'rate limited' }, cors, 429);
+        }
+
+        return json(await castVote(env, id, ip), cors);
       }
 
       return json({ error: 'not found' }, cors, 404);
     } catch (err) {
+      console.error('worker error', err);
       return json({ error: 'internal error' }, cors, 500);
     }
   },
 };
 
-async function castVote(env, request, id) {
-  const ip = request.headers.get('CF-Connecting-IP') || '0.0.0.0';
-  const hash = await sha256(`${ip}:${id}`);
-  const dedupKey = `dedup:${hash}`;
+async function verifyTurnstile(secret, token, ip) {
+  try {
+    const body = new FormData();
+    body.append('secret', secret);
+    body.append('response', token);
+    if (ip) body.append('remoteip', ip);
+    const r = await fetch(TURNSTILE_VERIFY_URL, { method: 'POST', body });
+    if (!r.ok) return false;
+    const data = await r.json();
+    return data && data.success === true;
+  } catch (err) {
+    console.error('turnstile verify error', err);
+    return false;
+  }
+}
 
-  const already = await env.BLOG_IDEAS.get(dedupKey);
-  if (already) {
+async function castVote(env, id, ip) {
+  const cap = parseInt(env.DAILY_CAP, 10) || DEFAULT_DAILY_CAP;
+  const today = new Date().toISOString().slice(0, 10);
+  const dayKey = `day:${id}:${today}`;
+  const todayCount = parseInt((await env.BLOG_IDEAS.get(dayKey)) || '0', 10);
+  if (todayCount >= cap) {
     return { id, count: await getCount(env, id), voted: false };
   }
 
-  // Mark voter first; if the count write fails we'd rather under-count than
-  // let the same caller spam.
+  const hash = await sha256(`${ip}:${id}`);
+  const dedupKey = `dedup:${hash}`;
+  if (await env.BLOG_IDEAS.get(dedupKey)) {
+    return { id, count: await getCount(env, id), voted: false };
+  }
+
   await env.BLOG_IDEAS.put(dedupKey, '1', { expirationTtl: 60 * 60 * 24 * 30 });
-
-  const current = await getCount(env, id);
-  const next = current + 1;
+  const next = (await getCount(env, id)) + 1;
   await env.BLOG_IDEAS.put(`count:${id}`, String(next));
+  await env.BLOG_IDEAS.put(dayKey, String(todayCount + 1), {
+    expirationTtl: 60 * 60 * 48,
+  });
   await registerId(env, id);
-
   return { id, count: next, voted: true };
+}
+
+function isAllowedOrigin(origin, env) {
+  if (!origin) return false;
+  const allowed = toList(env.ALLOWED_ORIGIN);
+  return allowed.some((p) => {
+    if (p === '*') return true;
+    if (p.endsWith('*')) return origin.startsWith(p.slice(0, -1));
+    return p === origin;
+  });
+}
+
+function isBlockedAsn(request, env) {
+  const asn = request.cf?.asn;
+  if (typeof asn !== 'number') return false;
+  if (env.BLOCKED_ASNS == null) return DEFAULT_BLOCKED_ASNS.has(asn);
+  return toList(env.BLOCKED_ASNS).map(Number).includes(asn);
+}
+
+function toList(raw) {
+  if (raw == null) return [];
+  return Array.isArray(raw)
+    ? raw
+    : String(raw)
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
 }
 
 async function getCount(env, id) {
@@ -117,27 +198,12 @@ async function sha256(input) {
 }
 
 function corsHeaders(origin, env) {
-  const raw = env.ALLOWED_ORIGIN;
-  const allowed = Array.isArray(raw)
-    ? raw
-    : (raw || '')
-        .split(',')
-        .map((s) => s.trim())
-        .filter(Boolean);
-
-  const matches = (pattern) => {
-    if (pattern === '*') return true;
-    if (pattern.endsWith('*')) {
-      return origin.startsWith(pattern.slice(0, -1));
-    }
-    return pattern === origin;
-  };
-
-  const ok = !!origin && allowed.some(matches);
+  const ok = isAllowedOrigin(origin, env);
+  const fallback = toList(env.ALLOWED_ORIGIN)[0] || '';
   return {
-    'Access-Control-Allow-Origin': ok ? origin : allowed[0] || '',
+    'Access-Control-Allow-Origin': ok ? origin : fallback,
     'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type,X-Turnstile-Token',
     'Access-Control-Max-Age': '86400',
     Vary: 'Origin',
   };
