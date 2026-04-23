@@ -117,11 +117,23 @@ async function sha256(input) {
 }
 
 function corsHeaders(origin, env) {
-  const allowed = (env.ALLOWED_ORIGIN || '').split(',').map((s) => s.trim());
-  const ok =
-    allowed.includes(origin) ||
-    allowed.includes('*') ||
-    origin.startsWith('http://localhost:');
+  const raw = env.ALLOWED_ORIGIN;
+  const allowed = Array.isArray(raw)
+    ? raw
+    : (raw || '')
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+  const matches = (pattern) => {
+    if (pattern === '*') return true;
+    if (pattern.endsWith('*')) {
+      return origin.startsWith(pattern.slice(0, -1));
+    }
+    return pattern === origin;
+  };
+
+  const ok = !!origin && allowed.some(matches);
   return {
     'Access-Control-Allow-Origin': ok ? origin : allowed[0] || '',
     'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',

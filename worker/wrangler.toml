@@ -1,21 +1,13 @@
 name = "edbzn-blog-ideas"
 main = "src/index.js"
-compatibility_date = "2025-01-01"
+compatibility_date = "2026-04-23"
 
-# Public origin that is allowed to call the API.
-# Override per-env via `[env.production.vars]` if needed.
 [vars]
-ALLOWED_ORIGIN = "https://edbzn.dev"
+ALLOWED_ORIGIN = ["https://edbzn.dev", "http://localhost:*"]
 
-# KV namespace that holds vote counts and per-voter dedup keys.
-# Create with:
-#   wrangler kv namespace create BLOG_IDEAS
-#   wrangler kv namespace create BLOG_IDEAS --preview
-# Then paste the returned ids below.
 [[kv_namespaces]]
-binding = "BLOG_IDEAS"
-id = "REPLACE_ME"
-preview_id = "REPLACE_ME"
+binding = "edbzn-blog-ideas"
+id = "59223b3111044b8fa5e3baa9e935dd25"
 
 [observability]
 enabled = true
