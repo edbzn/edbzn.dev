@@ -7,18 +7,33 @@
  */
 export const blogIdeas = [
   {
-    id: 'nx-agents-deep-dive',
-    title: 'Nx Agents deep dive',
-    description: 'How task distribution actually works under the hood.',
+    id: 'nx-dte-vs-ci-matrix',
+    title: 'Nx DTE vs CI job matrix',
+    description:
+      'Nx Distributed Task Execution (DTE) vs a traditional CI job matrix with manual sharding: a comparison of developer experience, performance, and reliability.',
   },
   {
-    id: 'vitest-vs-jest-2026',
-    title: 'Vitest vs Jest in 2026',
-    description: 'A fresh benchmark and migration notes.',
+    id: 'monorepo-readiness-checklist',
+    title: 'Are you ready for a monorepo?',
+    description:
+      'An opinionated checklist to help you decide whether a monorepo is the right choice for your organization, and how to prepare for the transition.',
   },
   {
-    id: 'ts-project-references',
-    title: 'TypeScript project references, properly',
-    description: 'Incremental builds without foot-guns.',
+    id: 'ai-monorepo-enabler',
+    title: 'Why monorepos unlock AI coding agents',
+    description:
+      'Shared context from frontend to backend, consistent conventions, and reliable task graphs: what makes a monorepo the ideal substrate for AI-assisted development.',
+  },
+  {
+    id: 'ci-flakiness-at-scale',
+    title: 'Managing CI flakiness at scale',
+    description:
+      'Detecting, quarantining, and fixing flaky tests without slowing the pipeline: patterns that survive past 25 engineers.',
+  },
+  {
+    id: 'monitoring-ci-health',
+    title: 'Monitoring CI health',
+    description:
+      'Tools and techniques for tracking CI performance and reliability over time, and alerting on regressions before they impact developers.',
   },
 ];
