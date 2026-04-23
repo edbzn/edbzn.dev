@@ -63,6 +63,12 @@ jobs:
     needs: [build, e2e]
     steps:
       - uses: actions/checkout@v6
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
