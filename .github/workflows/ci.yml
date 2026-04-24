@@ -98,7 +98,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: worker/blog-ideas
+          workingDirectory: workers/ideas
           wranglerVersion: '4'
           command: deploy
 
@@ -115,6 +115,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: worker/reactions
+          workingDirectory: workers/reactions
           wranglerVersion: '4'
           command: deploy

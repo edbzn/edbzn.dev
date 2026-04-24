@@ -8,8 +8,8 @@
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
-    "develop:worker": "pnpm --dir worker/blog-ideas dev",
-    "develop:reactions": "pnpm --dir worker/reactions dev",
+    "develop:worker": "pnpm --dir workers/ideas dev",
+    "develop:reactions": "pnpm --dir workers/reactions dev",
     "format": "prettier --write \"**/*.{js,jsx,json,css}\"",
     "start": "run-p develop develop:worker develop:reactions",
     "serve": "run-p serve:gatsby develop:worker develop:reactions",

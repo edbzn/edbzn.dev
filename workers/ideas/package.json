@@ -1,5 +1,5 @@
 {
-  "name": "edbzn-blog-ideas-worker",
+  "name": "edbzn-ideas-worker",
   "private": true,
   "version": "0.0.0",
   "type": "module",
