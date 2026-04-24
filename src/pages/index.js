@@ -120,6 +120,7 @@ export const pageQuery = graphql`
         github {
           repositoryUrl
           sponsorUrl
+          commitSha
         }
         ossProjects {
           name

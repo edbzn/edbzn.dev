@@ -289,16 +289,22 @@ class Layout extends React.Component {
             ·{' '}
             <a
               href={github.repositoryUrl}
-              style={{ boxShadow: 'none', color: 'var(--text-color)' }}
+              style={{
+                boxShadow: 'none',
+                color: 'var(--text-color)',
+                fontFamily: '"Fira Code", "Courier New", Courier, monospace;',
+                fontWeight: 100,
+              }}
+              title="Source code on GitHub"
             >
-              🔑&nbsp;Source&nbsp;code
+              {github.commitSha ? github.commitSha.slice(0, 16) : 'source'}
             </a>{' '}
             ·{' '}
             <a
               href={github.sponsorUrl}
               style={{ boxShadow: 'none', color: 'var(--text-color)' }}
             >
-              ❤️&nbsp;Become&nbsp;a&nbsp;GitHub&nbsp;Sponsor
+              Become&nbsp;a&nbsp;GitHub&nbsp;Sponsor
             </a>
           </div>
         </footer>

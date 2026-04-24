@@ -1,9 +1,22 @@
+import { execSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import remarkGfm from 'remark-gfm';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const siteUrl = `https://edbzn.dev`;
+
+const commitSha = (() => {
+  try {
+    return (
+      process.env.GITHUB_SHA ||
+      process.env.COMMIT_SHA ||
+      execSync('git rev-parse HEAD', { cwd: __dirname }).toString().trim()
+    );
+  } catch {
+    return '';
+  }
+})();
 
 export default {
   siteMetadata: {
@@ -17,6 +30,7 @@ export default {
     github: {
       sponsorUrl: 'https://github.com/sponsors/edbzn',
       repositoryUrl: 'https://github.com/edbzn/edbzn.github.io',
+      commitSha,
     },
     social: {
       twitter: `https://twitter.com/edbzn`,

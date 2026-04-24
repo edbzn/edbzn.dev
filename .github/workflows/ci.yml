@@ -23,6 +23,7 @@ jobs:
           GATSBY_IDEAS_API: ${{ vars.GATSBY_IDEAS_API }}
           GATSBY_REACTIONS_API: ${{ vars.GATSBY_REACTIONS_API }}
           GATSBY_TURNSTILE_SITE_KEY: ${{ vars.GATSBY_TURNSTILE_SITE_KEY }}
+          COMMIT_SHA: ${{ github.sha }}
       - name: Upload build artifacts
         uses: actions/upload-artifact@v7
         with:
