@@ -244,14 +244,51 @@ body::before {
   background-size: 256px 256px;
 }
 
-/* Rotate on hover */
+/* Compass needle animation: on hover, swing wildly then settle, the way a
+   real compass needle oscillates around magnetic north before coming to rest. */
 .logo-inner {
-  transition: transform 1.3s cubic-bezier(0.41, 0.57, 0, 1.41);
   transform-origin: 50%;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* Catch hover across the full bounding box even when the ring interior
+     is hollow (see the donut path using evenodd fill rule). */
+  pointer-events: bounding-box;
 }
 
-.logo-inner:hover {
-  transform: rotate(345deg);
+.logo-inner:hover,
+.logo-inner.logo-active {
+  animation: compass-seek 2.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes compass-seek {
+  0% {
+    transform: rotate(0deg);
+  }
+  18% {
+    transform: rotate(-48deg);
+  }
+  36% {
+    transform: rotate(32deg);
+  }
+  54% {
+    transform: rotate(-18deg);
+  }
+  72% {
+    transform: rotate(10deg);
+  }
+  86% {
+    transform: rotate(-4deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-inner,
+  .logo-inner:hover {
+    animation: none;
+    transition: none;
+  }
 }
 
 /* Logo colors - invert in dark mode */
@@ -290,6 +327,18 @@ body::before {
 
 :root[data-theme='abyss'] .logo-inner polygon[fill='rgb(23,23,23)'] {
   fill: #6688cc !important;
+}
+
+.logo-inner polygon[fill='rgb(100,100,100)'] {
+  transition: fill 0.3s ease;
+}
+
+:root[data-theme='dark'] .logo-inner polygon[fill='rgb(100,100,100)'] {
+  fill: rgb(180, 180, 180) !important;
+}
+
+:root[data-theme='abyss'] .logo-inner polygon[fill='rgb(100,100,100)'] {
+  fill: #3d568a !important;
 }
 
 li {

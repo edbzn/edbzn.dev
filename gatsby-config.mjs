@@ -292,7 +292,7 @@ export default {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        icon: `static/images/me.jpg`,
+        icon: `static/images/logo.png`,
       },
     },
   ],

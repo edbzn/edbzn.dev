@@ -4,6 +4,7 @@ import rss from '../../static/icons/rss.svg';
 import { rhythm } from '../utils/typography';
 import { ThemeToggle } from './theme-toggle';
 import { AsciiSphere } from './ascii-sphere';
+import { LogoProximityTrigger } from './logo-proximity-trigger';
 
 class Layout extends React.Component {
   render() {
@@ -23,6 +24,7 @@ class Layout extends React.Component {
           hyphenateLimitZone: '8%',
         }}
       >
+        <LogoProximityTrigger />
         <header
           className="site-header"
           style={{
@@ -58,133 +60,84 @@ class Layout extends React.Component {
             <div style={{ display: `flex`, alignItems: `center` }}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 71 71"
-                width="42px"
-                shapeRendering="geometricprecision"
+                viewBox="0 0 100 100"
+                width="38px"
+                shapeRendering="geometricPrecision"
               >
                 <g className="logo-inner">
+                  {/* Mask that punches a transparent circle through the
+                      compass rose so the page background shows through the
+                      center. */}
+                  <defs>
+                    <mask
+                      id="compass-hole"
+                      maskUnits="userSpaceOnUse"
+                      x="0"
+                      y="0"
+                      width="100"
+                      height="100"
+                    >
+                      <rect width="100" height="100" fill="white" />
+                      <circle cx="50" cy="50" r="7" fill="black" />
+                    </mask>
+                  </defs>
+                  {/* Outer ring (hollow donut via evenodd) */}
                   <path
-                    d=" M 7.011 27.866 C 11.224 12.143 27.41 2.798 43.134 7.011 C 58.857 11.224 68.202 27.41 63.989 43.134 C 59.776 58.857 43.59 68.202 27.866 63.989 C 12.143 59.776 2.798 43.59 7.011 27.866 Z "
+                    d="M 50 8 A 42 42 0 1 0 50 92 A 42 42 0 1 0 50 8 Z M 50 12 A 38 38 0 1 1 50 88 A 38 38 0 1 1 50 12 Z"
                     fill="rgb(0,0,0)"
+                    fillRule="evenodd"
                   />
-                  <path
-                    d=" M 9.014 28.403 C 12.931 13.785 27.979 5.097 42.597 9.014 C 57.215 12.931 65.903 27.979 61.986 42.597 C 58.069 57.215 43.021 65.903 28.403 61.986 C 13.785 58.069 5.097 43.021 9.014 28.403 Z "
-                    fill="rgb(255,255,255)"
+                  {/* Cardinal ticks */}
+                  <polygon points="49,2 51,2 51,8 49,8" fill="rgb(23,23,23)" />
+                  <polygon
+                    points="92,49 98,49 98,51 92,51"
+                    fill="rgb(23,23,23)"
                   />
-                  <g>
-                    <g>
-                      <polygon
-                        points="48.49,58,32.533,37.213,38.467,33.787"
-                        fill="rgb(23,23,23)"
-                      />
-                      <path
-                        d=" M 48.49 58 L 35.5 35.5 L 32.533 37.213 L 48.49 58 Z "
-                        fill="rgb(0,0,0)"
-                      />
-                    </g>
-                    <g>
-                      <polygon
-                        points="22.51,13,38.467,33.787,32.533,37.213"
-                        fill="rgb(23,23,23)"
-                      />
-                      <path
-                        d=" M 22.51 13 L 35.5 35.5 L 38.467 33.787 L 22.51 13 Z "
-                        fill="rgb(0,0,0)"
-                      />
-                    </g>
-                    <g>
-                      <polygon
-                        points="13,48.49,33.787,32.533,37.213,38.467"
-                        fill="rgb(23,23,23)"
-                      />
-                      <path
-                        d=" M 13 48.49 L 35.5 35.5 L 33.787 32.533 L 13 48.49 Z "
-                        fill="rgb(0,0,0)"
-                      />
-                    </g>
-                    <g>
-                      <polygon
-                        points="58,22.51,37.213,38.467,33.787,32.533"
-                        fill="rgb(23,23,23)"
-                      />
-                      <path
-                        d=" M 58 22.51 L 35.5 35.5 L 37.213 38.467 L 58 22.51 Z "
-                        fill="rgb(0,0,0)"
-                      />
-                    </g>
-                    <g>
-                      <polygon
-                        points="45.012,0,40.182,36.755,30.818,34.245"
-                        fill="rgb(255,0,0)"
-                      />
-                      <path
-                        d=" M 45.012 0 L 35.5 35.5 L 40.182 36.755 L 45.012 0 Z "
-                        fill="rgb(210,0,0)"
-                      />
-                    </g>
-                    <g>
-                      <polygon
-                        points="25.988,71,30.818,34.245,40.182,36.755"
-                        fill="rgb(23,23,23)"
-                      />
-                      <path
-                        d=" M 25.988 71 L 35.5 35.5 L 30.818 34.245 L 25.988 71 Z "
-                        fill="rgb(0,0,0)"
-                      />
-                    </g>
-                    <g>
-                      <polygon
-                        points="0,25.988,36.755,30.818,34.245,40.182"
-                        fill="rgb(23,23,23)"
-                      />
-                      <path
-                        d=" M 0 25.988 L 35.5 35.5 L 36.755 30.818 L 0 25.988 Z "
-                        fill="rgb(0,0,0)"
-                      />
-                    </g>
-                    <g>
-                      <polygon
-                        points="71,45.012,34.245,40.182,36.755,30.818"
-                        fill="rgb(23,23,23)"
-                      />
-                      <path
-                        d=" M 71 45.012 L 35.5 35.5 L 34.245 40.182 L 71 45.012 Z "
-                        fill="rgb(0,0,0)"
-                      />
-                    </g>
-                    <g>
-                      <polygon
-                        points="71,45.012,34.245,40.182,36.755,30.818"
-                        fill="rgb(23,23,23)"
-                      />
-                      <path
-                        d=" M 71 45.012 L 35.5 35.5 L 34.245 40.182 L 71 45.012 Z "
-                        fill="rgb(0,0,0)"
-                      />
-                    </g>
-                    <g>
-                      <polygon
-                        points="48.49,58,32.533,37.213,38.467,33.787"
-                        fill="rgb(23,23,23)"
-                      />
-                      <path
-                        d=" M 48.49 58 L 35.5 35.5 L 32.533 37.213 L 48.49 58 Z "
-                        fill="rgb(0,0,0)"
-                      />
-                    </g>
+                  <polygon
+                    points="49,92 51,92 51,98 49,98"
+                    fill="rgb(23,23,23)"
+                  />
+                  <polygon points="2,49 8,49 8,51 2,51" fill="rgb(23,23,23)" />
+                  {/* 8-ray compass rose — cardinal rays carry more visual
+                      weight than the thinner diagonal rays. The central
+                      circle is masked out so the background shows through. */}
+                  <g mask="url(#compass-hole)">
+                    {/* Diagonals */}
+                    <polygon
+                      points="68,32 55.2,49.2 50.8,44.8"
+                      fill="rgb(23,23,23)"
+                    />
+                    <polygon
+                      points="68,68 50.8,55.2 55.2,50.8"
+                      fill="rgb(23,23,23)"
+                    />
+                    <polygon
+                      points="32,68 44.8,50.8 49.2,55.2"
+                      fill="rgb(23,23,23)"
+                    />
+                    <polygon
+                      points="32,32 49.2,44.8 44.8,49.2"
+                      fill="rgb(23,23,23)"
+                    />
+                    {/* Cardinals (bolder) */}
+                    <polygon
+                      points="90,50 55,54.5 55,45.5"
+                      fill="rgb(23,23,23)"
+                    />
+                    <polygon
+                      points="50,90 45.5,55 54.5,55"
+                      fill="rgb(23,23,23)"
+                    />
+                    <polygon
+                      points="10,50 45,45.5 45,54.5"
+                      fill="rgb(23,23,23)"
+                    />
+                    {/* North — red in every theme */}
+                    <polygon
+                      points="50,10 54.5,45 45.5,45"
+                      fill="rgb(255,0,0)"
+                    />
                   </g>
-                  <path
-                    d=" M 26.837 33.179 C 28.118 28.398 33.04 25.556 37.821 26.837 C 42.602 28.118 45.444 33.04 44.163 37.821 C 42.882 42.602 37.96 45.444 33.179 44.163 C 28.398 42.882 25.556 37.96 26.837 33.179 Z "
-                    fill="rgb(0,0,0)"
-                  />
-                  <path
-                    d=" M 28.877 33.725 C 29.857 30.07 33.619 27.898 37.274 28.877 C 40.93 29.857 43.102 33.619 42.123 37.274 C 41.143 40.93 37.381 43.102 33.725 42.123 C 30.07 41.143 27.898 37.381 28.877 33.725 Z "
-                    fill="rgb(255,255,255)"
-                  />
-                  <path
-                    d=" M 31.856 34.524 C 32.395 32.513 34.465 31.317 36.476 31.856 C 38.487 32.395 39.683 34.465 39.144 36.476 C 38.605 38.487 36.535 39.683 34.524 39.144 C 32.513 38.605 31.317 36.535 31.856 34.524 Z "
-                    fill="rgb(0,0,0)"
-                  />
                 </g>
               </svg>
               <span
