@@ -25,11 +25,15 @@ const writeReacted = (data) => {
 
 const keyFor = (slug, emoji) => `${slug}:${emoji}`;
 
+const PARTICLE_COUNT = 6;
+const PARTICLES = Array.from({ length: PARTICLE_COUNT }, (_, i) => i);
+
 export const PostReactions = ({ slug }) => {
   const [counts, setCounts] = useState({});
   const [reacted, setReacted] = useState({});
   const [loaded, setLoaded] = useState(false);
   const [pending, setPending] = useState({});
+  const [animating, setAnimating] = useState({});
 
   useEffect(() => {
     setReacted(readReacted());
@@ -59,6 +63,7 @@ export const PostReactions = ({ slug }) => {
       if (!API || reacted[key] || pending[key]) return;
 
       setPending((p) => ({ ...p, [key]: true }));
+      setAnimating((a) => ({ ...a, [key]: (a[key] || 0) + 1 }));
       setCounts((c) => ({ ...c, [emoji]: (c[emoji] || 0) + 1 }));
       const nextReacted = { ...reacted, [key]: true };
       setReacted(nextReacted);
@@ -102,6 +107,7 @@ export const PostReactions = ({ slug }) => {
         const didReact = !!reacted[key];
         const isPending = !!pending[key];
         const count = counts[emoji] || 0;
+        const animKey = animating[key] || 0;
 
         return (
           <button
@@ -113,7 +119,29 @@ export const PostReactions = ({ slug }) => {
             aria-label={`React with ${emoji}`}
             aria-pressed={didReact}
           >
-            <span className={styles.emoji}>{emoji}</span>
+            <span className={styles.emojiWrap}>
+              <span
+                key={animKey}
+                className={`${styles.emoji} ${animKey ? styles.emojiPop : ''}`}
+              >
+                {emoji}
+              </span>
+              {animKey ? (
+                <span
+                  key={`p-${animKey}`}
+                  className={styles.particles}
+                  aria-hidden="true"
+                >
+                  {PARTICLES.map((i) => (
+                    <span
+                      key={i}
+                      className={styles.particle}
+                      style={{ '--i': i, '--n': PARTICLE_COUNT }}
+                    />
+                  ))}
+                </span>
+              ) : null}
+            </span>
             <span className={styles.count}>{loaded ? count : '·'}</span>
           </button>
         );

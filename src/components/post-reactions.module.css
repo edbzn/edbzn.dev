@@ -74,6 +74,89 @@
   line-height: 1;
 }
 
+.emojiWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.emojiPop {
+  animation: emojiPopAnim 0.5s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+  transform-origin: center;
+}
+
+@keyframes emojiPopAnim {
+  0% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(0.6);
+  }
+  40% {
+    transform: scale(1.4) rotate(-8deg);
+  }
+  70% {
+    transform: scale(1.15) rotate(6deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: #f43f5e;
+  opacity: 0;
+  --angle: calc((360deg / var(--n)) * var(--i));
+  animation: particleBurstAnim 0.6s ease-out forwards;
+}
+
+.particle:nth-child(2n) {
+  background: #f59e0b;
+}
+.particle:nth-child(3n) {
+  background: #7aa2f7;
+}
+.particle:nth-child(5n) {
+  background: #9ece6a;
+}
+
+@keyframes particleBurstAnim {
+  0% {
+    opacity: 1;
+    transform: rotate(var(--angle)) translateX(0) scale(1);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--angle)) translateX(18px) scale(0.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .emojiPop,
+  .particle {
+    animation: none;
+  }
+}
+
 .count {
   font-variant-numeric: tabular-nums;
   font-size: 0.85rem;
