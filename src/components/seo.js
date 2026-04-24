@@ -1,5 +1,6 @@
 import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
+import { ogImagePath } from '../utils/og-image-path';
 
 export function Seo({
   title,
@@ -20,7 +21,15 @@ export function Seo({
   } = site.siteMetadata;
 
   // Normalize image: accept either a string URL or an object { url, width, height, alt }.
-  const rawImage = typeof image === 'string' ? { url: image } : image;
+  // When no explicit image is provided, fall back to the dynamic OG image
+  // generated at build time for this pathname.
+  const resolvedImage =
+    image ??
+    (pathname
+      ? { url: ogImagePath(pathname), width: 1200, height: 630 }
+      : null);
+  const rawImage =
+    typeof resolvedImage === 'string' ? { url: resolvedImage } : resolvedImage;
   const toAbsolute = (url) =>
     url ? (url.startsWith('http') ? url : `${siteUrl}${url}`) : null;
 

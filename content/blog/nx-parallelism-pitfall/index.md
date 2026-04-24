@@ -3,7 +3,6 @@ title: "The hidden cost of Nx parallelism: when two layers compete"
 date: '2026-04-21'
 description: "Bumping Nx's parallel flag looks free, but tools like esbuild and Vitest already parallelize internally. Stacking both on top of each other can flatline or regress your builds. Here's a small benchmark that shows the crossover."
 tags: [nx, monorepo, performance, benchmark]
-cover: ./chart.png
 ---
 
 Increasing Nx's parallelism looks like a free speedup, but it's not as simple as it seems. Most modern build and test tools already parallelize internally, and Nx's parallel flag stacks on top of that. Past a certain threshold, you pay the cost of oversubscription without getting any speedup in return, and sometimes you actually regress.

@@ -78,8 +78,11 @@ class BlogIndex extends React.Component {
 
 export default BlogIndex;
 
-export const Head = ({ pageContext: { tag } }) => (
-  <Seo title={tag ? `${tag} posts` : 'All posts'} />
+export const Head = ({ pageContext: { tag }, location }) => (
+  <Seo
+    title={tag ? `${tag} posts` : 'All posts'}
+    pathname={location.pathname}
+  />
 );
 
 export const pageQuery = graphql`

@@ -1,5 +1,6 @@
 const path = require(`path`);
 const { createFilePath } = require(`gatsby-source-filesystem`);
+const { generateOgImages } = require(`./scripts/generate-og-images`);
 
 /**
  * @type {import('gatsby').GatsbyNode['createPages']}
@@ -146,8 +147,97 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
       tags: [String]
       draft: Boolean
       lang: String
+      cover: File @fileByRelativePath
     }
     `,
   ];
   createTypes(typeDefs);
+};
+
+/**
+ * Generate dynamic social preview images (1200×630 PNG) for every published
+ * page and blog post. Images are written to `public/og/<slug>.png` and
+ * referenced from the SEO component via a pathname-derived URL.
+ *
+ * @type {import('gatsby').GatsbyNode['onPostBuild']}
+ */
+exports.onPostBuild = async ({ graphql, store, reporter }) => {
+  const { program, config } = store.getState();
+  const publicDir = path.join(program.directory, 'public');
+  const siteMetadata = (config && config.siteMetadata) || {};
+
+  const result = await graphql(`
+    {
+      allMdx(filter: { published: { eq: true } }) {
+        nodes {
+          fields {
+            slug
+          }
+          excerpt(pruneLength: 160)
+          frontmatter {
+            title
+            description
+            tags
+          }
+        }
+        group(field: { frontmatter: { tags: SELECT } }) {
+          fieldValue
+        }
+      }
+    }
+  `);
+
+  if (result.errors) {
+    reporter.panicOnBuild(
+      'Error querying MDX nodes for social preview generation',
+      result.errors
+    );
+    return;
+  }
+
+  const posts = result.data.allMdx.nodes.map((node) => ({
+    pathname: node.fields.slug,
+    title: node.frontmatter.title,
+    description: node.frontmatter.description || node.excerpt,
+    tags: node.frontmatter.tags,
+    kind: 'article',
+  }));
+
+  const tagPages = result.data.allMdx.group.map((g) => {
+    const slugifiedTag = g.fieldValue.toLowerCase().replace(/\s+/g, '-');
+    return {
+      pathname: `/tags/${slugifiedTag}`,
+      title: `${g.fieldValue} posts`,
+      description: siteMetadata.description,
+      tags: [g.fieldValue],
+      kind: 'page',
+    };
+  });
+
+  const staticPages = [
+    {
+      pathname: '/',
+      title: 'About me',
+      description: siteMetadata.description,
+      kind: 'page',
+    },
+    {
+      pathname: '/blog',
+      title: 'All posts',
+      description: siteMetadata.description,
+      kind: 'page',
+    },
+    {
+      pathname: '/404',
+      title: 'Page Not Found',
+      description: siteMetadata.description,
+      kind: 'page',
+    },
+  ];
+
+  await generateOgImages({
+    publicDir,
+    entries: [...staticPages, ...tagPages, ...posts],
+    log: (msg) => reporter.info(msg),
+  });
 };

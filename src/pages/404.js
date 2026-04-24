@@ -25,7 +25,9 @@ class NotFoundPage extends React.Component {
 
 export default NotFoundPage;
 
-export const Head = () => <Seo title="Page Not Found" />;
+export const Head = ({ location }) => (
+  <Seo title="Page Not Found" pathname={location.pathname} />
+);
 
 export const pageQuery = graphql`
   query {
