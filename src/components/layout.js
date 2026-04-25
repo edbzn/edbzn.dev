@@ -197,6 +197,24 @@ class Layout extends React.Component {
             >
               Blog
             </Link>
+            <Link
+              to="/uses"
+              className="site-nav-link"
+              style={{
+                boxShadow: 'none',
+                fontFamily: '"Public Sans", sans-serif',
+                textTransform: 'uppercase',
+                fontSize: '14px',
+                fontWeight: '500',
+                color: 'var(--text-primary)',
+                textDecoration: 'none',
+              }}
+              activeStyle={{
+                fontWeight: '700',
+              }}
+            >
+              Uses
+            </Link>
             <ThemeToggle />
           </nav>
         </header>
@@ -245,7 +263,7 @@ class Layout extends React.Component {
               style={{
                 boxShadow: 'none',
                 color: 'var(--text-color)',
-                fontFamily: '"Fira Code", "Courier New", Courier, monospace;',
+                fontFamily: '"Fira Code", "Courier New", Courier, monospace',
                 fontWeight: 100,
               }}
               title="Source code on GitHub"

@@ -9,3 +9,12 @@ import '@fontsource/public-sans/900.css';
 
 import './static/css/code-theme.css';
 import './static/css/main.css';
+
+export const onRouteUpdate = () => {
+  const main = document.querySelector('main');
+  if (!main) return;
+  main.classList.remove('page-enter');
+  // Force reflow so the animation restarts
+  void main.offsetWidth;
+  main.classList.add('page-enter');
+};
