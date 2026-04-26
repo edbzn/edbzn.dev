@@ -30,6 +30,7 @@ export function LogoProximityTrigger({ threshold = 160 }) {
     let inRange = false;
     let scheduled = false;
     let lastY = -1;
+    let prevY = -1;
 
     const resizeObserver = new ResizeObserver((entries) => {
       headerBottom = entries[0].contentRect.height;
@@ -38,22 +39,35 @@ export function LogoProximityTrigger({ threshold = 160 }) {
 
     const update = () => {
       scheduled = false;
-      const shouldBeInRange = lastY >= 0 && lastY <= headerBottom + threshold;
-      if (shouldBeInRange === inRange) return;
-      inRange = shouldBeInRange;
-      if (inRange) {
-        // Restart the animation by removing then re-adding the class on the
-        // next frame (class removal alone doesn't force a reflow reliably).
+      const withinRange = lastY >= 0 && lastY <= headerBottom + threshold;
+      const movingUp = prevY >= 0 && lastY < prevY;
+
+      if (!inRange && withinRange && movingUp) {
+        // Start animation only when entering range while moving upward
+        inRange = true;
         logo.classList.remove('logo-active');
         // eslint-disable-next-line no-unused-expressions
         logo.offsetWidth; // force reflow so the re-added class restarts keyframes
         logo.classList.add('logo-active');
-      } else {
+      } else if (inRange && !withinRange) {
+        // Stop only when leaving the range entirely
+        inRange = false;
         logo.classList.remove('logo-active');
       }
     };
 
     const onPointerMove = (event) => {
+      // Don't trigger when hovering the nav links
+      if (event.target.closest?.('.site-nav')) {
+        prevY = lastY;
+        lastY = -1;
+        if (!scheduled) {
+          scheduled = true;
+          requestAnimationFrame(update);
+        }
+        return;
+      }
+      prevY = lastY;
       lastY = event.clientY;
       if (scheduled) return;
       scheduled = true;

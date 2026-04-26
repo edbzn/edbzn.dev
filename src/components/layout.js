@@ -3,12 +3,13 @@ import React from 'react';
 import rss from '../../static/icons/rss.svg';
 import { rhythm } from '../utils/typography';
 import { ThemeToggle } from './theme-toggle';
+import { NavLinks } from './nav-links';
 import { AsciiSphere } from './ascii-sphere';
 import { LogoProximityTrigger } from './logo-proximity-trigger';
 
 class Layout extends React.Component {
   render() {
-    const { children, github, author } = this.props;
+    const { children, github, author, location } = this.props;
     return (
       <div
         style={{
@@ -61,7 +62,7 @@ class Layout extends React.Component {
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 100 100"
-                width="38px"
+                width="32px"
                 shapeRendering="geometricPrecision"
               >
                 <g className="logo-inner">
@@ -144,9 +145,11 @@ class Layout extends React.Component {
                 className="site-logo-text"
                 style={{
                   marginLeft: '12px',
-                  background: 'var(--text-primary)',
-                  color: 'var(--bg-primary)',
-                  padding: '2px 4px',
+                  color: 'var(--text-primary)',
+                  fontFamily: "'Fira Code', monospace",
+                  fontWeight: 400,
+                  fontSize: '0.95rem',
+                  letterSpacing: '0',
                 }}
               >
                 edbzn.dev
@@ -155,66 +158,26 @@ class Layout extends React.Component {
           </Link>
           <nav
             className="site-nav"
+            role="navigation"
+            aria-label="Main navigation"
             style={{
               display: 'flex',
-              gap: '24px',
               alignItems: 'center',
+              gap: '4px',
             }}
           >
-            <Link
-              to="/"
-              className="site-nav-link"
+            <NavLinks pathname={location?.pathname || '/'} />
+            <div
               style={{
-                boxShadow: 'none',
-                fontFamily: '"Public Sans", sans-serif',
-                textTransform: 'uppercase',
-                fontSize: '14px',
-                fontWeight: '500',
-                color: 'var(--text-primary)',
-                textDecoration: 'none',
+                width: '1px',
+                height: '16px',
+                background: 'var(--border-color)',
+                margin: '0 8px',
+                flexShrink: 0,
               }}
-              activeStyle={{
-                fontWeight: '700',
-              }}
-            >
-              About me
-            </Link>
-            <Link
-              to="/blog"
-              className="site-nav-link"
-              style={{
-                boxShadow: 'none',
-                fontFamily: '"Public Sans", sans-serif',
-                textTransform: 'uppercase',
-                fontSize: '14px',
-                fontWeight: '500',
-                color: 'var(--text-primary)',
-                textDecoration: 'none',
-              }}
-              activeStyle={{
-                fontWeight: '700',
-              }}
-            >
-              Blog
-            </Link>
-            <Link
-              to="/uses"
-              className="site-nav-link"
-              style={{
-                boxShadow: 'none',
-                fontFamily: '"Public Sans", sans-serif',
-                textTransform: 'uppercase',
-                fontSize: '14px',
-                fontWeight: '500',
-                color: 'var(--text-primary)',
-                textDecoration: 'none',
-              }}
-              activeStyle={{
-                fontWeight: '700',
-              }}
-            >
-              Uses
-            </Link>
+              role="separator"
+              aria-hidden="true"
+            />
             <ThemeToggle />
           </nav>
         </header>

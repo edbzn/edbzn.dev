@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500&display=swap');
+
 /* Page transition */
 @keyframes page-enter {
   from {
@@ -81,6 +83,10 @@ main.page-enter {
   --blockquote-border: rgba(0, 0, 0, 0.15);
   --anchor-color: rgba(0, 0, 0, 0.3);
 
+  /* Nav pill */
+  --nav-pill-bg: rgba(0, 0, 0, 0.04);
+  --nav-active-bg: rgba(0, 0, 0, 0.08);
+
   /* Background texture + color wash */
   --site-bg-noise-opacity: 0.15;
   --site-bg-wash: none;
@@ -122,6 +128,10 @@ main.page-enter {
   --blockquote-border: rgba(255, 255, 255, 0.25);
   --anchor-color: rgba(255, 255, 255, 0.4);
 
+  /* Nav pill */
+  --nav-pill-bg: rgba(255, 255, 255, 0.08);
+  --nav-active-bg: rgba(255, 255, 255, 0.12);
+
   --site-bg-noise-opacity: 0.15;
   --site-bg-wash: none;
 
@@ -161,6 +171,10 @@ main.page-enter {
   --table-border: rgba(89, 111, 153, 0.3);
   --blockquote-border: rgba(89, 111, 153, 0.35);
   --anchor-color: rgba(102, 136, 204, 0.4);
+
+  /* Nav pill */
+  --nav-pill-bg: rgba(102, 136, 204, 0.08);
+  --nav-active-bg: rgba(102, 136, 204, 0.15);
 
   --site-bg-noise-opacity: 0.15;
   --site-bg-wash: radial-gradient(
@@ -541,16 +555,21 @@ p > img {
 
   .site-logo-text {
     margin-left: 8px !important;
-    padding: 1px 4px !important;
-    font-size: 0.9rem;
+    font-size: 1.3rem;
   }
 
   .site-nav {
-    gap: 12px !important;
+    gap: 4px !important;
+  }
+
+  .site-nav-links {
+    gap: 1px !important;
+    padding: 2px !important;
   }
 
   .site-nav-link {
     font-size: 12px !important;
+    padding: 4px 8px !important;
     white-space: nowrap;
   }
 
