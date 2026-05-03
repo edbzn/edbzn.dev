@@ -107,7 +107,6 @@ export const NavLinks = ({ pathname }) => {
               boxShadow: 'none',
               fontFamily: '"Public Sans", sans-serif',
               fontSize: '13px',
-              fontWeight: active ? '600' : '400',
               color: 'var(--text-primary)',
               textDecoration: 'none',
               padding: '5px 12px',

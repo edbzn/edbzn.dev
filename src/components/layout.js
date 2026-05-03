@@ -32,8 +32,8 @@ class Layout extends React.Component {
             background: 'rgba(var(--bg-primary-rgb, 255, 255, 255), 0.4)',
             backdropFilter: 'blur(12px)',
             WebkitBackdropFilter: 'blur(12px)',
-            paddingBottom: 14,
-            paddingTop: 14,
+            paddingBottom: 10,
+            paddingTop: 10,
             paddingLeft: 'max(1rem, calc((100vw - 698px) / 2 + 1rem))',
             paddingRight: 'max(1rem, calc((100vw - 698px) / 2 + 1rem))',
             display: 'flex',
@@ -62,7 +62,7 @@ class Layout extends React.Component {
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 100 100"
-                width="32px"
+                width="30px"
                 shapeRendering="geometricPrecision"
               >
                 <g className="logo-inner">
@@ -146,9 +146,8 @@ class Layout extends React.Component {
                 style={{
                   marginLeft: '12px',
                   color: 'var(--text-primary)',
-                  fontFamily: "'Fira Code', monospace",
                   fontWeight: 400,
-                  fontSize: '0.95rem',
+                  fontSize: '0.90rem',
                   letterSpacing: '0',
                 }}
               >
