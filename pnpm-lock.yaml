@@ -152,7 +152,7 @@ importers:
         version: 0.26.0
       start-server-and-test:
         specifier: ^3.0.0
-        version: 3.0.2
+        version: 3.0.4
       wrangler:
         specifier: ^4.0.0
         version: 4.90.0
@@ -7410,8 +7410,8 @@ packages:
   stackframe@1.3.4:
     resolution: {integrity: sha512-oeVtt7eWQS+Na6F//S4kJ2K2VbRlS9D43mAlMyVpVWovy9o+jfgH8O9agzANzaiLjclA0oYzUXEM4PurhSUChw==}
 
-  start-server-and-test@3.0.2:
-    resolution: {integrity: sha512-g6v4zPr1RRL5XxXJ+Wnk1GFLb+DGZLjFqse+5lNZ0X7m4SRMC6eOA+AXYboQDfNCEjpnTu0AGrvJb/JTUOg8dQ==}
+  start-server-and-test@3.0.4:
+    resolution: {integrity: sha512-y9j+VvFW5SH8deed5GvyNQs8gk8t8TJRDZYBvEPhCwdr/VhISvVvyamMNcNV4h9PxOptPGgPigb6yz4C67O1Qw==}
     engines: {node: ^22 || >=24}
     hasBin: true
 
@@ -8105,8 +8105,8 @@ packages:
   vscode-uri@3.1.0:
     resolution: {integrity: sha512-/BpdSx+yCQGnCvecbyXdxHDkuk55/G3xwnC0GqY4gmQ3j+A+g8kzzgB4Nk/SINjqn6+waqw3EgbVF2QKExkRxQ==}
 
-  wait-on@9.0.5:
-    resolution: {integrity: sha512-qgnbHDfDTRIp73ANEJNRW/7kn8CrDUcvZz18xotJQku/P4saTGkbIzvnMZebPmVvVNUiRq1qWAPyqCH+W4H8KA==}
+  wait-on@9.0.6:
+    resolution: {integrity: sha512-KR+Te+NBg6DmPVil4anyIO72mpt/QDHjRo3nVFkwRgb26oweUp3DDW2szO3EeUY4cqafWy4rQuOOeEk4n+7Oeg==}
     engines: {node: '>=20.0.0'}
     hasBin: true
 
@@ -9589,14 +9589,14 @@ snapshots:
   '@graphql-tools/optimize@1.4.0(graphql@16.13.2)':
     dependencies:
       graphql: 16.13.2
-      tslib: 2.8.1
+      tslib: 2.4.1
 
   '@graphql-tools/relay-operation-optimizer@6.5.18(graphql@16.13.2)':
     dependencies:
       '@ardatan/relay-compiler': 12.0.0(graphql@16.13.2)
       '@graphql-tools/utils': 9.2.1(graphql@16.13.2)
       graphql: 16.13.2
-      tslib: 2.8.1
+      tslib: 2.4.1
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -17437,7 +17437,7 @@ snapshots:
 
   stackframe@1.3.4: {}
 
-  start-server-and-test@3.0.2:
+  start-server-and-test@3.0.4:
     dependencies:
       arg: 5.0.2
       bluebird: 3.7.2
@@ -17446,7 +17446,7 @@ snapshots:
       execa: 5.1.1
       lazy-ass: 1.6.0
       tree-kill: 1.2.2
-      wait-on: 9.0.5(debug@4.4.3)
+      wait-on: 9.0.6(debug@4.4.3)
     transitivePeerDependencies:
       - supports-color
 
@@ -18235,7 +18235,7 @@ snapshots:
 
   vscode-uri@3.1.0: {}
 
-  wait-on@9.0.5(debug@4.4.3):
+  wait-on@9.0.6(debug@4.4.3):
     dependencies:
       axios: 1.16.0(debug@4.4.3)
       joi: 18.2.1
