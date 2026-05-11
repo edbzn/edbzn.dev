@@ -6,6 +6,24 @@ const SHADE_CODES = new Uint8Array([...SHADE].map((c) => c.charCodeAt(0)));
 const SPACE_CODE = 32;
 const NEWLINE_CODE = 10;
 
+// Reverse lookup: char code → shade index (0 = space/dimmest, 12 = brightest)
+const CHAR_TO_SHADE = new Map();
+for (let i = 0; i < SHADE.length; i++) {
+  CHAR_TO_SHADE.set(SHADE.charCodeAt(i), i);
+}
+
+// Pre-computed CSS opacity strings for each shade level (uses default text color)
+const SHADE_OPACITIES = (() => {
+  const opacities = [];
+  const len = SHADE.length;
+  for (let i = 0; i < len; i++) {
+    const t = i / (len - 1); // 0 (dimmest) → 1 (brightest)
+    const opacity = 0.1 + 0.9 * t;
+    opacities.push(opacity.toFixed(2));
+  }
+  return opacities;
+})();
+
 const WORDS = [
   'CI/CD',
   'Docker',
@@ -51,7 +69,7 @@ function pickWords() {
   return shuffled.slice(0, 6);
 }
 
-function renderFrame(ax, ay, W, H, words, mx, my, charBuf, outBuf) {
+function renderFrame(ax, ay, W, H, words, mx, my, charBuf) {
   const ASPECT = 1.8; // Fira Code char aspect ratio without letter-spacing
   const R = 1.0;
   // Inline normalize to avoid array alloc
@@ -133,16 +151,57 @@ function renderFrame(ax, ay, W, H, words, mx, my, charBuf, outBuf) {
     charBuf[idx] = code;
   }
 
-  // Build output string in one pass via outBuf (Uint16Array of char codes + newlines)
-  let o = 0;
+  // Build colored HTML output — group consecutive chars with same color into spans
+  const parts = [];
   for (let r = 0; r < H; r++) {
     const rowOff = r * W;
+    let currentColor = null;
+    let run = '';
+
     for (let c = 0; c < W; c++) {
-      outBuf[o++] = charBuf[rowOff + c];
+      const code = charBuf[rowOff + c];
+      if (code === SPACE_CODE) {
+        // Spaces don't need opacity spans
+        const color = '';
+        if (color !== currentColor) {
+          if (run)
+            parts.push(
+              currentColor && currentColor !== '1'
+                ? `<span style="opacity:${currentColor}">${run}</span>`
+                : run
+            );
+          run = '';
+          currentColor = color;
+        }
+        run += ' ';
+        continue;
+      }
+
+      const shadeIdx = CHAR_TO_SHADE.get(code);
+      // Text band chars won't be in SHADE map — use default text color at full opacity
+      const color = shadeIdx !== undefined ? SHADE_OPACITIES[shadeIdx] : '1';
+
+      if (color !== currentColor) {
+        if (run)
+          parts.push(
+            currentColor !== '1'
+              ? `<span style="opacity:${currentColor}">${run}</span>`
+              : run
+          );
+        run = '';
+        currentColor = color;
+      }
+      run += String.fromCharCode(code);
     }
-    outBuf[o++] = NEWLINE_CODE;
+    if (run)
+      parts.push(
+        currentColor && currentColor !== '1'
+          ? `<span style="opacity:${currentColor}">${run}</span>`
+          : run
+      );
+    parts.push('\n');
   }
-  return String.fromCharCode.apply(null, outBuf);
+  return parts.join('');
 }
 
 export const AsciiSphere = () => {
@@ -163,7 +222,6 @@ export const AsciiSphere = () => {
   const H = 22;
   // Reusable buffers — never reallocated per frame
   const charBufRef = useRef(new Uint8Array(W * H));
-  const outBufRef = useRef(new Uint16Array(W * H + H)); // +H newlines
 
   useEffect(() => {
     const el = containerRef.current;
@@ -228,12 +286,11 @@ export const AsciiSphere = () => {
       wordsRef.current.words,
       mouseRef.current.x,
       mouseRef.current.y,
-      charBufRef.current,
-      outBufRef.current
+      charBufRef.current
     );
     // Write directly to the DOM — bypass React reconciliation every frame.
     const pre = preRef.current;
-    if (pre) pre.textContent = rendered;
+    if (pre) pre.innerHTML = rendered;
     angleRef.current.x += 0.004;
     angleRef.current.y += 0.008;
     rafRef.current = requestAnimationFrame(animate);
