@@ -67,42 +67,12 @@ const Bio = ({ short = true }) => {
             engineering teams scale their codebases and ship software with
             confidence.
           </p>
-          {short && (
-            <div style={{ marginTop: rhythm(0.4) }}>
-              <Social social={social} />
-            </div>
-          )}
-        </div>
-      </div>
-      {!short && (
-        <div style={{ marginTop: rhythm(0.6) }}>
-          <p
-            style={{
-              margin: 0,
-              fontSize: 14,
-              fontWeight: 'lighter',
-            }}
-          >
-            I'm an active open source contributor, maintaining projects like{' '}
-            <a
-              href="https://github.com/jscutlery/semver"
-              style={{
-                color: 'inherit',
-                boxShadow: 'none',
-                textDecoration: 'underline',
-              }}
-            >
-              @jscutlery/semver
-            </a>{' '}
-            for automated semantic versioning in Nx workspaces, and contributing
-            to the broader <em>Node.js</em> ecosystem through plugins, developer
-            tooling, and build infrastructure.
-          </p>
-          <div style={{ marginTop: rhythm(0.8) }}>
+
+          <div style={{ marginTop: rhythm(0.4) }}>
             <Social social={social} />
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
