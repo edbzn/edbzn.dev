@@ -18,7 +18,7 @@ const SHADE_OPACITIES = (() => {
   const len = SHADE.length;
   for (let i = 0; i < len; i++) {
     const t = i / (len - 1); // 0 (dimmest) → 1 (brightest)
-    const opacity = 0.1 + 0.9 * t;
+    const opacity = 0 + 1 * t;
     opacities.push(opacity.toFixed(2));
   }
   return opacities;
@@ -69,10 +69,9 @@ function pickWords() {
   return shuffled.slice(0, 6);
 }
 
-function renderFrame(ax, ay, W, H, words, mx, my, charBuf) {
-  const ASPECT = 1.8; // Fira Code char aspect ratio without letter-spacing
+function buildFrame(ax, ay, W, H, words, mx, my, charBuf) {
+  const ASPECT = 1.8;
   const R = 1.0;
-  // Inline normalize to avoid array alloc
   const lxRaw = 0.3 + mx;
   const lyRaw = -0.5 + my;
   const lzRaw = 1.0;
@@ -88,7 +87,6 @@ function renderFrame(ax, ay, W, H, words, mx, my, charBuf) {
 
   charBuf.fill(SPACE_CODE);
 
-  // Step 1: Raycast sphere for shading
   const scale = H / 2;
   const halfW = W / 2;
   const halfH = H / 2;
@@ -108,15 +106,12 @@ function renderFrame(ax, ay, W, H, words, mx, my, charBuf) {
         ny = vy / R,
         nz = vz / R;
 
-      // Ry^-1 first
       const t1x = nx * cosB + nz * sinB;
       const t1z = -nx * sinB + nz * cosB;
-      // Rx^-1 second (t1y === ny)
       const wnx = t1x;
       const wny = ny * cosA + t1z * sinA;
       const wnz = -ny * sinA + t1z * cosA;
 
-      // Half-lambert
       const dot = wnx * lx + wny * ly + wnz * lz;
       const lum = (dot + 1) * 0.5;
       const shade = 0.1 + 0.9 * lum;
@@ -127,11 +122,9 @@ function renderFrame(ax, ay, W, H, words, mx, my, charBuf) {
     }
   }
 
-  // Step 2: Flat horizontal text band at the equator
   const gap = '    ';
   const fullText = words.join(gap) + gap;
   const textLen = fullText.length;
-
   const eqRow = Math.round(H / 2);
   const scrollOffset = (ay / (2 * Math.PI)) * textLen;
   const rCols = Math.floor(R * scale * ASPECT);
@@ -150,8 +143,78 @@ function renderFrame(ax, ay, W, H, words, mx, my, charBuf) {
     if (code === SPACE_CODE) continue;
     charBuf[idx] = code;
   }
+}
 
-  // Build colored HTML output — group consecutive chars with same color into spans
+// Wave distortion: radial displacement + brightness ripple at the wave front.
+// Returns false when the effect has expired.
+// gx/gy are in grid-column/row units. Distances are computed in pixel-normalized
+// units (1 unit = charWidth) to keep the wave circular in pixel space.
+function applyWaveDistortion(charBuf, distBuf, W, H, gx, gy, elapsed) {
+  const SPHERE_ASPECT = 1.8; // lineHeight / charWidth — must match buildFrame
+  const WAVE_SPEED = 10; // charWidth-units per second
+  const WAVE_AMP = 4.0; // max radial displacement in column-units
+  const WAVE_SIGMA = 3.0; // wave ring width — wider = softer
+  const DURATION = 3.0;
+
+  if (elapsed > DURATION) return false;
+
+  const t = elapsed / DURATION;
+  // Cubic ease-out: strong initial pulse, long gentle tail
+  const decay = (1 - t) * (1 - t) * (1 - t);
+
+  const waveFront = elapsed * WAVE_SPEED;
+
+  distBuf.set(charBuf);
+
+  for (let r = 0; r < H; r++) {
+    for (let c = 0; c < W; c++) {
+      const dcol = c - gx;
+      const drow = r - gy;
+      // Convert to pixel-normalised coords (charWidth = 1 unit)
+      const dx = dcol;
+      const dy = drow * SPHERE_ASPECT;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < 0.5) continue;
+
+      const phase = dist - waveFront;
+      const envelope = Math.exp(
+        -(phase * phase) / (2 * WAVE_SIGMA * WAVE_SIGMA)
+      );
+      const disp = WAVE_AMP * envelope * decay;
+      if (disp < 0.1) continue;
+
+      // Direction unit vector (pixel-space), then convert displacement back to grid units
+      const nx = dx / dist; // column units (unchanged)
+      const ny = dy / dist / SPHERE_ASPECT; // row units
+
+      const srcC = Math.round(c - nx * disp);
+      const srcR = Math.round(r - ny * disp);
+
+      if (srcC < 0 || srcC >= W || srcR < 0 || srcR >= H) {
+        charBuf[r * W + c] = SPACE_CODE;
+        continue;
+      }
+
+      const srcCode = distBuf[srcR * W + srcC];
+      charBuf[r * W + c] = srcCode;
+
+      // Smooth brightness ripple at the wave crest (no random scatter)
+      if (srcCode !== SPACE_CODE) {
+        const shadeIdx = CHAR_TO_SHADE.get(srcCode) ?? 0;
+        const boost = Math.round(5 * envelope * decay);
+        if (boost > 0) {
+          const boostedIdx = Math.min(SHADE_CODES.length - 1, shadeIdx + boost);
+          charBuf[r * W + c] = SHADE_CODES[boostedIdx];
+        }
+      }
+    }
+  }
+  return true;
+}
+
+function frameToHtml(charBuf, W, H) {
+  // Build opacity-shaded HTML — group consecutive chars with same opacity into spans
   const parts = [];
   for (let r = 0; r < H; r++) {
     const rowOff = r * W;
@@ -161,7 +224,6 @@ function renderFrame(ax, ay, W, H, words, mx, my, charBuf) {
     for (let c = 0; c < W; c++) {
       const code = charBuf[rowOff + c];
       if (code === SPACE_CODE) {
-        // Spaces don't need opacity spans
         const color = '';
         if (color !== currentColor) {
           if (run)
@@ -178,13 +240,12 @@ function renderFrame(ax, ay, W, H, words, mx, my, charBuf) {
       }
 
       const shadeIdx = CHAR_TO_SHADE.get(code);
-      // Text band chars won't be in SHADE map — use default text color at full opacity
       const color = shadeIdx !== undefined ? SHADE_OPACITIES[shadeIdx] : '1';
 
       if (color !== currentColor) {
         if (run)
           parts.push(
-            currentColor !== '1'
+            currentColor && currentColor !== '1'
               ? `<span style="opacity:${currentColor}">${run}</span>`
               : run
           );
@@ -213,6 +274,7 @@ export const AsciiSphere = () => {
   const mouseTargetRef = useRef({ x: 0, y: 0 });
   const rectRef = useRef({ cx: 0, cy: 0 });
   const rafRef = useRef(null);
+  const clickWaveRef = useRef(null);
   const wordsRef = useRef({
     words: pickWords(),
     lastSwap: 0,
@@ -220,8 +282,8 @@ export const AsciiSphere = () => {
 
   const W = 44;
   const H = 22;
-  // Reusable buffers — never reallocated per frame
   const charBufRef = useRef(new Uint8Array(W * H));
+  const distBufRef = useRef(new Uint8Array(W * H));
 
   useEffect(() => {
     const el = containerRef.current;
@@ -265,6 +327,24 @@ export const AsciiSphere = () => {
     };
   }, []);
 
+  // Use native mousedown instead of React onClick so the event fires before
+  // pre.innerHTML is replaced by the next animation frame (which would swallow
+  // clicks on the span characters).
+  useEffect(() => {
+    const div = containerRef.current;
+    if (!div) return;
+    const onMouseDown = (e) => {
+      const pre = preRef.current;
+      if (!pre) return;
+      const rect = pre.getBoundingClientRect();
+      const gx = ((e.clientX - rect.left) / rect.width) * W;
+      const gy = ((e.clientY - rect.top) / rect.height) * H;
+      clickWaveRef.current = { gx, gy, startTime: Date.now() };
+    };
+    div.addEventListener('mousedown', onMouseDown);
+    return () => div.removeEventListener('mousedown', onMouseDown);
+  }, [W, H]);
+
   const animate = useCallback(() => {
     const now = Date.now();
     if (now - wordsRef.current.lastSwap > 8000) {
@@ -278,7 +358,8 @@ export const AsciiSphere = () => {
       (mouseTargetRef.current.y - mouseRef.current.y) * ease;
     const mx = mouseRef.current.x * 0.3;
     const my = mouseRef.current.y * 0.2;
-    const rendered = renderFrame(
+
+    buildFrame(
       angleRef.current.x + my,
       angleRef.current.y + mx,
       W,
@@ -288,6 +369,22 @@ export const AsciiSphere = () => {
       mouseRef.current.y,
       charBufRef.current
     );
+
+    if (clickWaveRef.current) {
+      const elapsed = (now - clickWaveRef.current.startTime) / 1000;
+      const active = applyWaveDistortion(
+        charBufRef.current,
+        distBufRef.current,
+        W,
+        H,
+        clickWaveRef.current.gx,
+        clickWaveRef.current.gy,
+        elapsed
+      );
+      if (!active) clickWaveRef.current = null;
+    }
+
+    const rendered = frameToHtml(charBufRef.current, W, H);
     // Write directly to the DOM — bypass React reconciliation every frame.
     const pre = preRef.current;
     if (pre) pre.innerHTML = rendered;
@@ -337,4 +434,5 @@ const preStyle = {
   whiteSpace: 'pre',
   opacity: 0.85,
   overflow: 'hidden',
+  cursor: 'pointer',
 };
