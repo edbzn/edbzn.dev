@@ -14,7 +14,7 @@ for (let i = 0; i < SHADE.length; i++) {
 // Pre-computed opacity values for each shade level (0 = dimmest, 1 = brightest)
 const SHADE_OPACITY_VALUES = (() => {
   const values = [];
-  const len = SHADE.length;
+  const len = SHADE.length / 2 + 1; // more levels in the darker half for better contrast
   for (let i = 0; i < len; i++) {
     values.push(i / (len - 1));
   }
@@ -25,54 +25,7 @@ const SHADE_OPACITY_VALUES = (() => {
 const CHAR_STRINGS = new Array(128);
 for (let i = 0; i < 128; i++) CHAR_STRINGS[i] = String.fromCharCode(i);
 
-const WORDS = [
-  'CI/CD',
-  'Docker',
-  'Node',
-  'Terraform',
-  'Vim',
-  'Zsh',
-  'React',
-  'Linux',
-  'Bash',
-  'Rust',
-  'API',
-  'Angular',
-  'REST',
-  'GraphQL',
-  'TypeScript',
-  'Monorepo',
-  'K8s',
-  'Nginx',
-  'Redis',
-  'Vite',
-  'WASM',
-  'OXC',
-  'Agentic',
-  'MCP',
-  'Python',
-  'Nx',
-  'Esbuild',
-  'Node.js',
-  'Cloud',
-  'Serverless',
-  'Git',
-  'Ansible',
-  'MongoDB',
-  'Qwik',
-  'Vue.js',
-  'Svelte',
-  'SemVer',
-];
-
-const GAP = '    ';
-
-function pickWords() {
-  const shuffled = [...WORDS].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, 6);
-}
-
-function buildFrame(ax, ay, W, H, fullText, mx, my, charBuf) {
+function buildFrame(ax, ay, W, H, mx, my, charBuf) {
   const ASPECT = 1.8;
   const R = 1.0;
   const lxRaw = 0.3 + mx;
@@ -121,28 +74,26 @@ function buildFrame(ax, ay, W, H, fullText, mx, my, charBuf) {
       let si = (shade * SHADE_CODES.length) | 0;
       if (si > shadeMax) si = shadeMax;
 
+      // Soft edge fade: no hard circular rim — outer cells dissolve smoothly
+      const edgeFade = Math.pow(1.0 - d2, 2.0);
+
+      // Drifting fog mask: two overlapping sine waves create organic moving patches.
+      // ax/ay grow with time, so the mask shifts as the sphere rotates.
+      // Using two waves (not three) so the product doesn't go deeply negative too often.
+      const fog =
+        Math.sin(vx * 2.6 + ax * 0.4) * Math.cos(vy * 2.0 - ay * 0.25);
+      // Cells where fog < -0.85 are hidden; smooth ramp up to fully visible.
+      // High bias (0.85) means only the deepest negative patches disappear → ~90% visible.
+      const fogMask = Math.min(1.0, Math.max(0, fog + 0.85) * 2.0);
+
+      const visibility = edgeFade * fogMask;
+      if (visibility < 0.05) continue;
+
+      si = Math.min(shadeMax, Math.round(si * visibility));
+      if (si <= 0) continue;
+
       charBuf[rowOff + col] = SHADE_CODES[si];
     }
-  }
-
-  const textLen = fullText.length;
-  const eqRow = Math.round(H / 2);
-  const scrollOffset = (ay / (2 * Math.PI)) * textLen;
-  const rCols = Math.floor(R * scale * ASPECT);
-  const halfWRound = Math.round(W / 2);
-
-  for (let dc = -rCols; dc <= rCols; dc++) {
-    const col = halfWRound + dc;
-    if (col < 0 || col >= W) continue;
-    const idx = eqRow * W + col;
-    if (charBuf[idx] === SPACE_CODE) continue;
-
-    const t = (dc + rCols) / (2 * rCols);
-    const ci =
-      Math.floor(((t * textLen + scrollOffset) % textLen) + textLen) % textLen;
-    const code = fullText.charCodeAt(ci);
-    if (code === SPACE_CODE) continue;
-    charBuf[idx] = code;
   }
 }
 
@@ -167,8 +118,19 @@ function applyWaveDistortion(charBuf, distBuf, W, H, gx, gy, elapsed) {
 
   distBuf.set(charBuf);
 
+  // Pre-compute sphere membership for fast boundary checks.
+  const ASPECT = 1.8;
+  const scale = H / 2;
+  const halfW = W / 2;
+  const halfH = H / 2;
+
   for (let r = 0; r < H; r++) {
     for (let c = 0; c < W; c++) {
+      // Skip cells outside the sphere — wave must not place chars there.
+      const vx = (c - halfW) / scale / ASPECT;
+      const vy = (r - halfH) / scale;
+      if (vx * vx + vy * vy > 1.0) continue;
+
       const dcol = c - gx;
       const drow = r - gy;
       // Convert to pixel-normalised coords (charWidth = 1 unit)
@@ -250,12 +212,6 @@ export const AsciiSphere = () => {
   const rectRef = useRef({ cx: 0, cy: 0 });
   const rafRef = useRef(null);
   const clickWaveRef = useRef(null);
-  // Lazy-init pattern for useRef (useRef doesn't support function initializers).
-  const wordsRef = useRef(null);
-  if (wordsRef.current === null) {
-    const words = pickWords();
-    wordsRef.current = { words, fullText: words.join(GAP) + GAP, lastSwap: 0 };
-  }
 
   const W = 44;
   const H = 22;
@@ -355,7 +311,7 @@ export const AsciiSphere = () => {
     // Reject black (likely means CSS variable not yet resolved)
     if (r === 0 && g === 0 && b === 0) return false;
     shadeColorsRef.current = SHADE_OPACITY_VALUES.map(
-      (a) => `rgba(${r},${g},${b},${(a * 0.85).toFixed(3)})`
+      (a) => `rgba(${r},${g},${b},${(a * 1.0).toFixed(3)})`
     );
     return true;
   }, []);
@@ -398,25 +354,19 @@ export const AsciiSphere = () => {
 
   const animate = useCallback(() => {
     const now = Date.now();
-    if (now - wordsRef.current.lastSwap > 8000) {
-      wordsRef.current.words = pickWords();
-      wordsRef.current.fullText = wordsRef.current.words.join(GAP) + GAP;
-      wordsRef.current.lastSwap = now;
-    }
     const ease = 0.05;
     mouseRef.current.x +=
       (mouseTargetRef.current.x - mouseRef.current.x) * ease;
     mouseRef.current.y +=
       (mouseTargetRef.current.y - mouseRef.current.y) * ease;
-    const mx = mouseRef.current.x * 0.3;
-    const my = mouseRef.current.y * 0.2;
+    const mx = mouseRef.current.x * 0.05;
+    const my = mouseRef.current.y * 0.03;
 
     buildFrame(
       angleRef.current.x + my,
       angleRef.current.y + mx,
       W,
       H,
-      wordsRef.current.fullText,
       mouseRef.current.x,
       mouseRef.current.y,
       charBufRef.current
@@ -484,11 +434,11 @@ const containerStyle = {
   overflow: 'hidden',
   userSelect: 'none',
   maxWidth: '100%',
-  cursor: 'pointer',
 };
 
 const canvasStyle = {
   display: 'block',
   color: 'var(--text-primary)',
   maxWidth: '100%',
+  cursor: 'pointer',
 };
