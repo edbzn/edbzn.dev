@@ -186,13 +186,12 @@ class Layout extends React.Component {
         </div>
         <footer
           role="contentinfo"
-          style={{ marginTop: rhythm(2), fontSize: 14, fontWeight: 100 }}
+          style={{ marginTop: rhythm(2), fontSize: '0.85rem', fontWeight: 100 }}
         >
           <div
             style={{
               textAlign: 'center',
               fontFamily: '"Public Sans", sans-serif',
-              fontSize: 14,
             }}
           >
             <a
@@ -203,6 +202,24 @@ class Layout extends React.Component {
             </a>
             &nbsp;
             {new Date().getFullYear()}&nbsp;&copy;&nbsp;{author} ·{' '}
+            <a
+              href={github.repositoryUrl}
+              style={{
+                boxShadow: 'none',
+                color: 'var(--text-color)',
+              }}
+              title="Source code on GitHub"
+            >
+              SHA {github.commitSha ? github.commitSha.slice(0, 16) : 'source'}
+            </a>{' '}
+            ·{' '}
+            <a
+              href={github.sponsorUrl}
+              style={{ boxShadow: 'none', color: 'var(--text-color)' }}
+            >
+              Sponsor Me on GitHub
+            </a>{' '}
+            ·{' '}
             <a
               href="/rss.xml"
               style={{ boxShadow: 'none', color: 'var(--text-color)' }}
@@ -219,26 +236,6 @@ class Layout extends React.Component {
               />{' '}
               RSS
             </a>{' '}
-            ·{' '}
-            <a
-              href={github.repositoryUrl}
-              style={{
-                boxShadow: 'none',
-                color: 'var(--text-color)',
-                fontFamily: '"Fira Code", "Courier New", Courier, monospace',
-                fontWeight: 100,
-              }}
-              title="Source code on GitHub"
-            >
-              {github.commitSha ? github.commitSha.slice(0, 16) : 'source'}
-            </a>{' '}
-            ·{' '}
-            <a
-              href={github.sponsorUrl}
-              style={{ boxShadow: 'none', color: 'var(--text-color)' }}
-            >
-              Become&nbsp;a&nbsp;GitHub&nbsp;Sponsor
-            </a>
           </div>
         </footer>
       </div>
