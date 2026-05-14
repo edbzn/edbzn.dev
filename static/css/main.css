@@ -193,72 +193,66 @@ body {
   background-attachment: fixed;
 }
 
-:root[data-theme='abyss'] body {
+/* Animated gradient wash — lives on a position:fixed ::after so it uses
+   transform (GPU-compositable) instead of background-position/background-size
+   on the body (which forces full-page repaints every animation frame).
+   The element is oversized (120vw × 120vh, offset -10% each side) so edges
+   are never visible during translation. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: -10%;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--site-bg-wash);
+  background-repeat: no-repeat;
+  background-size: 160% 130%;
+  background-position: 30% 20%;
+  opacity: 0;
+}
+
+:root[data-theme='abyss'] body::after {
   background-image:
     var(--site-bg-wash),
     linear-gradient(180deg, #000c18 0%, #050a30 40%, #060621 100%);
+  background-size:
+    200% 160%,
+    100% 100%;
+  opacity: 1;
 }
 
+/* Translate the oversized ::after pseudo-element — no scale needed since
+   the element already extends 10% beyond all viewport edges. */
 @keyframes site-bg-wash-pan {
   0% {
-    background-position:
-      0% 0%,
-      0% 0%;
-    background-size:
-      200% 160%,
-      100% 100%;
+    transform: translate3d(0%, 0%, 0);
   }
   20% {
-    background-position:
-      80% 30%,
-      0% 0%;
-    background-size:
-      160% 220%,
-      100% 100%;
+    transform: translate3d(-4%, -2%, 0);
   }
   40% {
-    background-position:
-      100% 80%,
-      0% 0%;
-    background-size:
-      220% 170%,
-      100% 100%;
+    transform: translate3d(-5%, -4%, 0);
   }
   60% {
-    background-position:
-      40% 100%,
-      0% 0%;
-    background-size:
-      170% 200%,
-      100% 100%;
+    transform: translate3d(-2%, -5%, 0);
   }
   80% {
-    background-position:
-      10% 60%,
-      0% 0%;
-    background-size:
-      240% 180%,
-      100% 100%;
+    transform: translate3d(-0.5%, -3%, 0);
   }
   100% {
-    background-position:
-      0% 0%,
-      0% 0%;
-    background-size:
-      200% 160%,
-      100% 100%;
+    transform: translate3d(0%, 0%, 0);
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  body {
+  body::after {
     animation: site-bg-wash-pan 50s ease-in-out infinite;
-    will-change: background-position, background-size;
+    will-change: transform;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body {
+  body::after {
     animation: none;
     will-change: auto;
   }
