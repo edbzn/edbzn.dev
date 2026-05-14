@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 const SHADE = ' .,-~:;=!*#$@';
 const SHADE_CODES = new Uint8Array([...SHADE].map((c) => c.charCodeAt(0)));
 const SPACE_CODE = 32;
-const NEWLINE_CODE = 10;
 
 // Reverse lookup: char code → shade index (0 = space/dimmest, 12 = brightest)
 const CHAR_TO_SHADE = new Map();
@@ -12,17 +11,19 @@ for (let i = 0; i < SHADE.length; i++) {
   CHAR_TO_SHADE.set(SHADE.charCodeAt(i), i);
 }
 
-// Pre-computed CSS opacity strings for each shade level (uses default text color)
-const SHADE_OPACITIES = (() => {
-  const opacities = [];
+// Pre-computed opacity values for each shade level (0 = dimmest, 1 = brightest)
+const SHADE_OPACITY_VALUES = (() => {
+  const values = [];
   const len = SHADE.length;
   for (let i = 0; i < len; i++) {
-    const t = i / (len - 1); // 0 (dimmest) → 1 (brightest)
-    const opacity = 0 + 1 * t;
-    opacities.push(opacity.toFixed(2));
+    values.push(i / (len - 1));
   }
-  return opacities;
+  return values;
 })();
+
+// Pre-computed single-char strings — avoids String.fromCharCode allocation per frame.
+const CHAR_STRINGS = new Array(128);
+for (let i = 0; i < 128; i++) CHAR_STRINGS[i] = String.fromCharCode(i);
 
 const WORDS = [
   'CI/CD',
@@ -64,12 +65,14 @@ const WORDS = [
   'SemVer',
 ];
 
+const GAP = '    ';
+
 function pickWords() {
   const shuffled = [...WORDS].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, 6);
 }
 
-function buildFrame(ax, ay, W, H, words, mx, my, charBuf) {
+function buildFrame(ax, ay, W, H, fullText, mx, my, charBuf) {
   const ASPECT = 1.8;
   const R = 1.0;
   const lxRaw = 0.3 + mx;
@@ -122,8 +125,6 @@ function buildFrame(ax, ay, W, H, words, mx, my, charBuf) {
     }
   }
 
-  const gap = '    ';
-  const fullText = words.join(gap) + gap;
   const textLen = fullText.length;
   const eqRow = Math.round(H / 2);
   const scrollOffset = (ay / (2 * Math.PI)) * textLen;
@@ -213,72 +214,48 @@ function applyWaveDistortion(charBuf, distBuf, W, H, gx, gy, elapsed) {
   return true;
 }
 
-function frameToHtml(charBuf, W, H) {
-  // Build opacity-shaded HTML — group consecutive chars with same opacity into spans
-  const parts = [];
+// Render charBuf directly onto a canvas context — zero string allocation per frame.
+// shadeColors: precomputed fillStyle string per shade index (length = SHADE.length).
+function renderFrame(ctx, charBuf, W, H, cw, lh, shadeColors) {
+  ctx.clearRect(0, 0, W * cw, H * lh);
+  let currentShade = -1;
   for (let r = 0; r < H; r++) {
     const rowOff = r * W;
-    let currentColor = null;
-    let run = '';
-
+    const y = r * lh;
     for (let c = 0; c < W; c++) {
       const code = charBuf[rowOff + c];
-      if (code === SPACE_CODE) {
-        const color = '';
-        if (color !== currentColor) {
-          if (run)
-            parts.push(
-              currentColor && currentColor !== '1'
-                ? `<span style="opacity:${currentColor}">${run}</span>`
-                : run
-            );
-          run = '';
-          currentColor = color;
-        }
-        run += ' ';
-        continue;
+      if (code === SPACE_CODE) continue;
+      const si = CHAR_TO_SHADE.get(code) ?? SHADE.length - 1;
+      if (si !== currentShade) {
+        ctx.fillStyle = shadeColors[si];
+        currentShade = si;
       }
-
-      const shadeIdx = CHAR_TO_SHADE.get(code);
-      const color = shadeIdx !== undefined ? SHADE_OPACITIES[shadeIdx] : '1';
-
-      if (color !== currentColor) {
-        if (run)
-          parts.push(
-            currentColor && currentColor !== '1'
-              ? `<span style="opacity:${currentColor}">${run}</span>`
-              : run
-          );
-        run = '';
-        currentColor = color;
-      }
-      run += String.fromCharCode(code);
+      ctx.fillText(CHAR_STRINGS[code], c * cw, y);
     }
-    if (run)
-      parts.push(
-        currentColor && currentColor !== '1'
-          ? `<span style="opacity:${currentColor}">${run}</span>`
-          : run
-      );
-    parts.push('\n');
   }
-  return parts.join('');
 }
 
 export const AsciiSphere = () => {
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef(null);
-  const preRef = useRef(null);
+  const canvasRef = useRef(null);
+  const ctxRef = useRef(null);
+  const metricsRef = useRef({ cw: 6.6, lh: 12 });
+  // Precomputed fillStyle strings for each shade level.
+  // Rebuilt once on init and whenever the CSS color changes (theme switch).
+  const shadeColorsRef = useRef(null);
   const angleRef = useRef({ x: 0.35, y: 0 });
   const mouseRef = useRef({ x: 0, y: 0 });
   const mouseTargetRef = useRef({ x: 0, y: 0 });
   const rectRef = useRef({ cx: 0, cy: 0 });
   const rafRef = useRef(null);
   const clickWaveRef = useRef(null);
-  const wordsRef = useRef({
-    words: pickWords(),
-    lastSwap: 0,
-  });
+  // Lazy-init pattern for useRef (useRef doesn't support function initializers).
+  const wordsRef = useRef(null);
+  if (wordsRef.current === null) {
+    const words = pickWords();
+    wordsRef.current = { words, fullText: words.join(GAP) + GAP, lastSwap: 0 };
+  }
 
   const W = 44;
   const H = 22;
@@ -291,7 +268,10 @@ export const AsciiSphere = () => {
 
     const observer = new IntersectionObserver(
       ([entry]) => setIsVisible(entry.isIntersecting),
-      { threshold: 0.1 }
+      // threshold: 0 = animate as long as even 1px is visible.
+      // A higher threshold like 0.1 stops the animation when DevTools opens
+      // and shrinks the viewport, pushing the canvas partially off-screen.
+      { threshold: 0 }
     );
 
     observer.observe(el);
@@ -334,9 +314,9 @@ export const AsciiSphere = () => {
     const div = containerRef.current;
     if (!div) return;
     const onMouseDown = (e) => {
-      const pre = preRef.current;
-      if (!pre) return;
-      const rect = pre.getBoundingClientRect();
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
       const gx = ((e.clientX - rect.left) / rect.width) * W;
       const gy = ((e.clientY - rect.top) / rect.height) * H;
       clickWaveRef.current = { gx, gy, startTime: Date.now() };
@@ -345,10 +325,82 @@ export const AsciiSphere = () => {
     return () => div.removeEventListener('mousedown', onMouseDown);
   }, [W, H]);
 
+  // Build precomputed fillStyle strings from the --text-primary CSS variable.
+  // Reading the variable directly is more reliable than getComputedStyle(canvas).color
+  // because document.fonts.ready can fire before the stylesheet is parsed,
+  // which would yield rgb(0,0,0) (invisible on dark background).
+  const buildShadeColors = useCallback(() => {
+    const raw = getComputedStyle(document.documentElement)
+      .getPropertyValue('--text-primary')
+      .trim();
+    if (!raw) return false;
+    // Parse hex (#rrggbb or #rgb) or rgb/rgba(...)
+    let r, g, b;
+    const hex = raw.match(/^#([0-9a-f]{3,8})$/i)?.[1];
+    if (hex) {
+      if (hex.length === 3) {
+        r = parseInt(hex[0] + hex[0], 16);
+        g = parseInt(hex[1] + hex[1], 16);
+        b = parseInt(hex[2] + hex[2], 16);
+      } else {
+        r = parseInt(hex.slice(0, 2), 16);
+        g = parseInt(hex.slice(2, 4), 16);
+        b = parseInt(hex.slice(4, 6), 16);
+      }
+    } else {
+      const m = raw.match(/(\d+)/g);
+      if (!m || m.length < 3) return false;
+      [r, g, b] = m.map(Number);
+    }
+    // Reject black (likely means CSS variable not yet resolved)
+    if (r === 0 && g === 0 && b === 0) return false;
+    shadeColorsRef.current = SHADE_OPACITY_VALUES.map(
+      (a) => `rgba(${r},${g},${b},${(a * 0.85).toFixed(3)})`
+    );
+    return true;
+  }, []);
+
+  // Initialise canvas: measure font metrics, set DPR-scaled dimensions.
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const init = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const fs = 11;
+      const lh = 13;
+      const ctx = canvas.getContext('2d');
+      ctxRef.current = ctx;
+      ctx.font = `${fs}px "Fira Code", "Courier New", Courier, monospace`;
+      ctx.textBaseline = 'top';
+      const cw = ctx.measureText('M').width;
+      metricsRef.current = { cw, lh };
+      canvas.width = Math.round(W * cw * dpr);
+      canvas.height = Math.round(H * lh * dpr);
+      canvas.style.width = `${Math.round(W * cw)}px`;
+      canvas.style.height = `${Math.round(H * lh)}px`;
+      ctx.scale(dpr, dpr);
+      ctx.font = `${fs}px "Fira Code", "Courier New", Courier, monospace`;
+      ctx.textBaseline = 'top';
+      buildShadeColors();
+    };
+    document.fonts.ready.then(init);
+    // Also try after full page load in case fonts.ready fires before CSS is parsed.
+    window.addEventListener('load', () => buildShadeColors(), { once: true });
+
+    // Update shade colors when the theme (CSS color) changes.
+    const themeObserver = new MutationObserver(() => buildShadeColors());
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class', 'data-theme'],
+    });
+    return () => themeObserver.disconnect();
+  }, [W, H, buildShadeColors]);
+
   const animate = useCallback(() => {
     const now = Date.now();
     if (now - wordsRef.current.lastSwap > 8000) {
       wordsRef.current.words = pickWords();
+      wordsRef.current.fullText = wordsRef.current.words.join(GAP) + GAP;
       wordsRef.current.lastSwap = now;
     }
     const ease = 0.05;
@@ -364,7 +416,7 @@ export const AsciiSphere = () => {
       angleRef.current.y + mx,
       W,
       H,
-      wordsRef.current.words,
+      wordsRef.current.fullText,
       mouseRef.current.x,
       mouseRef.current.y,
       charBufRef.current
@@ -384,10 +436,22 @@ export const AsciiSphere = () => {
       if (!active) clickWaveRef.current = null;
     }
 
-    const rendered = frameToHtml(charBufRef.current, W, H);
-    // Write directly to the DOM — bypass React reconciliation every frame.
-    const pre = preRef.current;
-    if (pre) pre.innerHTML = rendered;
+    const ctx = ctxRef.current;
+    // Lazy fallback: if shadeColors weren't built yet (CSS loaded after fonts.ready),
+    // try again now that the page is fully rendered.
+    if (ctx && !shadeColorsRef.current) buildShadeColors();
+    if (ctx && shadeColorsRef.current) {
+      const { cw, lh } = metricsRef.current;
+      renderFrame(
+        ctx,
+        charBufRef.current,
+        W,
+        H,
+        cw,
+        lh,
+        shadeColorsRef.current
+      );
+    }
     angleRef.current.x += 0.004;
     angleRef.current.y += 0.008;
     rafRef.current = requestAnimationFrame(animate);
@@ -407,7 +471,7 @@ export const AsciiSphere = () => {
 
   return (
     <div ref={containerRef} style={containerStyle} aria-hidden="true">
-      <pre ref={preRef} style={preStyle} />
+      <canvas ref={canvasRef} style={canvasStyle} />
     </div>
   );
 };
@@ -420,19 +484,11 @@ const containerStyle = {
   overflow: 'hidden',
   userSelect: 'none',
   maxWidth: '100%',
+  cursor: 'pointer',
 };
 
-const preStyle = {
-  fontFamily: '"Fira Code", "Courier New", Courier, monospace',
-  fontSize: 'min(11px, 2.5vw)',
-  lineHeight: 'min(12px, 2.8vw)',
-  letterSpacing: 0,
+const canvasStyle = {
+  display: 'block',
   color: 'var(--text-primary)',
-  textShadow: 'none',
-  margin: 0,
-  padding: 0,
-  whiteSpace: 'pre',
-  opacity: 0.85,
-  overflow: 'hidden',
-  cursor: 'pointer',
+  maxWidth: '100%',
 };
