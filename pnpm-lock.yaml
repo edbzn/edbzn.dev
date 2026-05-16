@@ -136,8 +136,8 @@ importers:
         specifier: ^9.0.0
         version: 9.1.7
       lint-staged:
-        specifier: 17.0.4
-        version: 17.0.4
+        specifier: 17.0.5
+        version: 17.0.5
       npm-run-all2:
         specifier: ^8.0.0
         version: 8.0.4
@@ -5440,8 +5440,8 @@ packages:
   linkfs@2.1.0:
     resolution: {integrity: sha512-kmsGcmpvjStZ0ATjuHycBujtNnXiZR28BTivEu0gAMDTT7GEyodcK6zSRtu6xsrdorrPZEIN380x7BD7xEYkew==}
 
-  lint-staged@17.0.4:
-    resolution: {integrity: sha512-+rU9lSUyVOZ/hDUmRLVGzyS2v73cDdQjX+XQz1AaOdIE4RysLq0HoPW2HrrgeNCLklkhi904VBU1bmgWLHVnkA==}
+  lint-staged@17.0.5:
+    resolution: {integrity: sha512-d12yC+/e8RhBjZtaxZn71FyrgU/P5e+uAPifhCLwdosQZP/zamSdKRWDC30ocVIbzDKiFG1McHc/LUgB92GIPw==}
     engines: {node: '>=22.22.1'}
     hasBin: true
 
@@ -9606,14 +9606,14 @@ snapshots:
   '@graphql-tools/optimize@1.4.0(graphql@16.14.0)':
     dependencies:
       graphql: 16.14.0
-      tslib: 2.4.1
+      tslib: 2.8.1
 
   '@graphql-tools/relay-operation-optimizer@6.5.18(graphql@16.14.0)':
     dependencies:
       '@ardatan/relay-compiler': 12.0.0(graphql@16.14.0)
       '@graphql-tools/utils': 9.2.1(graphql@16.14.0)
       graphql: 16.14.0
-      tslib: 2.4.1
+      tslib: 2.8.1
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -14969,7 +14969,7 @@ snapshots:
 
   linkfs@2.1.0: {}
 
-  lint-staged@17.0.4:
+  lint-staged@17.0.5:
     dependencies:
       listr2: 10.2.1
       picomatch: 4.0.4
