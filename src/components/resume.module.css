@@ -55,12 +55,8 @@
 }
 
 .content {
-  background-color: var(--bg-primary);
-  position: relative;
-}
-
-:global(:root[data-theme='abyss']) .content {
   background-color: transparent;
+  position: relative;
 }
 
 .content > * {
@@ -135,6 +131,16 @@
 .partial {
   position: relative;
   overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgb(255, 255, 255) 0%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgb(255, 255, 255) 0%,
+    transparent 100%
+  );
 }
 
 .partial::after {
@@ -145,57 +151,35 @@
   right: 0;
   height: 70px;
   width: 100%;
-  background: linear-gradient(to bottom, transparent, var(--bg-primary));
   z-index: 1;
-}
-
-:global(:root[data-theme='abyss']) .partial::after {
   background: none;
   -webkit-mask-image: none;
   mask-image: none;
 }
 
-:global(:root[data-theme='abyss']) .partial {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    black 0%,
-    rgba(0, 0, 0, 0.8) 30%,
-    rgba(0, 0, 0, 0.4) 60%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    black 0%,
-    rgba(0, 0, 0, 0.8) 30%,
-    rgba(0, 0, 0, 0.4) 60%,
-    transparent 100%
-  );
-}
-
-.actions button {
+.toggle {
   margin-top: 24px;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  padding: 6px 12px;
-  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 4px 0;
+  font-size: 0.85rem;
   font-family: '"Public Sans"', sans-serif;
   cursor: pointer;
-  border-radius: 4px;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.toggle:hover {
   color: var(--text-primary);
-  transition: background-color 0.2s ease;
 }
 
-.actions button:hover {
-  background-color: var(--border-color);
+.chevron {
+  transition: transform 0.2s ease;
 }
 
-.actions button:last-child {
-  margin-left: 12px;
-  background-color: var(--text-primary);
-  color: var(--bg-primary);
-  border-color: var(--text-primary);
-}
-
-.actions button:last-child:hover {
-  opacity: 0.9;
+.chevronOpen {
+  transform: rotate(180deg);
 }

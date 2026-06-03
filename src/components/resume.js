@@ -5,15 +5,6 @@ export const Resume = ({ experiences }) => {
   const [showAll, setShowAll] = useState(false);
   const displayedExperiences = showAll ? experiences : experiences.slice(0, 3);
 
-  const downloadCV = () => {
-    const link = document.createElement('a');
-    link.href = '/cv-edouard-bozon.pdf';
-    link.download = 'cv-edouard-bozon.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   const isCurrent = (period) => {
     return period && period.toLowerCase().includes('today');
   };
@@ -68,11 +59,26 @@ export const Resume = ({ experiences }) => {
         ))}
       </section>
       <div className={css.actions}>
-        <button type="button" onClick={() => setShowAll(!showAll)}>
-          {showAll ? 'Show Less' : 'Show more'}
-        </button>
-        <button type="button" onClick={() => downloadCV()}>
-          Download CV
+        <button
+          type="button"
+          className={css.toggle}
+          onClick={() => setShowAll(!showAll)}
+        >
+          {showAll ? 'Show less' : 'Show more'}
+          <svg
+            className={`${css.chevron} ${showAll ? css.chevronOpen : ''}`}
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
         </button>
       </div>
     </>

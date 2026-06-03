@@ -240,12 +240,27 @@ export const AsciiSphere = () => {
     const el = containerRef.current;
     if (!el) return;
 
-    const updateRect = () => {
+    const readRect = () => {
       const rect = el.getBoundingClientRect();
       rectRef.current.cx = rect.left + rect.width / 2;
       rectRef.current.cy = rect.top + rect.height / 2;
     };
-    updateRect();
+    readRect();
+
+    // Coalesce rect reads to at most one per animation frame. Reading
+    // getBoundingClientRect() synchronously on every scroll event forces a
+    // layout flush per event; near the bottom of a long page the scroll events
+    // fire densely and interleave with the canvas RAF, tanking the framerate.
+    // rAF-throttling keeps the layout read off the scroll hot path.
+    let rectScheduled = false;
+    const scheduleRect = () => {
+      if (rectScheduled) return;
+      rectScheduled = true;
+      requestAnimationFrame(() => {
+        rectScheduled = false;
+        readRect();
+      });
+    };
 
     const onMouseMove = (e) => {
       const { cx, cy } = rectRef.current;
@@ -254,12 +269,12 @@ export const AsciiSphere = () => {
     };
 
     window.addEventListener('mousemove', onMouseMove, { passive: true });
-    window.addEventListener('scroll', updateRect, { passive: true });
-    window.addEventListener('resize', updateRect);
+    window.addEventListener('scroll', scheduleRect, { passive: true });
+    window.addEventListener('resize', scheduleRect);
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('scroll', updateRect);
-      window.removeEventListener('resize', updateRect);
+      window.removeEventListener('scroll', scheduleRect);
+      window.removeEventListener('resize', scheduleRect);
     };
   }, []);
 
@@ -308,8 +323,9 @@ export const AsciiSphere = () => {
       if (!m || m.length < 3) return false;
       [r, g, b] = m.map(Number);
     }
-    // Reject black (likely means CSS variable not yet resolved)
-    if (r === 0 && g === 0 && b === 0) return false;
+    // Note: black (rgb(0,0,0)) is the legitimate light-theme color, so it must
+    // NOT be rejected. The "not yet resolved" case is already handled above by
+    // the empty-string guard (getPropertyValue returns '' before CSS parses).
     shadeColorsRef.current = SHADE_OPACITY_VALUES.map(
       (a) => `rgba(${r},${g},${b},${(a * 1.0).toFixed(3)})`
     );

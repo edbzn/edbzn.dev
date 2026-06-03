@@ -34,7 +34,7 @@ export const onRenderBody = ({
         __html: `
           (function() {
             try {
-              const savedTheme = localStorage.getItem('theme') || 'abyss';
+              const savedTheme = localStorage.getItem('theme') || 'dark';
               document.documentElement.setAttribute('data-theme', savedTheme);
             } catch (e) {
               console.error('Error loading theme:', e);

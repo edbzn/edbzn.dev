@@ -1,23 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500&display=swap');
 
-/* Page transition */
-@keyframes page-enter {
-  from {
-    opacity: 0.7;
-    transform: translateY(4px);
-  }
-}
-
-main.page-enter {
-  animation: page-enter 120ms ease-out;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  main.page-enter {
-    animation: none;
-  }
-}
-
 /* CSS Variables for theming */
 
 /* Shiki multi-theme: map theme-specific token colors */
@@ -50,9 +32,8 @@ main.page-enter {
 
 /* Light theme (default) */
 :root {
-  --bg-primary: #ffffff;
-  --bg-primary-rgb: 255, 255, 255;
-  --bg-secondary: #f8f9fa;
+  --bg-primary: #f6f5f5;
+  --bg-secondary: #fff;
   --text-primary: rgba(0, 0, 0, 0.9);
   --text-secondary: rgba(0, 0, 0, 0.7);
   --text-muted: rgba(0, 0, 0, 0.5);
@@ -97,14 +78,13 @@ main.page-enter {
 /* Dark theme */
 :root[data-theme='dark'] {
   --bg-primary: #1e1e1e;
-  --bg-primary-rgb: 30, 30, 30;
   --bg-secondary: #2d2d2d;
   --text-primary: rgba(255, 255, 255, 0.9);
   --text-secondary: rgba(255, 255, 255, 0.7);
   --text-muted: rgba(255, 255, 255, 0.5);
   --border-color: rgba(255, 255, 255, 0.085);
-  --box-shadow-light: rgba(0, 0, 0, 0.3);
-  --box-shadow-dark: rgba(0, 0, 0, 0.5);
+  --box-shadow-light: rgba(0, 0, 0, 0.1);
+  --box-shadow-dark: rgba(0, 0, 0, 0.2);
   --accent-color: #4db8ff;
   --code-bg: rgb(255 253 100 / 7%);
   --code-text: #f0f0f0;
@@ -140,15 +120,14 @@ main.page-enter {
 
 /* Abyss theme - inspired by VS Code Abyss */
 :root[data-theme='abyss'] {
-  --bg-primary: #000c18;
-  --bg-primary-rgb: 0, 12, 24;
+  --bg-primary: #000c188c;
   --bg-secondary: #060621;
-  --text-primary: #8da6d8;
-  --text-secondary: rgba(141, 166, 216, 0.75);
+  --text-primary: #a6bce6;
+  --text-secondary: rgba(177, 194, 228, 0.75);
   --text-muted: rgba(141, 166, 216, 0.55);
   --border-color: rgba(89, 111, 153, 0.25);
-  --box-shadow-light: rgba(0, 0, 0, 0.4);
-  --box-shadow-dark: rgba(0, 0, 0, 0.6);
+  --box-shadow-light: rgba(0, 0, 0, 0.2);
+  --box-shadow-dark: rgba(0, 0, 0, 0.3);
   --accent-color: #2277ff;
   --code-bg: rgb(255 253 100 / 7%);
   --code-text: #8da6d8;
@@ -159,9 +138,8 @@ main.page-enter {
   --tag-bg: rgba(102, 136, 204, 0.1);
   --tag-text: #8da6d8;
   --tag-bg-hover: rgba(102, 136, 204, 0.15);
-  --tag-shadow: rgba(0, 0, 0, 0.3) 0px 2px 8px, rgba(0, 0, 0, 0.2) 0px 4px 16px;
-  --tag-shadow-hover:
-    rgba(0, 0, 0, 0.4) 0px 3px 10px, rgba(0, 0, 0, 0.3) 0px 6px 18px;
+  --tag-shadow: rgba(0, 0, 0, 0.452);
+  --tag-shadow-hover: rgba(0, 0, 0, 0.661);
   --note-bg: rgba(102, 136, 204, 0.05);
   --note-border: rgba(102, 136, 204, 0.15);
   --note-warning-bg: rgba(255, 238, 187, 0.1);
@@ -178,9 +156,9 @@ main.page-enter {
 
   --site-bg-noise-opacity: 0.15;
   --site-bg-wash: radial-gradient(
-    120% 80% at 30% 20%,
-    color-mix(in srgb, var(--accent-color) 8%, transparent),
-    transparent 70%
+    120% 80% at 30% 10%,
+    color-mix(in srgb, var(--accent-color) 5%, transparent),
+    transparent 60%
   );
 
   color-scheme: dark;
@@ -202,7 +180,9 @@ body::after {
   content: '';
   position: fixed;
   inset: -10%;
-  z-index: -1;
+  /* Furthest back: the noise texture (::before, z-index:-1) layers on top of
+     this wash, and both stay behind page content. */
+  z-index: -2;
   pointer-events: none;
   background-image: var(--site-bg-wash);
   background-repeat: no-repeat;
@@ -263,7 +243,10 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 1000;
+  /* Sit behind page content (alongside the bg wash at z-index:-1) rather than
+     on top of it. At z-index:1000 this full-viewport noise layer painted a film
+     over everything — including hovered cards — washing out their box-shadows. */
+  z-index: -1;
   opacity: var(--site-bg-noise-opacity);
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
   background-repeat: repeat;
@@ -317,16 +300,6 @@ body::before {
   }
 }
 
-/* Logo colors - invert in dark mode */
-.logo-inner path[fill='rgb(0,0,0)'],
-.logo-inner path[fill='rgb(23,23,23)'] {
-  transition: fill 0.3s ease;
-}
-
-.logo-inner path[fill='rgb(255,255,255)'] {
-  transition: fill 0.3s ease;
-}
-
 /* Dark theme logo colors */
 :root[data-theme='dark'] .logo-inner path[fill='rgb(0,0,0)'],
 :root[data-theme='dark'] .logo-inner path[fill='rgb(23,23,23)'] {
@@ -336,7 +309,7 @@ body::before {
 /* Abyss theme logo colors */
 :root[data-theme='abyss'] .logo-inner path[fill='rgb(0,0,0)'],
 :root[data-theme='abyss'] .logo-inner path[fill='rgb(23,23,23)'] {
-  fill: #6688cc !important;
+  fill: var(--text-primary);
 }
 
 :root[data-theme='dark'] .logo-inner path[fill='rgb(255,255,255)'] {
@@ -352,11 +325,7 @@ body::before {
 }
 
 :root[data-theme='abyss'] .logo-inner polygon[fill='rgb(23,23,23)'] {
-  fill: #6688cc !important;
-}
-
-.logo-inner polygon[fill='rgb(100,100,100)'] {
-  transition: fill 0.3s ease;
+  fill: var(--text-primary);
 }
 
 :root[data-theme='dark'] .logo-inner polygon[fill='rgb(100,100,100)'] {
@@ -364,7 +333,7 @@ body::before {
 }
 
 :root[data-theme='abyss'] .logo-inner polygon[fill='rgb(100,100,100)'] {
-  fill: #3d568a !important;
+  fill: var(--text-primary);
 }
 
 li {

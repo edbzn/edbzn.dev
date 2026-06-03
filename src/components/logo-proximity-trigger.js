@@ -37,6 +37,16 @@ export function LogoProximityTrigger({ threshold = 160 }) {
     });
     resizeObserver.observe(header);
 
+    // Remove the class only once the keyframe animation has run to completion,
+    // so leaving the proximity zone mid-animation lets it finish instead of
+    // cutting it off abruptly. Re-entering range restarts a fresh cycle.
+    const onAnimationEnd = () => {
+      // Only clear if the pointer has since left the zone; otherwise keep the
+      // class so the animation can be restarted on the next entry.
+      if (!inRange) logo.classList.remove('logo-active');
+    };
+    logo.addEventListener('animationend', onAnimationEnd);
+
     const update = () => {
       scheduled = false;
       const withinRange = lastY >= 0 && lastY <= headerBottom + threshold;
@@ -50,9 +60,10 @@ export function LogoProximityTrigger({ threshold = 160 }) {
         logo.offsetWidth; // force reflow so the re-added class restarts keyframes
         logo.classList.add('logo-active');
       } else if (inRange && !withinRange) {
-        // Stop only when leaving the range entirely
+        // Leaving the range: don't yank the class mid-animation. Mark out of
+        // range and let `animationend` remove the class so the current cycle
+        // finishes gracefully.
         inRange = false;
-        logo.classList.remove('logo-active');
       }
     };
 
@@ -78,6 +89,7 @@ export function LogoProximityTrigger({ threshold = 160 }) {
 
     return () => {
       window.removeEventListener('pointermove', onPointerMove);
+      logo.removeEventListener('animationend', onAnimationEnd);
       resizeObserver.disconnect();
       logo.classList.remove('logo-active');
     };

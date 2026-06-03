@@ -29,7 +29,6 @@ class Layout extends React.Component {
         <header
           className="site-header"
           style={{
-            background: 'rgba(var(--bg-primary-rgb, 255, 255, 255), 0.4)',
             backdropFilter: 'blur(12px)',
             WebkitBackdropFilter: 'blur(12px)',
             paddingBottom: 10,
