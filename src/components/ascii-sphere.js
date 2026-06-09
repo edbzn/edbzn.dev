@@ -342,7 +342,15 @@ export const AsciiSphere = () => {
       const lh = 13;
       const ctx = canvas.getContext('2d');
       ctxRef.current = ctx;
-      ctx.font = `${fs}px "Fira Code", "Courier New", Courier, monospace`;
+      // Use Fira Code only if already in the font cache. Setting ctx.font to an
+      // uncached web font triggers a synchronous download + parse on the main thread
+      // which tanks the framerate when the sphere first enters the viewport.
+      // Fall back to system monospace immediately; re-init after fonts.ready to
+      // upgrade metrics once Fira Code finishes loading (off the scroll hot-path).
+      const font = document.fonts.check(`${fs}px "Fira Code"`)
+        ? `${fs}px "Fira Code", "Courier New", Courier, monospace`
+        : `${fs}px "Courier New", Courier, monospace`;
+      ctx.font = font;
       ctx.textBaseline = 'top';
       const cw = ctx.measureText('M').width;
       metricsRef.current = { cw, lh };
@@ -351,11 +359,17 @@ export const AsciiSphere = () => {
       canvas.style.width = `${Math.round(W * cw)}px`;
       canvas.style.height = `${Math.round(H * lh)}px`;
       ctx.scale(dpr, dpr);
-      ctx.font = `${fs}px "Fira Code", "Courier New", Courier, monospace`;
+      ctx.font = font;
       ctx.textBaseline = 'top';
       buildShadeColors();
     };
-    document.fonts.ready.then(init);
+    // Init immediately with the best font available right now — no blocking wait.
+    init();
+    // Once all fonts have settled, re-init to upgrade to Fira Code metrics if it
+    // wasn't available above. This runs off the scroll hot-path.
+    document.fonts.ready.then(() => {
+      if (canvasRef.current) init();
+    });
     // Also try after full page load in case fonts.ready fires before CSS is parsed.
     window.addEventListener('load', () => buildShadeColors(), { once: true });
 
