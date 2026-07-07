@@ -25,6 +25,20 @@ const SHADE_OPACITY_VALUES = (() => {
 const CHAR_STRINGS = new Array(128);
 for (let i = 0; i < 128; i++) CHAR_STRINGS[i] = String.fromCharCode(i);
 
+function hslToRgb(h, s, l) {
+  s /= 100;
+  l /= 100;
+  const k = (n) => (n + h / 30) % 12;
+  const a = s * Math.min(l, 1 - l);
+  const f = (n) =>
+    l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  return [
+    Math.round(f(0) * 255),
+    Math.round(f(8) * 255),
+    Math.round(f(4) * 255),
+  ];
+}
+
 function buildFrame(ax, ay, W, H, mx, my, charBuf) {
   const ASPECT = 1.8;
   const R = 1.0;
@@ -305,9 +319,14 @@ export const AsciiSphere = () => {
       .getPropertyValue('--text-primary')
       .trim();
     if (!raw) return false;
-    // Parse hex (#rrggbb or #rgb) or rgb/rgba(...)
+    // Parse hex (#rrggbb or #rgb), rgb/rgba(...), or hsl/hsla(...).
+    // Browsers normalize computed colors to different formats (e.g. Chrome
+    // returns hsla() for colors with alpha), so all three must be handled.
     let r, g, b;
     const hex = raw.match(/^#([0-9a-f]{3,8})$/i)?.[1];
+    const hsl = raw.match(
+      /^hsla?\(\s*([\d.]+)(?:deg)?[\s,]+([\d.]+)%[\s,]+([\d.]+)%/i
+    );
     if (hex) {
       if (hex.length === 3) {
         r = parseInt(hex[0] + hex[0], 16);
@@ -318,6 +337,8 @@ export const AsciiSphere = () => {
         g = parseInt(hex.slice(2, 4), 16);
         b = parseInt(hex.slice(4, 6), 16);
       }
+    } else if (hsl) {
+      [r, g, b] = hslToRgb(Number(hsl[1]), Number(hsl[2]), Number(hsl[3]));
     } else {
       const m = raw.match(/(\d+)/g);
       if (!m || m.length < 3) return false;
