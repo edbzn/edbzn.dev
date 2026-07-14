@@ -11,7 +11,7 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
       - name: Use Node.js v20
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: 'pnpm'
@@ -38,7 +38,7 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
       - name: Use Node.js v20
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: 'pnpm'
@@ -67,7 +67,7 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: 'pnpm'
