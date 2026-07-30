@@ -76,7 +76,7 @@ importers:
         version: 7.16.0(gatsby-plugin-sharp@5.16.0(gatsby@5.16.1(babel-eslint@10.1.0(eslint@7.32.0))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(type-fest@0.21.3)(typescript@7.0.2))(graphql@16.14.2))(gatsby@5.16.1(babel-eslint@10.1.0(eslint@7.32.0))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(type-fest@0.21.3)(typescript@7.0.2))
       gatsby-remark-mermaid:
         specifier: ^5.0.0
-        version: 5.0.0(playwright@1.62.0)
+        version: 5.0.0(playwright@1.62.1)
       gatsby-remark-responsive-iframe:
         specifier: ^6.0.0
         version: 6.16.0(gatsby@5.16.1(babel-eslint@10.1.0(eslint@7.32.0))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(type-fest@0.21.3)(typescript@7.0.2))
@@ -143,7 +143,7 @@ importers:
         version: 9.0.3
       playwright:
         specifier: ^1.56.1
-        version: 1.62.0
+        version: 1.62.1
       prettier:
         specifier: 3.9.6
         version: 3.9.6
@@ -6517,13 +6517,13 @@ packages:
   platform@1.3.6:
     resolution: {integrity: sha512-fnWVljUchTro6RiCFvCXBbNhJc2NijN7oIQxbwsyL0buWJPG85v81ehlHI9fXrJsMNgTofEoWIQeClKpgxFLrg==}
 
-  playwright-core@1.62.0:
-    resolution: {integrity: sha512-nsNRyq0r2zsG8AcRHWknc9QRA5XCueC7gWMrs+Gx2tlZn9hcl8zudfh00lhJPY1DE7NmZ6bDsT9g2yey8mXljA==}
+  playwright-core@1.62.1:
+    resolution: {integrity: sha512-wPYSwEBJY9GHraISXqyqtx0na0LpO3XEX7jNDhntbex7tzUS7kLnZsOlFruFJB4Hi/rhDMjXGqHewDZ68nYZVw==}
     engines: {node: '>=20'}
     hasBin: true
 
-  playwright@1.62.0:
-    resolution: {integrity: sha512-Z14dG305dgaLu6foB1TXQagFiW8JfSUIUaUuPaKQ6NtBPKF1P/qXcqfh6c6K/icPqdy37JmjbiBXf6JNg6Sylw==}
+  playwright@1.62.1:
+    resolution: {integrity: sha512-0M+L3LAD8/nm554LOla9Ayx0j0tmFZ0FBcoQ7F1VuVHpM/XpiC8RcDzBQB8W5+hA8L22THxELzeF+2WcUzvcLg==}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -13816,10 +13816,10 @@ snapshots:
       unist-util-select: 3.0.4
       unist-util-visit-parents: 3.1.1
 
-  gatsby-remark-mermaid@5.0.0(playwright@1.62.0):
+  gatsby-remark-mermaid@5.0.0(playwright@1.62.1):
     dependencies:
-      playwright: 1.62.0
-      remark-mermaidjs: 7.0.0(playwright@1.62.0)
+      playwright: 1.62.1
+      remark-mermaidjs: 7.0.0(playwright@1.62.1)
       vfile: 6.0.3
 
   gatsby-remark-responsive-iframe@6.16.0(gatsby@5.16.1(babel-eslint@10.1.0(eslint@7.32.0))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(type-fest@0.21.3)(typescript@7.0.2)):
@@ -15468,13 +15468,13 @@ snapshots:
 
   merge2@1.4.1: {}
 
-  mermaid-isomorphic@3.1.0(playwright@1.62.0):
+  mermaid-isomorphic@3.1.0(playwright@1.62.1):
     dependencies:
       '@fortawesome/fontawesome-free': 6.7.2
       katex: 0.16.47
       mermaid: 11.16.0
     optionalDependencies:
-      playwright: 1.62.0
+      playwright: 1.62.1
 
   mermaid@11.16.0:
     dependencies:
@@ -16303,11 +16303,11 @@ snapshots:
 
   platform@1.3.6: {}
 
-  playwright-core@1.62.0: {}
+  playwright-core@1.62.1: {}
 
-  playwright@1.62.0:
+  playwright@1.62.1:
     dependencies:
-      playwright-core: 1.62.0
+      playwright-core: 1.62.1
     optionalDependencies:
       fsevents: 2.3.2
 
@@ -16923,16 +16923,16 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  remark-mermaidjs@7.0.0(playwright@1.62.0):
+  remark-mermaidjs@7.0.0(playwright@1.62.1):
     dependencies:
       '@types/mdast': 4.0.4
       hast-util-from-html-isomorphic: 2.0.0
-      mermaid-isomorphic: 3.1.0(playwright@1.62.0)
+      mermaid-isomorphic: 3.1.0(playwright@1.62.1)
       unified: 11.0.5
       unist-util-visit-parents: 6.0.2
       vfile: 6.0.3
     optionalDependencies:
-      playwright: 1.62.0
+      playwright: 1.62.1
 
   remark-parse@10.0.2:
     dependencies:
