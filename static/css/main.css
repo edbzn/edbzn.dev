@@ -64,6 +64,11 @@
   --blockquote-border: rgba(0, 0, 0, 0.15);
   --anchor-color: rgba(0, 0, 0, 0.3);
 
+  /* Opaque top bar: the colour the page actually shows at the top of the
+     viewport, i.e. --bg-primary blended with the body::before noise layer
+     (and, in abyss, the body::after gradient). */
+  --header-bg: #f1f0f0;
+
   /* Nav pill */
   --nav-pill-bg: rgba(0, 0, 0, 0.04);
   --nav-active-bg: rgba(0, 0, 0, 0.08);
@@ -71,6 +76,10 @@
   /* Background texture + color wash */
   --site-bg-noise-opacity: 0.15;
   --site-bg-wash: none;
+
+  /* Height of the sticky .site-header (see layout.js), used to offset
+     anchor targets and the sticky table of contents. */
+  --site-header-height: 53px;
 
   color-scheme: light;
 }
@@ -107,6 +116,8 @@
   --table-border: rgba(255, 255, 255, 0.2);
   --blockquote-border: rgba(255, 255, 255, 0.25);
   --anchor-color: rgba(255, 255, 255, 0.4);
+
+  --header-bg: #292929;
 
   /* Nav pill */
   --nav-pill-bg: rgba(255, 255, 255, 0.08);
@@ -149,6 +160,10 @@
   --table-border: rgba(89, 111, 153, 0.3);
   --blockquote-border: rgba(89, 111, 153, 0.35);
   --anchor-color: rgba(102, 136, 204, 0.4);
+
+  /* --bg-primary is translucent here: the visible colour comes from the
+     fixed gradient on body::after under the noise layer. */
+  --header-bg: #101c31;
 
   /* Nav pill */
   --nav-pill-bg: rgba(102, 136, 204, 0.08);
@@ -419,6 +434,15 @@ a.anchor svg {
   left: 0;
 }
 
+/* Keep anchored headings clear of the sticky site header */
+h2[id],
+h3[id],
+h4[id],
+h5[id],
+h6[id] {
+  scroll-margin-top: calc(var(--site-header-height) + 1rem);
+}
+
 twitter-widget {
   margin: 2.25em auto !important;
 }
@@ -502,6 +526,10 @@ p > img {
 }
 
 @media screen and (max-width: 640px) {
+  :root {
+    --site-header-height: 61px;
+  }
+
   html {
     font-size: 90%;
   }

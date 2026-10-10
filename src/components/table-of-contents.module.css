@@ -1,16 +1,21 @@
-/* TOC wrapper - collapsible container */
-.toc-wrapper {
-  border: 1px solid var(--border-color, #e1e4e8);
-  border-radius: 8px;
-  padding: 1rem;
-  background-color: var(--bg-secondary, #f6f8fa);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin: 2.25em 0;
+/*
+ * Below the wide breakpoint: collapsible box above the post content.
+ * From the wide breakpoint: sticky side block in the right margin, next to
+ * the 698px text column (see the media query at the end of this file).
+ */
+
+.toc-layout {
+  position: relative;
 }
 
-[data-theme='dark'] .toc-wrapper {
-  background-color: var(--bg-secondary, #1c1e21);
-  border-color: var(--border-color, #30363d);
+/* TOC wrapper - collapsible container */
+.toc-wrapper {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: var(--bg-secondary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin: 2.25em 0;
 }
 
 /* Toggle button */
@@ -27,19 +32,15 @@
   cursor: pointer;
   font-weight: 600;
   font-size: 1rem;
-  color: var(--text-primary, #24292e);
+  color: var(--text-primary);
 }
 
 .toc-toggle:hover {
   background-color: inherit;
 }
 
-[data-theme='dark'] .toc-toggle {
-  color: var(--text-primary, #e6edf3);
-}
-
 .toc-toggle:focus-visible {
-  outline: 2px solid var(--link-color, #0969da);
+  outline: 2px solid var(--accent-color);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -65,6 +66,11 @@
 
 .toc-chevron-open {
   transform: rotate(180deg);
+}
+
+/* Title of the side block, only shown on wide screens */
+.toc-title {
+  display: none;
 }
 
 /* Collapsible content */
@@ -110,19 +116,147 @@
 
 /* TOC Links */
 .toc-link {
-  color: var(--text-primary, #24292e);
+  color: var(--text-primary);
   text-decoration: none;
+  box-shadow: none;
+  transition: color 0.2s ease;
 }
 
-[data-theme='dark'] .toc-link {
-  color: var(--text-primary, #e6edf3);
+.toc-link:hover {
+  color: var(--accent-color);
 }
 
+.toc-link:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Section currently being read */
 .toc-link-active {
-  color: var(--text-primary, #24292e);
+  color: var(--accent-color);
   font-weight: 600;
 }
 
-[data-theme='dark'] .toc-link-active {
-  color: var(--text-primary, #e6edf3);
+/* Sticky side block in the right margin */
+@media screen and (min-width: 1240px) {
+  .toc-rail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(100% + 2rem);
+    width: 220px;
+  }
+
+  .toc-wrapper {
+    position: sticky;
+    top: calc(var(--site-header-height) + 1.5rem);
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - var(--site-header-height) - 3rem);
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    font-family: 'Public Sans', sans-serif;
+    hyphens: manual;
+  }
+
+  .toc-toggle {
+    display: none;
+  }
+
+  .toc-title {
+    display: block;
+    flex-shrink: 0;
+    margin: 0 0 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* Always expanded, scrolls on its own when the TOC is long */
+  .toc-content,
+  .toc-content-open {
+    min-height: 0;
+    max-height: none;
+    margin: 0;
+    padding: 2px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    opacity: 1;
+    visibility: visible;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    border-left: 1px solid var(--border-color);
+    font-size: 0.85rem;
+    line-height: 1.45;
+  }
+
+  .toc-list .toc-list {
+    margin: 0;
+    border-left: none;
+  }
+
+  .toc-item {
+    margin: 0;
+  }
+
+  .toc-link {
+    display: block;
+    margin-left: -1px;
+    padding: 0.3rem 0 0.3rem 0.85rem;
+    border-left: 2px solid transparent;
+    color: var(--text-secondary);
+    overflow-wrap: anywhere;
+  }
+
+  .toc-list .toc-list .toc-link {
+    padding-left: 1.6rem;
+    font-size: 0.8rem;
+  }
+
+  .toc-list .toc-list .toc-list .toc-link {
+    padding-left: 2.35rem;
+  }
+
+  .toc-link:hover {
+    color: var(--text-primary);
+  }
+
+  .toc-link:focus-visible {
+    outline-offset: -2px;
+  }
+
+  .toc-link-active,
+  .toc-link-active:hover {
+    border-left-color: var(--accent-color);
+    color: var(--accent-color);
+    /* No weight change: it would re-wrap long titles while scrolling */
+    font-weight: inherit;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .toc-rail {
+    left: calc(100% + 3rem);
+    width: 260px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toc-chevron,
+  .toc-content,
+  .toc-link {
+    transition: none;
+  }
 }
