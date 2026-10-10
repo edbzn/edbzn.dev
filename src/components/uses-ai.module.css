@@ -1,0 +1,299 @@
+.root {
+  --ai-hue: 255;
+  --ai-bg: hsl(var(--ai-hue) 70% 50% / 0.1);
+  --ai-fg: hsl(var(--ai-hue) 60% 40%);
+  --ai-border: hsl(var(--ai-hue) 60% 50% / 0.35);
+  font-family: 'Public Sans', sans-serif;
+  margin-bottom: 2.5rem;
+  hyphens: manual;
+}
+
+:global(:root[data-theme='dark']) .root,
+:global(:root[data-theme='abyss']) .root {
+  --ai-bg: hsl(var(--ai-hue) 70% 65% / 0.14);
+  --ai-fg: hsl(var(--ai-hue) 85% 78%);
+  --ai-border: hsl(var(--ai-hue) 70% 70% / 0.35);
+}
+
+/* Rows carry the tool's category hue (see uses-tools.module.css). */
+.root tbody tr {
+  --tint-bg: hsl(var(--hue, 255) 70% 50% / 0.12);
+  --tint-fg: hsl(var(--hue, 255) 65% 32%);
+  --tint-border: hsl(var(--hue, 255) 60% 45% / 0.35);
+}
+
+:global(:root[data-theme='dark']) .root tbody tr,
+:global(:root[data-theme='abyss']) .root tbody tr {
+  --tint-bg: hsl(var(--hue, 255) 70% 60% / 0.14);
+  --tint-fg: hsl(var(--hue, 255) 85% 76%);
+  --tint-border: hsl(var(--hue, 255) 70% 65% / 0.35);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Surface strip ---------- */
+
+.surfaces {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.surface {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    'icon label'
+    'icon count';
+  column-gap: 0.6rem;
+  align-items: center;
+  margin: 0;
+  padding: 0.6rem 0.7rem;
+  font: inherit;
+  text-align: left;
+  color: var(--text-primary);
+  background: var(--note-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.surface:hover {
+  border-color: var(--ai-border);
+}
+
+.surface[aria-pressed='true'] {
+  background: var(--ai-bg);
+  border-color: var(--ai-border);
+}
+
+.surface:focus-visible,
+.toolLink:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.surfaceIcon {
+  grid-area: icon;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 7px;
+  color: var(--ai-fg);
+  background: var(--ai-bg);
+}
+
+.surfaceLabel {
+  grid-area: label;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.surfaceCount {
+  grid-area: count;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* ---------- Matrix ---------- */
+
+.matrix {
+  width: 100%;
+  margin: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-size: 0.85rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--note-bg);
+}
+
+.matrix th,
+.matrix td {
+  padding: 0.65rem 0.5rem;
+  border: 0;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+  transition:
+    background-color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.matrix tbody tr:last-child th,
+.matrix tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.toolHead,
+.surfaceHead {
+  font-size: 0.68rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.toolHead {
+  width: 58%;
+  text-align: left;
+  padding-left: 0.75rem !important;
+}
+
+.surfaceHead {
+  text-align: center;
+}
+
+.tool {
+  padding-left: 0.75rem !important;
+  text-align: left;
+  font-weight: 400;
+}
+
+.toolInner {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.monogram {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 7px;
+  font-family: 'Space Grotesk', 'Public Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--tint-fg);
+  background: var(--tint-bg);
+  box-shadow: inset 0 0 0 1px var(--tint-border);
+}
+
+.toolText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 0.05rem;
+}
+
+.toolName {
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+.toolLink {
+  color: inherit;
+  box-shadow: none;
+  text-decoration: none;
+}
+
+.toolLink:hover {
+  color: var(--link-color);
+}
+
+.toolDescription {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.cell {
+  text-align: center;
+}
+
+.dotOn,
+.dotOff {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.dotOn {
+  background: var(--ai-fg);
+  box-shadow: 0 0 0 4px var(--ai-bg);
+}
+
+.dotOff {
+  width: 0.4rem;
+  height: 0.4rem;
+  background: var(--border-color);
+}
+
+.focused {
+  background: var(--ai-bg);
+}
+
+.lit .toolName {
+  color: var(--ai-fg);
+}
+
+.dim th,
+.dim td:not(.focused) {
+  opacity: 0.45;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surface,
+  .matrix th,
+  .matrix td {
+    transition: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .surfaces {
+    gap: 0.4rem;
+  }
+
+  .surface {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'icon'
+      'label'
+      'count';
+    justify-items: center;
+    row-gap: 0.25rem;
+    padding: 0.6rem 0.4rem;
+    text-align: center;
+  }
+
+  .toolHead {
+    width: 55%;
+  }
+
+  .surfaceHead {
+    font-size: 0.6rem;
+    letter-spacing: 0.02em;
+    padding-left: 0.2rem !important;
+    padding-right: 0.2rem !important;
+  }
+
+  .monogram {
+    display: none;
+  }
+}
