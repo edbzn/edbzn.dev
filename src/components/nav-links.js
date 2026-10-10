@@ -12,11 +12,21 @@ function isActive(to, pathname) {
   return pathname.startsWith(to);
 }
 
-export const NavLinks = ({ pathname }) => {
+/**
+ * Section links shown in the header pill. When `breadcrumb` is given (the
+ * current post title on article pages), it is rendered after "Blog" as the
+ * current sub page: Blog stays highlighted as the active section, the title is
+ * plain text marked as the current page and truncated with an ellipsis.
+ */
+export const NavLinks = ({ pathname, breadcrumb }) => {
   const containerRef = useRef(null);
   const linkRefs = useRef({});
   const [indicator, setIndicator] = useState(null);
   const [hoveredTo, setHoveredTo] = useState(null);
+  // With a breadcrumb the post title sits between Blog and Uses: sliding the indicator across
+  // it on hover looks odd, so it stays on the active section and hovered links get their own
+  // highlight instead (see .site-nav-links--crumb in main.css).
+  const crumbShown = Boolean(breadcrumb) && isActive('/blog', pathname);
 
   const measureLink = useCallback((to) => {
     const container = containerRef.current;
@@ -32,14 +42,15 @@ export const NavLinks = ({ pathname }) => {
   }, []);
 
   const updateIndicator = useCallback(() => {
-    const target = hoveredTo || links.find((l) => isActive(l.to, pathname))?.to;
+    const active = links.find((l) => isActive(l.to, pathname))?.to;
+    const target = crumbShown ? active : hoveredTo || active;
     if (!target) {
       setIndicator(null);
       return;
     }
     const pos = measureLink(target);
     if (pos) setIndicator(pos);
-  }, [pathname, hoveredTo, measureLink]);
+  }, [pathname, hoveredTo, crumbShown, measureLink]);
 
   useEffect(() => {
     updateIndicator();
@@ -61,7 +72,7 @@ export const NavLinks = ({ pathname }) => {
   return (
     <div
       ref={containerRef}
-      className="site-nav-links"
+      className={`site-nav-links${crumbShown ? ' site-nav-links--crumb' : ''}`}
       onMouseLeave={handleMouseLeave}
       style={{
         display: 'flex',
@@ -93,31 +104,48 @@ export const NavLinks = ({ pathname }) => {
       )}
       {links.map(({ to, label }) => {
         const active = isActive(to, pathname);
+        const crumb = to === '/blog' && active && breadcrumb;
         return (
-          <Link
-            key={to}
-            to={to}
-            ref={(el) => {
-              linkRefs.current[to] = el;
-            }}
-            className="site-nav-link"
-            aria-current={active ? 'page' : undefined}
-            onMouseEnter={() => handleMouseEnter(to)}
-            style={{
-              boxShadow: 'none',
-              fontFamily: '"Public Sans", sans-serif',
-              fontSize: '13px',
-              color: 'var(--text-primary)',
-              textDecoration: 'none',
-              padding: '5px 12px',
-              borderRadius: '6px',
-              lineHeight: '1.2',
-              position: 'relative',
-              zIndex: 1,
-            }}
-          >
-            {label}
-          </Link>
+          <React.Fragment key={to}>
+            <Link
+              to={to}
+              ref={(el) => {
+                linkRefs.current[to] = el;
+              }}
+              className="site-nav-link"
+              data-active={active ? '' : undefined}
+              aria-current={active && !crumb ? 'page' : undefined}
+              onMouseEnter={() => handleMouseEnter(to)}
+              style={{
+                boxShadow: 'none',
+                fontFamily: '"Public Sans", sans-serif',
+                fontSize: '13px',
+                color: 'var(--text-primary)',
+                textDecoration: 'none',
+                padding: '5px 12px',
+                borderRadius: '6px',
+                lineHeight: '1.2',
+                position: 'relative',
+                zIndex: 1,
+              }}
+            >
+              {label}
+            </Link>
+            {crumb && (
+              <>
+                <span className="site-nav-crumb-separator" aria-hidden="true">
+                  ›
+                </span>
+                <span
+                  className="site-nav-crumb"
+                  aria-current="page"
+                  title={breadcrumb}
+                >
+                  {breadcrumb}
+                </span>
+              </>
+            )}
+          </React.Fragment>
         );
       })}
     </div>

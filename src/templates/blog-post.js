@@ -89,7 +89,12 @@ const BlogPostTemplate = (props) => {
   const { location, children } = props;
 
   return (
-    <Layout location={location} author={author} github={github}>
+    <Layout
+      location={location}
+      author={author}
+      github={github}
+      breadcrumb={post.frontmatter.title}
+    >
       <article>
         <header>
           <h1

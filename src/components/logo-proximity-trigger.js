@@ -68,8 +68,8 @@ export function LogoProximityTrigger({ threshold = 160 }) {
     };
 
     const onPointerMove = (event) => {
-      // Don't trigger when hovering the nav links
-      if (event.target.closest?.('.site-nav')) {
+      // Don't trigger when hovering the nav links or the theme toggle
+      if (event.target.closest?.('.site-nav, .site-header-actions')) {
         prevY = lastY;
         lastY = -1;
         if (!scheduled) {
