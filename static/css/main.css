@@ -525,6 +525,124 @@ p > img {
   grid-template-columns: repeat(2, 1fr);
 }
 
+/*
+ * Site header (see layout.js). Below the wide breakpoint: logo on the left,
+ * nav pill + theme toggle on the right. From the wide breakpoint: a 3-column
+ * grid whose middle column is the centred content column, so the nav pill
+ * starts at the same x as the page content; the logo and the toggle sit in
+ * the side gutters.
+ */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.site-logo-link {
+  flex-shrink: 0;
+}
+
+.site-nav {
+  display: flex;
+  min-width: 0;
+  margin-left: auto;
+}
+
+.site-nav-links {
+  min-width: 0;
+}
+
+.site-nav-link {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.site-header-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+  margin-left: -12px;
+}
+
+.site-header-separator {
+  flex-shrink: 0;
+  width: 1px;
+  height: 16px;
+  margin: 0 8px;
+  background: var(--border-color);
+}
+
+/* On article pages the indicator stays on Blog; other links fade in their own highlight. */
+.site-nav-links--crumb .site-nav-link:not([data-active]) {
+  transition: background-color 0.15s ease;
+}
+
+.site-nav-links--crumb .site-nav-link:not([data-active]):hover,
+.site-nav-links--crumb .site-nav-link:not([data-active]):focus-visible {
+  background: var(--nav-active-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav-links--crumb .site-nav-link:not([data-active]) {
+    transition: none;
+  }
+}
+
+/* Article breadcrumb: Blog › <post title> */
+.site-nav-crumb-separator {
+  flex-shrink: 0;
+  padding: 0 2px 0 5px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.site-nav-crumb {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 280px;
+  padding: 5px 12px 5px 4px;
+  overflow: hidden;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  line-height: 1.2;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: default;
+}
+
+@media screen and (min-width: 1000px) {
+  .site-header {
+    display: grid;
+    /* Middle column = the 698px layout column minus its 1rem side padding
+       (#gatsby-focus-wrapper > div), i.e. the content box of <main>. */
+    grid-template-columns:
+      minmax(0, 1fr) minmax(0, calc(698px - 2rem))
+      minmax(0, 1fr);
+    gap: 0 24px;
+  }
+
+  .site-nav {
+    justify-self: start;
+    max-width: 100%;
+    margin-left: 0;
+  }
+
+  .site-header-actions {
+    justify-self: end;
+    margin-left: 0;
+  }
+
+  .site-header-separator {
+    display: none;
+  }
+}
+
 @media screen and (max-width: 640px) {
   :root {
     --site-header-height: 61px;
@@ -549,10 +667,6 @@ p > img {
     font-size: 1.3rem;
   }
 
-  .site-nav {
-    gap: 4px !important;
-  }
-
   .site-nav-links {
     gap: 1px !important;
     padding: 2px !important;
@@ -561,7 +675,12 @@ p > img {
   .site-nav-link {
     font-size: 12px !important;
     padding: 4px 8px !important;
-    white-space: nowrap;
+  }
+
+  /* No room for the post title: keep only the highlighted Blog section */
+  .site-nav-crumb,
+  .site-nav-crumb-separator {
+    display: none;
   }
 
   .gatsby-resp-image-wrapper img {

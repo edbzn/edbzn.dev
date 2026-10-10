@@ -9,7 +9,7 @@ import { LogoProximityTrigger } from './logo-proximity-trigger';
 
 class Layout extends React.Component {
   render() {
-    const { children, github, author, location } = this.props;
+    const { children, github, author, location, breadcrumb } = this.props;
     return (
       <div
         style={{
@@ -35,9 +35,6 @@ class Layout extends React.Component {
             paddingTop: 10,
             paddingLeft: 'clamp(1.25rem, 3vw, 2rem)',
             paddingRight: 'clamp(1.25rem, 3vw, 2rem)',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
             position: 'sticky',
             top: 0,
             zIndex: 100,
@@ -154,30 +151,20 @@ class Layout extends React.Component {
               </span>
             </div>
           </Link>
-          <nav
-            className="site-nav"
-            role="navigation"
-            aria-label="Main navigation"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-            }}
-          >
-            <NavLinks pathname={location?.pathname || '/'} />
+          <nav className="site-nav" aria-label="Main navigation">
+            <NavLinks
+              pathname={location?.pathname || '/'}
+              breadcrumb={breadcrumb}
+            />
+          </nav>
+          <div className="site-header-actions">
             <div
-              style={{
-                width: '1px',
-                height: '16px',
-                background: 'var(--border-color)',
-                margin: '0 8px',
-                flexShrink: 0,
-              }}
+              className="site-header-separator"
               role="separator"
               aria-hidden="true"
             />
             <ThemeToggle />
-          </nav>
+          </div>
         </header>
         <main style={{ marginTop: rhythm(2) }}>{children}</main>
         <div style={{ marginTop: rhythm(2) }}>
