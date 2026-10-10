@@ -3,7 +3,7 @@ import { Link } from 'gatsby';
 import { rhythm } from '../utils/typography';
 import * as styles from './tags.module.css';
 
-const slugifyTag = (tag) => tag.toLowerCase().replace(/\s+/g, '-');
+export const slugifyTag = (tag) => tag.toLowerCase().replace(/\s+/g, '-');
 
 export const Tags = ({ tags, style }) => {
   if (!tags || tags.length === 0) {
