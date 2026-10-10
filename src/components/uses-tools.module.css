@@ -1,0 +1,496 @@
+/* Per-category tint. `--hue` is set inline on groups and chips, so the
+   derived colours are declared there (a custom property's var() resolves on
+   the element that declares it). They flip for the dark themes below. */
+.root {
+  font-family: 'Public Sans', sans-serif;
+  margin-bottom: 2.5rem;
+  /* Short card text reads better unhyphenated (layout.js sets auto). */
+  hyphens: manual;
+}
+
+.group,
+.chip {
+  --tint-bg: hsl(var(--hue, 210) 70% 50% / 0.12);
+  --tint-fg: hsl(var(--hue, 210) 65% 32%);
+  --tint-border: hsl(var(--hue, 210) 60% 45% / 0.35);
+}
+
+:global(:root[data-theme='dark']) .group,
+:global(:root[data-theme='dark']) .chip,
+:global(:root[data-theme='abyss']) .group,
+:global(:root[data-theme='abyss']) .chip {
+  --tint-bg: hsl(var(--hue, 210) 70% 60% / 0.14);
+  --tint-fg: hsl(var(--hue, 210) 85% 76%);
+  --tint-border: hsl(var(--hue, 210) 70% 65% / 0.35);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Controls ---------- */
+
+.controls {
+  margin-bottom: 1.25rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0.3rem 0.4rem 0.3rem 0.6rem;
+  font: inherit;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  color: var(--text-secondary);
+  background: var(--nav-pill-bg);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.chip:hover {
+  color: var(--text-primary);
+  background: var(--nav-active-bg);
+}
+
+.chip[aria-pressed='true'] {
+  color: var(--tint-fg);
+  background: var(--tint-bg);
+  border-color: var(--tint-border);
+}
+
+/* "All" has no hue: use the neutral active pill instead. */
+.chip:not([style])[aria-pressed='true'] {
+  color: var(--text-primary);
+  background: var(--nav-active-bg);
+  border-color: var(--border-color);
+}
+
+.chipIcon {
+  flex-shrink: 0;
+  color: var(--tint-fg);
+}
+
+.chip:not([style]) .chipIcon {
+  color: currentColor;
+}
+
+.chipCount {
+  min-width: 1.4em;
+  padding: 0.05rem 0.35rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  background: var(--nav-pill-bg);
+}
+
+/* ---------- Groups ---------- */
+
+.group {
+  margin-bottom: 1.75rem;
+}
+
+.groupTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.75rem;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-primary);
+}
+
+.groupIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 6px;
+  color: var(--tint-fg);
+  background: var(--tint-bg);
+}
+
+.groupCount {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+/* ---------- Cards ---------- */
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-width: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--note-bg);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.card:hover,
+.cardOpen {
+  border-color: var(--tint-border);
+}
+
+.cardOpen {
+  box-shadow: 0 4px 16px var(--box-shadow-dark);
+}
+
+.cardButton {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'mono name chevron'
+    'desc desc desc';
+  column-gap: 0.6rem;
+  row-gap: 0.5rem;
+  align-items: center;
+  align-content: start;
+  width: 100%;
+  margin: 0;
+  padding: 0.7rem 0.6rem 0.6rem 0.7rem;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.cardButton:focus-visible,
+.chip:focus-visible,
+.tagButton:focus-visible,
+.visit:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.monogram {
+  grid-area: mono;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 7px;
+  font-family: 'Space Grotesk', 'Public Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--tint-fg);
+  background: var(--tint-bg);
+  box-shadow: inset 0 0 0 1px var(--tint-border);
+  white-space: nowrap;
+  transition: transform 0.2s ease;
+}
+
+.card:hover .monogram,
+.cardOpen .monogram {
+  transform: scale(1.05);
+}
+
+.cardText {
+  display: contents;
+}
+
+.name {
+  grid-area: name;
+  min-width: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.description {
+  grid-area: desc;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.cardOpen .description {
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+}
+
+.chevron {
+  grid-area: chevron;
+  align-self: start;
+  margin-top: 0.1rem;
+  color: var(--text-muted);
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
+}
+
+.card:hover .chevron {
+  color: var(--text-secondary);
+}
+
+.cardOpen .chevron {
+  transform: rotate(180deg);
+  color: var(--tint-fg);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0 0.7rem 0.65rem;
+}
+
+.tags li {
+  display: flex;
+  margin: 0;
+}
+
+.tag {
+  margin: 0;
+  padding: 0.05rem 0.45rem;
+  font-size: 0.68rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  background: var(--nav-pill-bg);
+  border-radius: 999px;
+}
+
+/* Collapsible details: grid-template-rows 0fr → 1fr animates to auto height.
+   `visibility` keeps the collapsed links out of the tab order. */
+.details {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.22s ease,
+    opacity 0.18s ease,
+    visibility 0s linear 0.22s;
+}
+
+.cardOpen .details {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  opacity: 1;
+  transition:
+    grid-template-rows 0.22s ease,
+    opacity 0.18s ease 0.04s,
+    visibility 0s;
+}
+
+.detailsInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.detailsInner > :first-child {
+  margin-top: 0.1rem;
+}
+
+.detailsInner > * {
+  margin: 0 0.7rem 0.5rem;
+}
+
+.detailsInner > :last-child {
+  margin-bottom: 0.7rem;
+}
+
+.visit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  max-width: 100%;
+  font-size: 0.8rem;
+  color: var(--link-color);
+  box-shadow: none;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.visit:hover {
+  text-decoration: underline;
+}
+
+.visit svg {
+  flex-shrink: 0;
+}
+
+.detailRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.6rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.detailLabel {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.tagButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0.1rem 0.45rem;
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--tint-fg);
+  background: var(--tint-bg);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.tagButton:hover {
+  border-color: var(--tint-border);
+}
+
+.related {
+  color: var(--text-secondary);
+}
+
+/* ---------- Motion ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .card {
+    animation: cardIn 0.24s ease both;
+  }
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .chip,
+  .monogram,
+  .chevron,
+  .details,
+  .cardOpen .details {
+    transition: none;
+    animation: none;
+  }
+
+  .card:hover .monogram,
+  .cardOpen .monogram {
+    transform: none;
+  }
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cardButton {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'mono chevron'
+      'name name'
+      'desc desc';
+    row-gap: 0.35rem;
+  }
+
+  .monogram {
+    justify-self: start;
+  }
+
+  .description {
+    margin-top: -0.15rem;
+  }
+
+  /* One swipeable row of chips instead of six wrapped lines. */
+  .chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin: 0 -1rem;
+    padding: 2px 1rem 4px;
+    scroll-padding: 0 1rem;
+    scrollbar-width: none;
+  }
+
+  .chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chip {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 360px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Inset ring so it hugs the card instead of the inner button. */
+.cardButton:focus-visible {
+  outline-offset: -2px;
+}
