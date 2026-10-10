@@ -29,12 +29,12 @@ class Layout extends React.Component {
         <header
           className="site-header"
           style={{
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
+            backgroundColor: 'var(--header-bg)',
+            borderBottom: '1px solid var(--border-color)',
             paddingBottom: 10,
             paddingTop: 10,
-            paddingLeft: 'max(1rem, calc((100vw - 698px) / 2 + 1rem))',
-            paddingRight: 'max(1rem, calc((100vw - 698px) / 2 + 1rem))',
+            paddingLeft: 'clamp(1.25rem, 3vw, 2rem)',
+            paddingRight: 'clamp(1.25rem, 3vw, 2rem)',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',

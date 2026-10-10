@@ -37,7 +37,7 @@ wordpress2016.overrideThemeStyles = ({ rhythm }) => {
       color: 'var(--text-primary)',
     },
     th: {
-      backgroundColor: 'var(--bg-secondary)',
+      backgroundColor: 'transparent',
       color: 'var(--text-primary)',
     },
     'ul,ol': {

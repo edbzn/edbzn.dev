@@ -131,10 +131,11 @@ const BlogPostTemplate = (props) => {
             )}
           </p>
         </header>
-        <TableOfContents headings={post.tableOfContents?.items} />
-        <MDXProvider components={shortcodes}>
-          <section style={{ marginBottom: rhythm(2) }}>{children}</section>
-        </MDXProvider>
+        <TableOfContents headings={post.tableOfContents?.items}>
+          <MDXProvider components={shortcodes}>
+            <section style={{ marginBottom: rhythm(2) }}>{children}</section>
+          </MDXProvider>
+        </TableOfContents>
         <div style={{ marginBottom: rhythm(2) }}>
           <PostReactions
             slug={location.pathname
