@@ -1,9 +1,9 @@
 import { graphql, Link } from 'gatsby';
 import React from 'react';
-import Bio from '../components/bio';
 import Layout from '../components/layout';
 import { Seo } from '../components/seo';
 import { PostPreview } from '../components/post-preview';
+import { TagIndex } from '../components/tag-index';
 import { BlogIdeas } from '../components/blog-ideas';
 import { blogIdeas } from '../data/blog-ideas';
 import { rhythm } from '../utils/typography';
@@ -26,7 +26,19 @@ class BlogIndex extends React.Component {
 
     return (
       <Layout location={this.props.location} author={author} github={github}>
-        <Bio />
+        <section style={{ marginTop: rhythm(2) }}>
+          <div
+            style={{
+              marginBottom: rhythm(1.4),
+              fontFamily: '"Public Sans", sans-serif',
+              textTransform: 'uppercase',
+              fontWeight: '100',
+            }}
+          >
+            Tags
+          </div>
+          <TagIndex posts={data.allMdx.nodes} activeTag={tag} />
+        </section>
         {!tag && (
           <section style={{ marginTop: rhythm(2) }}>
             <div
