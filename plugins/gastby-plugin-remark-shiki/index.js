@@ -5,8 +5,8 @@ import { visit } from 'unist-util-visit';
 
 const themeConfig = {
   light: 'dark-plus',
-  dark: 'github-dark-default',
-  abyss: 'aurora-x',
+  dark: 'aurora-x',
+  abyss: 'github-dark-default',
 };
 
 export default async function (
