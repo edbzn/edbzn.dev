@@ -157,7 +157,9 @@ describe('Accessibility tests', () => {
 
   it('should navigate to blog page', () => {
     cy.visit('/');
-    cy.get('a[href="/blog/"]', { timeout: 10000 }).click();
+    cy.get('nav[aria-label="Main navigation"] a[href="/blog/"]', {
+      timeout: 10000,
+    }).click();
     cy.url().should('include', '/blog');
   });
 
