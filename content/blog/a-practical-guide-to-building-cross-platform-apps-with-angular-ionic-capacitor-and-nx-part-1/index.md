@@ -2,7 +2,7 @@
 title: "A practical guide to building cross-platform apps with Angular, Ionic, Capacitor, and Nx · Part 1 · Workspace setup and app initialization"
 date: '2024-11-29T00:00:00.000Z'
 description: Learn to set up a workspace and initialize an app using Angular, Ionic, Capacitor, and Nx for cross-platform development.
-tags: [angular, ionic, capacitor, nx]
+tags: [angular, mobile, monorepo]
 ---
 
 This article is part of a practical series on building cross-platform apps using **Angular**, **Ionic**, **Capacitor**, and **Nx**.

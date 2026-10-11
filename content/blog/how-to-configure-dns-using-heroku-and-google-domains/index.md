@@ -2,7 +2,7 @@
 title: How to configure DNS using Heroku and Google Domains
 date: '2019-05-25T00:00:00.000Z'
 description: Learn how to configure DNS using Heroku and Google Domains to point your custom domains to your Heroku apps.
-tags: [heroku, dns, google-domains]
+tags: [infrastructure]
 ---
 
 My app is composed of two Docker images, the first one is a JavaScript SPA and second one is the server which is a Node.js API. The client basically call the API through HTTP. Here is the `Dockerfile` for the client.

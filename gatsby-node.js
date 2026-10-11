@@ -2,6 +2,36 @@ const path = require(`path`);
 const { createFilePath } = require(`gatsby-source-filesystem`);
 const { generateOgImages } = require(`./scripts/generate-og-images`);
 
+// Former tag slugs and the category each one was merged into.
+const retiredTags = {
+  ai: 'open-source',
+  benchmark: 'performance',
+  capacitor: 'mobile',
+  dns: 'infrastructure',
+  firmware: 'linux',
+  'google-domains': 'infrastructure',
+  heroku: 'infrastructure',
+  http: 'javascript',
+  i18n: 'angular',
+  ionic: 'mobile',
+  'lit-html': 'javascript',
+  nixos: 'linux',
+  nx: 'monorepo',
+  react: 'javascript',
+  rspack: 'tooling',
+  rxjs: 'javascript',
+  'service-worker': 'javascript',
+  'software-development': 'open-source',
+  'souveraineté-numérique': 'open-source',
+  ssd: 'linux',
+  'state-management': 'javascript',
+  troubleshooting: 'linux',
+  typescript: 'tooling',
+  vite: 'tooling',
+  vuejs: 'javascript',
+  'web-components': 'javascript',
+};
+
 /**
  * @type {import('gatsby').GatsbyNode['createPages']}
  */
@@ -98,6 +128,15 @@ exports.createPages = async ({ graphql, actions }) => {
       context: {
         tag: tag.fieldValue,
       },
+    });
+  });
+
+  // Tags merged into broader categories: keep the old tag pages working.
+  Object.entries(retiredTags).forEach(([oldTag, category]) => {
+    createRedirect({
+      fromPath: `/tags/${oldTag}`,
+      toPath: `/tags/${category}`,
+      isPermanent: true,
     });
   });
 };

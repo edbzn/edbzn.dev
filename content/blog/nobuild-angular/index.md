@@ -2,7 +2,7 @@
 title: 'Running Angular without build tools, Node.js or npm'
 date: '2025-02-08'
 description: 'Learn how to run Angular applications without a build step using ES modules and TypeScript in the browser.'
-tags: ['angular']
+tags: [angular, tooling]
 ---
 
 ## Introduction

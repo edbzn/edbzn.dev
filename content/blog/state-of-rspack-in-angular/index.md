@@ -2,7 +2,7 @@
 title: State of Rspack in Angular
 date: '2025-01-24'
 description: Exploring the current state of Rspack in Angular, its benefits, limitations, and future potential for faster builds and enhanced performance.
-tags: [angular, rspack]
+tags: [angular, tooling]
 ---
 
 ![Rspack and Angular logo](./logo.png)

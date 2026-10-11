@@ -2,7 +2,7 @@
 title: Framework-agnostic internationalization with Angular's localize tools and Nx
 description: Implementing a universal i18n system for consistent internationalization in large monorepos.
 date: '2025-12-25T00:00:00.000Z'
-tags: [i18n, angular, vite, nx, monorepo]
+tags: [angular, monorepo, tooling]
 ---
 
 Recently, I worked on [Rosa](https://rosa.be)’s _internationalization_ (i18n) system, I dived deep into the subject so I wanted to share what I learned along the way.

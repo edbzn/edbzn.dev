@@ -1,7 +1,7 @@
 ---
 title: Service worker runtime cache made easy
 date: '2019-01-24T00:00:00.000Z'
-tags: [service-worker, performance]
+tags: [javascript, performance]
 description: Learn how to simplify service worker creation using sw-precache.
 ---
 
