@@ -395,17 +395,16 @@ a:not([class]):focus-visible,
   color: var(--accent-color);
 }
 
-/* Inside blog posts, links stay blue; since the colour can't change on
-   hover, the underline gets thicker instead. */
+/* Inside blog posts, links are blue and only underlined on hover. */
 .post-content a:not([class]) {
   color: var(--link-color);
-  text-decoration-thickness: 1px;
+  text-decoration: none;
 }
 
 .post-content a:not([class]):hover,
 .post-content a:not([class]):focus-visible {
   color: var(--link-color);
-  text-decoration-thickness: 2px;
+  text-decoration: underline;
 }
 
 li {
