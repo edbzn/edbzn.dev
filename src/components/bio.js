@@ -63,7 +63,7 @@ const Bio = ({ short = true }) => {
             <strong>software engineer</strong> based in France, focused on{' '}
             <em>monorepo architectures</em>, <em>platform engineering</em>, and{' '}
             <em>developer experience</em>. I build the tools and workflows that
-            let engineering teams scale their codebases and ship faster, with
+            help engineering teams scale their codebases and ship faster, with
             confidence.
           </p>
 
