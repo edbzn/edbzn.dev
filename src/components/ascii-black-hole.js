@@ -88,7 +88,7 @@ function hslToRgb(h, s, l) {
 function createGeometry(W, H) {
   const n = W * H;
   return {
-    tilt: NaN,
+    built: false,
     r: new Float32Array(n), // disk radius seen by the cell
     phi: new Float32Array(n), // disk azimuth seen by the cell
     omega: new Float32Array(n), // Keplerian angular velocity at that radius
@@ -133,11 +133,11 @@ function lensFar(x, y, rho, incl, inclFar, out) {
 }
 
 // Ray-trace (cheaply) every sub-sample once and average them per cell.
-// Everything here is static for a given camera tilt; only the disk turbulence
+// Everything here is static, so it runs once; only the disk turbulence
 // changes per frame, so the frame loop just evaluates a few sines per lit cell.
-function buildGeometry(geo, W, H, tilt) {
-  const incl = INCL + tilt;
-  const inclFar = INCL_FAR + tilt * 1.5;
+function buildGeometry(geo, W, H) {
+  const incl = INCL;
+  const inclFar = INCL_FAR;
   const unit = W / 2 / HALF_W; // columns per shadow radius
   const hit = { X: 0, Z: 0 };
   const under = { X: 0, Z: 0 };
@@ -213,19 +213,19 @@ function buildGeometry(geo, W, H, tilt) {
       }
     }
   }
-  geo.tilt = tilt;
+  geo.built = true;
 }
 
 // Shade every cell for time t: the disk turns differentially (inner orbits
 // faster) and its turbulence is a few sheared sine waves in (angle, radius).
-function buildFrame(geo, W, H, t, cellBuf) {
+function buildFrame(geo, W, H, t, spin, cellBuf) {
   const { r, phi, omega, weight, ring } = geo;
   for (let cell = 0; cell < W * H; cell++) {
     const rg = ring[cell];
     const w = weight[cell];
     let d = 0;
     if (w > 0) {
-      const a = phi[cell] + omega[cell] * t;
+      const a = phi[cell] + omega[cell] * t + spin;
       const rr = r[cell];
       d =
         w *
@@ -341,8 +341,9 @@ export const AsciiBlackHole = () => {
   // Rebuilt once on init and whenever the CSS colors change (theme switch).
   const paletteRef = useRef(null);
   const timeRef = useRef(0);
-  const tiltRef = useRef(0);
-  const mouseTargetRef = useRef({ x: 0, y: 0 });
+  // Extra disk rotation that follows the mouse's horizontal position.
+  const spinRef = useRef(0);
+  const mouseTargetRef = useRef({ x: 0 });
   const rectRef = useRef({ cx: 0, cy: 0 });
   const rafRef = useRef(null);
   const clickWaveRef = useRef(null);
@@ -418,9 +419,8 @@ export const AsciiBlackHole = () => {
     };
 
     const onMouseMove = (e) => {
-      const { cx, cy } = rectRef.current;
+      const { cx } = rectRef.current;
       mouseTargetRef.current.x = ((e.clientX - cx) / window.innerWidth) * 2;
-      mouseTargetRef.current.y = ((e.clientY - cy) / window.innerHeight) * 2;
     };
 
     window.addEventListener('mousemove', onMouseMove, { passive: true });
@@ -535,17 +535,13 @@ export const AsciiBlackHole = () => {
     return () => themeObserver.disconnect();
   }, [W, H, buildPalette]);
 
-  // Draw exactly one frame at the current time and tilt, without advancing
+  // Draw exactly one frame at the current time and spin, without advancing
   // them or scheduling another. Shared by the animation loop and the
   // reduced-motion path.
   const drawFrame = useCallback(() => {
     const geo = geometryRef.current;
-    // The geometry only depends on the camera tilt, which follows the mouse
-    // slowly: re-trace it only once the tilt has visibly changed.
-    if (isNaN(geo.tilt) || Math.abs(geo.tilt - tiltRef.current) > 0.002) {
-      buildGeometry(geo, W, H, tiltRef.current);
-    }
-    buildFrame(geo, W, H, timeRef.current, cellBufRef.current);
+    if (!geo.built) buildGeometry(geo, W, H);
+    buildFrame(geo, W, H, timeRef.current, spinRef.current, cellBufRef.current);
 
     if (clickWaveRef.current) {
       const elapsed = (Date.now() - clickWaveRef.current.startTime) / 1000;
@@ -574,12 +570,10 @@ export const AsciiBlackHole = () => {
   drawFrameRef.current = drawFrame;
 
   const animate = useCallback(() => {
-    // Moving the mouse up/down gently tilts the camera above/below the disk.
-    const target = Math.max(
-      -0.04,
-      Math.min(0.04, -mouseTargetRef.current.y * 0.03)
-    );
-    tiltRef.current += (target - tiltRef.current) * 0.05;
+    // Moving the mouse left/right gently drags the disk round, eased so it
+    // glides. The shape never changes, so the geometry is never re-traced.
+    const target = Math.max(-1, Math.min(1, mouseTargetRef.current.x)) * 0.8;
+    spinRef.current += (target - spinRef.current) * 0.04;
     drawFrame();
     timeRef.current += 0.015;
     rafRef.current = requestAnimationFrame(animate);
