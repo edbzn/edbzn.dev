@@ -17,7 +17,6 @@
   font-family: 'Public Sans', sans-serif;
   text-decoration: none;
   box-shadow: var(--tag-shadow);
-  transition: all 0.2s ease;
 }
 
 .tag:hover {

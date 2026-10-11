@@ -42,7 +42,6 @@
   text-decoration: none;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: color 0.2s ease;
 }
 
 .link:hover {
@@ -72,11 +71,5 @@
     line-clamp: 2;
     white-space: normal;
     hyphens: manual;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .link {
-    transition: none;
   }
 }

@@ -138,7 +138,12 @@ const BlogPostTemplate = (props) => {
         </header>
         <TableOfContents headings={post.tableOfContents?.items}>
           <MDXProvider components={shortcodes}>
-            <section style={{ marginBottom: rhythm(2) }}>{children}</section>
+            <section
+              className="post-content"
+              style={{ marginBottom: rhythm(2) }}
+            >
+              {children}
+            </section>
           </MDXProvider>
         </TableOfContents>
         <div style={{ marginBottom: rhythm(2) }}>

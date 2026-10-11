@@ -38,11 +38,8 @@
   color: var(--text-primary);
   font-family: inherit;
   cursor: pointer;
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease,
-    transform 0.05s ease;
+  /* Hover colours apply instantly; only the press nudge animates */
+  transition: transform 0.05s ease;
 }
 
 .button:hover:not(:disabled) {

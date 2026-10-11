@@ -45,9 +45,6 @@
   font-size: 0.8rem;
   font-weight: 400;
   text-decoration: none;
-  transition:
-    background-color 0.2s ease,
-    box-shadow 0.2s ease;
 }
 
 .tag:hover {
@@ -124,11 +121,5 @@
     overscroll-behavior: contain;
     scrollbar-width: thin;
     scrollbar-color: var(--border-color) transparent;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tag {
-    transition: none;
   }
 }
