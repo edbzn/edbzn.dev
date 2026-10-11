@@ -132,8 +132,8 @@
 /* Abyss theme - inspired by VS Code Abyss */
 :root[data-theme='abyss'] {
   /* Deep petrol blue drifting to dark teal-green */
-  --bg-primary: #000e128c;
-  --bg-secondary: #021418;
+  --bg-primary: #000b0f8c;
+  --bg-secondary: #011114;
   --text-primary: #a7c9d3;
   --text-secondary: rgba(174, 205, 212, 0.75);
   --text-muted: rgba(132, 176, 186, 0.55);
@@ -145,7 +145,7 @@
   --code-text: #8dbdc8;
   --link-color: #2ba3c4;
   --blockquote-color: rgba(102, 172, 186, 0.9);
-  --highlight-bg: rgba(2, 22, 27, 0.95);
+  --highlight-bg: rgba(1, 18, 23, 0.95);
   --highlight-border: rgba(43, 163, 196, 0.25);
   --tag-bg: rgba(102, 168, 178, 0.1);
   --tag-text: #8dbdc8;
@@ -164,7 +164,7 @@
 
   /* --bg-primary is translucent here: the visible colour comes from the
      fixed gradient on body::after under the noise layer. */
-  --header-bg: #0d1d24;
+  --header-bg: #0d1a21;
 
   /* Nav pill */
   --nav-pill-bg: rgba(102, 168, 178, 0.08);
@@ -217,7 +217,7 @@ body::after {
 :root[data-theme='abyss'] body::after {
   background-image:
     var(--site-bg-wash),
-    linear-gradient(180deg, #000c12 0%, #01171e 45%, #011414 100%);
+    linear-gradient(180deg, #000a0f 0%, #011319 45%, #011111 100%);
   background-size: 100% 100%;
   background-position: 0 0;
   opacity: 1;
@@ -345,7 +345,7 @@ body::before {
 }
 
 :root[data-theme='abyss'] .logo-inner path[fill='rgb(255,255,255)'] {
-  fill: #000c12 !important;
+  fill: #000a0f !important;
 }
 
 :root[data-theme='dark'] .logo-inner polygon[fill='rgb(23,23,23)'] {

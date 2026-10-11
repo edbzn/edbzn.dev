@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
 export const ThemeToggle = () => {
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('abyss');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const savedTheme = localStorage.getItem('theme') || 'dark';
+    const savedTheme = localStorage.getItem('theme') || 'abyss';
     setTheme(savedTheme);
     applyTheme(savedTheme);
   }, []);
