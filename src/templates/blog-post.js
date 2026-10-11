@@ -121,7 +121,7 @@ const BlogPostTemplate = (props) => {
           <p
             style={{
               marginBottom: rhythm(2),
-              fontWeight: 'lighter',
+              fontWeight: 300,
             }}
           >
             {post.frontmatter.draft ? (

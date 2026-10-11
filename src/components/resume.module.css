@@ -49,7 +49,7 @@
 .period {
   font-family: 'Public Sans', sans-serif;
   font-size: 0.8rem;
-  font-weight: 200;
+  font-weight: 400;
   font-variant-numeric: tabular-nums;
   text-align: left;
   color: var(--text-muted);
@@ -164,7 +164,7 @@
 .position {
   font-family: 'Public Sans', sans-serif;
   font-size: 0.8rem;
-  font-weight: 200;
+  font-weight: 400;
   color: var(--text-secondary);
   text-align: right;
 }

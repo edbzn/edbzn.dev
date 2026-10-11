@@ -35,7 +35,7 @@ export const PostPreview = ({ node }) => {
       <footer
         style={{
           fontSize: '14px',
-          fontWeight: '100',
+          fontWeight: '300',
         }}
       >
         <div

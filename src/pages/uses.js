@@ -9,7 +9,7 @@ const sectionHeadingStyle = {
   marginBottom: rhythm(1),
   fontFamily: '"Public Sans", sans-serif',
   textTransform: 'uppercase',
-  fontWeight: '100',
+  fontWeight: '300',
 };
 
 const categoryStyle = {

@@ -36,7 +36,7 @@
   --bg-secondary: #fff;
   --text-primary: rgba(0, 0, 0, 0.9);
   --text-secondary: rgba(0, 0, 0, 0.7);
-  --text-muted: rgba(0, 0, 0, 0.5);
+  --text-muted: rgba(0, 0, 0, 0.6);
   --border-color: rgba(0, 0, 0, 0.1);
   --box-shadow-light: rgba(17, 17, 26, 0.05);
   --box-shadow-dark: rgba(17, 17, 26, 0.08);
@@ -90,7 +90,7 @@
   --bg-secondary: #2d2d2d;
   --text-primary: rgba(255, 255, 255, 0.9);
   --text-secondary: rgba(255, 255, 255, 0.7);
-  --text-muted: rgba(255, 255, 255, 0.5);
+  --text-muted: rgba(255, 255, 255, 0.58);
   --border-color: rgba(255, 255, 255, 0.085);
   --box-shadow-light: rgba(0, 0, 0, 0.1);
   --box-shadow-dark: rgba(0, 0, 0, 0.2);
@@ -136,7 +136,7 @@
   --bg-secondary: #011114;
   --text-primary: #a7c9d3;
   --text-secondary: rgba(174, 205, 212, 0.75);
-  --text-muted: rgba(132, 176, 186, 0.55);
+  --text-muted: rgba(140, 182, 192, 0.78);
   --border-color: rgba(78, 128, 136, 0.25);
   --box-shadow-light: rgba(0, 0, 0, 0.2);
   --box-shadow-dark: rgba(0, 0, 0, 0.3);

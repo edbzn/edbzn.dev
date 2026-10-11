@@ -56,7 +56,7 @@ const Bio = ({ short = true }) => {
             style={{
               margin: 0,
               fontSize: 14,
-              fontWeight: 'lighter',
+              fontWeight: 300,
             }}
           >
             I'm <span style={{ textDecoration: 'underline' }}>{author}</span>, a{' '}

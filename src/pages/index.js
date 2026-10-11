@@ -29,7 +29,7 @@ class AboutMe extends React.Component {
           >
             <span
               style={{
-                fontWeight: '100',
+                fontWeight: '300',
               }}
             >
               Resume
@@ -44,7 +44,7 @@ class AboutMe extends React.Component {
               marginBottom: rhythm(1.4),
               fontFamily: '"Public Sans", sans-serif',
               textTransform: 'uppercase',
-              fontWeight: '100',
+              fontWeight: '300',
             }}
           >
             Latest posts
@@ -75,7 +75,7 @@ class AboutMe extends React.Component {
           >
             <span
               style={{
-                fontWeight: '100',
+                fontWeight: '300',
               }}
             >
               Open source projects
