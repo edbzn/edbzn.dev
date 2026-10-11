@@ -244,67 +244,84 @@ function buildFrame(geo, W, H, t, spin, cellBuf) {
   }
 }
 
-// Gravitational-wave ripple: radial displacement + brightness ripple at the
-// wave front. Returns false when the effect has expired.
+// Click effect: a small black hole forms at the click point, then evaporates.
+// Each cell shows what a point lens would bend into it (the source sits at
+// d - E²/d from the hole, E being the Einstein radius, so the inner images
+// are flipped), swirled round by frame dragging. The centre is swallowed by
+// an empty horizon ringed with accent-coloured light. Returns false once the
+// effect is over.
 // gx/gy are in grid-column/row units. Distances are computed in pixel-normalized
-// units (1 unit = charWidth) to keep the wave circular in pixel space.
-function applyWaveDistortion(cellBuf, distBuf, W, H, gx, gy, elapsed) {
-  const WAVE_SPEED = 10; // charWidth-units per second
-  const WAVE_AMP = 4.0; // max radial displacement in column-units
-  const WAVE_SIGMA = 3.0; // wave ring width — wider = softer
-  const DURATION = 3.0;
+// units (1 unit = charWidth) to keep the hole circular in pixel space.
+function applyClickBlackHole(cellBuf, distBuf, W, H, gx, gy, elapsed) {
+  const DURATION = 2.8;
+  const EINSTEIN_R = 7; // full-size Einstein radius, in column units
+  const HORIZON = 0.72; // horizon radius, as a fraction of the Einstein radius
+  const RING_SIGMA = 0.6; // photon ring thickness, in column units
+  const SWIRL = 1.6; // frame-dragging twist at the ring, in radians
 
   if (elapsed > DURATION) return false;
 
+  // Forms fast, holds, then evaporates.
   const t = elapsed / DURATION;
-  // Cubic ease-out: strong initial pulse, long gentle tail
-  const decay = (1 - t) * (1 - t) * (1 - t);
+  const smooth = (a, b, x) => {
+    const k = Math.min(1, Math.max(0, (x - a) / (b - a)));
+    return k * k * (3 - 2 * k);
+  };
+  const strength = smooth(0, 0.18, t) * (1 - smooth(0.6, 1, t));
+  if (strength <= 0) return true;
 
-  const waveFront = elapsed * WAVE_SPEED;
+  const e = EINSTEIN_R * strength;
+  const e2 = e * e;
+  const horizon = e * HORIZON;
+  // The swirl keeps turning while the hole lives.
+  const twist = SWIRL * strength * (1 + elapsed * 0.8);
 
   distBuf.set(cellBuf);
 
   for (let r = 0; r < H; r++) {
     for (let c = 0; c < W; c++) {
-      const dcol = c - gx;
-      const drow = r - gy;
-      // Convert to pixel-normalised coords (charWidth = 1 unit)
-      const dx = dcol;
-      const dy = drow * ASPECT;
-      const dist = Math.sqrt(dx * dx + dy * dy);
+      const dx = c - gx;
+      const dy = (r - gy) * ASPECT;
+      const d = Math.sqrt(dx * dx + dy * dy);
+      const cell = r * W + c;
 
-      if (dist < 0.5) continue;
+      // Far enough out, the deflection is under half a cell: leave as is.
+      if (e2 / Math.max(d, 0.001) < 0.4) continue;
 
-      const phase = dist - waveFront;
-      const envelope = Math.exp(
-        -(phase * phase) / (2 * WAVE_SIGMA * WAVE_SIGMA)
-      );
-      const disp = WAVE_AMP * envelope * decay;
-      if (disp < 0.1) continue;
-
-      // Direction unit vector (pixel-space), then convert displacement back to grid units
-      const nx = dx / dist; // column units (unchanged)
-      const ny = dy / dist / ASPECT; // row units
-
-      const srcC = Math.round(c - nx * disp);
-      const srcR = Math.round(r - ny * disp);
-
-      if (srcC < 0 || srcC >= W || srcR < 0 || srcR >= H) {
-        cellBuf[r * W + c] = 0;
+      if (d < horizon) {
+        cellBuf[cell] = 0;
         continue;
       }
 
-      const src = distBuf[srcR * W + srcC];
-      cellBuf[r * W + c] = src;
+      // Point-lens mapping plus a twist that fades with distance.
+      const scale = (d - e2 / d) / d;
+      const ang = twist * Math.min(1, e / d) * Math.min(1, e / d);
+      const cos = Math.cos(ang);
+      const sin = Math.sin(ang);
+      const sx = (dx * cos - dy * sin) * scale;
+      const sy = (dx * sin + dy * cos) * scale;
+      const srcC = Math.round(gx + sx);
+      const srcR = Math.round(gy + sy / ASPECT);
 
-      // Smooth brightness ripple at the wave crest (no random scatter)
-      if (src !== 0) {
-        const boost = Math.round(5 * envelope * decay);
-        if (boost > 0) {
-          const si = Math.min(SHADE_MAX, (src & SHADE_MASK) + boost);
-          cellBuf[r * W + c] = (src & TINT) | si;
-        }
+      let v = 0;
+      if (srcC >= 0 && srcC < W && srcR >= 0 && srcR < H) {
+        v = distBuf[srcR * W + srcC];
       }
+
+      // Light dims as it nears the horizon (gravitational redshift)...
+      let shade = v & SHADE_MASK;
+      if (shade > 0 && d < e) {
+        shade = Math.round(shade * ((d - horizon) / (e - horizon)));
+      }
+      v = shade > 0 ? (v & TINT) | shade : 0;
+
+      // ...and piles up in a bright accent ring around it.
+      const dr = (d - e) / RING_SIGMA;
+      const glow = strength * Math.exp(-dr * dr);
+      const ringShade = Math.round(glow * SHADE_MAX);
+      if (glow > 0.3) v = TINT | Math.max(ringShade, v & SHADE_MASK);
+
+      cellBuf[cell] = v;
     }
   }
   return true;
@@ -346,7 +363,7 @@ export const AsciiBlackHole = () => {
   const mouseTargetRef = useRef({ x: 0 });
   const rectRef = useRef({ cx: 0, cy: 0 });
   const rafRef = useRef(null);
-  const clickWaveRef = useRef(null);
+  const clickHoleRef = useRef(null);
   // Mirror of `reducedMotion` for the native listeners, whose closures are
   // created once and would otherwise capture a stale value.
   const reducedMotionRef = useRef(false);
@@ -433,8 +450,8 @@ export const AsciiBlackHole = () => {
     };
   }, []);
 
-  // Use native mousedown instead of React onClick so the ripple starts on
-  // press, before the next animation frame is drawn.
+  // Use native mousedown instead of React onClick so the click black hole
+  // starts on press, before the next animation frame is drawn.
   useEffect(() => {
     const div = containerRef.current;
     if (!div) return;
@@ -444,7 +461,7 @@ export const AsciiBlackHole = () => {
       const rect = canvas.getBoundingClientRect();
       const gx = ((e.clientX - rect.left) / rect.width) * W;
       const gy = ((e.clientY - rect.top) / rect.height) * H;
-      clickWaveRef.current = { gx, gy, startTime: Date.now() };
+      clickHoleRef.current = { gx, gy, startTime: Date.now() };
     };
     div.addEventListener('mousedown', onMouseDown);
     return () => div.removeEventListener('mousedown', onMouseDown);
@@ -543,18 +560,18 @@ export const AsciiBlackHole = () => {
     if (!geo.built) buildGeometry(geo, W, H);
     buildFrame(geo, W, H, timeRef.current, spinRef.current, cellBufRef.current);
 
-    if (clickWaveRef.current) {
-      const elapsed = (Date.now() - clickWaveRef.current.startTime) / 1000;
-      const active = applyWaveDistortion(
+    if (clickHoleRef.current) {
+      const elapsed = (Date.now() - clickHoleRef.current.startTime) / 1000;
+      const active = applyClickBlackHole(
         cellBufRef.current,
         distBufRef.current,
         W,
         H,
-        clickWaveRef.current.gx,
-        clickWaveRef.current.gy,
+        clickHoleRef.current.gx,
+        clickHoleRef.current.gy,
         elapsed
       );
-      if (!active) clickWaveRef.current = null;
+      if (!active) clickHoleRef.current = null;
     }
 
     const ctx = ctxRef.current;
@@ -628,5 +645,5 @@ const canvasStyle = {
   cursor: 'pointer',
 };
 
-// Reduced motion: the click ripple is disabled, so don't advertise it.
+// Reduced motion: the click black hole is disabled, so don't advertise it.
 const canvasStyleStatic = { ...canvasStyle, cursor: 'default' };
