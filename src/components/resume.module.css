@@ -37,16 +37,19 @@
   margin: 0;
 }
 
+/* Same type scale as the latest posts list (post-title-list.module.css) */
 .content h3 {
   font-family: 'Public Sans', sans-serif;
-  font-weight: 100;
-  font-size: 1.2rem;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: inherit;
   margin: 0;
 }
 
 .period {
   font-family: 'Public Sans', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 200;
   font-variant-numeric: tabular-nums;
   text-align: left;
   color: var(--text-muted);
@@ -157,7 +160,8 @@
 }
 
 .position {
-  font-size: 0.9rem;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.8rem;
   font-weight: 200;
   color: var(--text-secondary);
   text-align: right;
