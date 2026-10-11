@@ -90,7 +90,8 @@
     top: 0;
     bottom: 0;
     left: calc(100% + 2rem);
-    width: 220px;
+    /* Fill the right margin, keeping a gutter to the viewport edge */
+    width: min(340px, calc((100vw - 100%) / 2 - 4rem));
   }
 
   .wrapper {
@@ -116,7 +117,9 @@
   .list {
     align-content: flex-start;
     min-height: 0;
-    padding: 2px;
+    /* Room for the pill shadows, which the scroll box would clip otherwise */
+    margin: -1.25rem;
+    padding: 1.25rem;
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
