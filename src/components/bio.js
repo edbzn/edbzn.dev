@@ -59,12 +59,11 @@ const Bio = ({ short = true }) => {
               fontWeight: 'lighter',
             }}
           >
-            I'm <span style={{ textDecoration: 'underline' }}>{author}</span>, a
-            passionate <strong>software engineer</strong> based in France,
-            specializing in <em>monorepo architectures</em>,{' '}
-            <em>platform engineering</em>, <em>DevOps</em>, and{' '}
-            <em>infrastructure</em>. I build tools and workflows that help
-            engineering teams scale their codebases and ship software with
+            I'm <span style={{ textDecoration: 'underline' }}>{author}</span>, a{' '}
+            <strong>software engineer</strong> based in France, focused on{' '}
+            <em>monorepo architectures</em>, <em>platform engineering</em>, and{' '}
+            <em>developer experience</em>. I build the tools and workflows that
+            let engineering teams scale their codebases and ship faster, with
             confidence.
           </p>
 
