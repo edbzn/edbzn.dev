@@ -1,7 +1,7 @@
 ---
 title: Eager vs Lazy in RxJS
 date: '2020-01-21T00:00:00.000Z'
-tags: [rxjs]
+tags: [javascript]
 description: Learn the difference between eager and lazy operations in RxJS and how to avoid common mistakes.
 ---
 

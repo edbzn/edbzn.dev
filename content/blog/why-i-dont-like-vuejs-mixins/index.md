@@ -1,7 +1,7 @@
 ---
 title: Why I don't like Vue.js mixins
 date: '2020-08-01T00:00:00.000Z'
-tags: [vuejs]
+tags: [javascript]
 description: Vue.js comes with its mixin concept to share logic between components, but it quickly shows its limits. Let's see why and what alternatives we have.
 ---
 

@@ -2,7 +2,7 @@
 title: Vue.js programmatic rendering example
 date: '2020-08-30T00:00:00.000Z'
 description: Learn how to use Vue.js render function to programmatically render elements.
-tags: [vuejs]
+tags: [javascript]
 ---
 
 I recently started working on a Vue.js components library and I ran into the following rendering problem.
