@@ -140,13 +140,13 @@
   --border-color: rgba(78, 120, 146, 0.25);
   --box-shadow-light: rgba(0, 0, 0, 0.2);
   --box-shadow-dark: rgba(0, 0, 0, 0.3);
-  --accent-color: #2b97d0;
+  --accent-color: #5cbcec;
   --code-bg: rgb(255 253 100 / 7%);
   --code-text: #8db6cf;
-  --link-color: #2b97d0;
+  --link-color: #5cbcec;
   --blockquote-color: rgba(102, 162, 196, 0.9);
   --highlight-bg: rgba(1, 13, 21, 0.95);
-  --highlight-border: rgba(43, 151, 208, 0.25);
+  --highlight-border: rgba(92, 188, 236, 0.25);
   --tag-bg: rgba(102, 158, 192, 0.1);
   --tag-text: #8db6cf;
   --tag-bg-hover: rgba(102, 158, 192, 0.15);
