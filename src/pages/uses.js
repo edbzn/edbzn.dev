@@ -27,11 +27,6 @@ const subheadingStyle = {
   color: 'var(--text-primary)',
 };
 
-const subheadingNoteStyle = {
-  fontSize: '0.8rem',
-  color: 'var(--text-muted)',
-};
-
 const dotfilesTextStyle = {
   fontFamily: '"Public Sans", sans-serif',
   fontSize: '0.95rem',
@@ -71,9 +66,7 @@ class UsesPage extends React.Component {
           </div>
           <UsesTools categories={usesCategories} />
 
-          <h2 style={subheadingStyle}>
-            AI usage <span style={subheadingNoteStyle}>where it plugs in</span>
-          </h2>
+          <h2 style={subheadingStyle}>AI usage</h2>
           <UsesAi
             categories={usesCategories}
             surfaces={aiSurfaces}
