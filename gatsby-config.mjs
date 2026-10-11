@@ -92,7 +92,7 @@ export default {
         position: 'Front-end Engineer',
         period: '2021 - 2021',
         url: 'https://www.delairmarine.com',
-        logo: 'https://www.delairmarine.com/wp-content/uploads/2023/02/cropped-icon_delair_marine-32x32.jpg',
+        logo: '/images/delair-marine.png',
       },
       {
         company: 'Groupama',
