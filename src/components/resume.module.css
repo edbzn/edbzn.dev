@@ -4,7 +4,8 @@
  * horizontal rule starting after the line.
  */
 .container {
-  --period-width: 7.5rem;
+  /* Fits the longest period ("2021 - 2024") */
+  --period-width: 5.75rem;
   --rail-width: 12px;
   --gap: 1.25rem;
   --row-padding: 0.85rem;
@@ -47,7 +48,7 @@
   font-family: 'Public Sans', sans-serif;
   font-size: 0.85rem;
   font-variant-numeric: tabular-nums;
-  text-align: right;
+  text-align: left;
   color: var(--text-muted);
   white-space: nowrap;
 }
