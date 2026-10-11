@@ -218,14 +218,14 @@ function buildGeometry(geo, W, H) {
 
 // Shade every cell for time t: the disk turns differentially (inner orbits
 // faster) and its turbulence is a few sheared sine waves in (angle, radius).
-function buildFrame(geo, W, H, t, spin, cellBuf) {
+function buildFrame(geo, W, H, t, cellBuf) {
   const { r, phi, omega, weight, ring } = geo;
   for (let cell = 0; cell < W * H; cell++) {
     const rg = ring[cell];
     const w = weight[cell];
     let d = 0;
     if (w > 0) {
-      const a = phi[cell] + omega[cell] * t + spin;
+      const a = phi[cell] + omega[cell] * t;
       const rr = r[cell];
       d =
         w *
@@ -244,87 +244,160 @@ function buildFrame(geo, W, H, t, spin, cellBuf) {
   }
 }
 
-// Click effect: a small black hole forms at the click point, then evaporates.
-// Each cell shows what a point lens would bend into it (the source sits at
-// d - E²/d from the hole, E being the Einstein radius, so the inner images
-// are flipped), swirled round by frame dragging. The centre is swallowed by
-// an empty horizon ringed with accent-coloured light. Returns false once the
-// effect is over.
+// Where the main black hole sits on the grid, in column/row units, and its
+// shadow radius in columns.
+function mainHole(W, H) {
+  const unit = W / 2 / HALF_W;
+  return {
+    cx: W / 2 - 0.5,
+    cy: H / 2 - 0.5 + (CENTER_Y * unit) / ASPECT,
+    shadow: SHADOW_R * unit,
+  };
+}
+
+const smoothstep = (a, b, x) => {
+  const k = Math.min(1, Math.max(0, (x - a) / (b - a)));
+  return k * k * (3 - 2 * k);
+};
+
+// Click effect: a small black hole forms at the click point and inspirals
+// into the main one, orbiting faster as it closes in (the orbit shrinks as
+// (1 - u)^¼, like a binary losing energy to gravitational waves). It is
+// swallowed by the shadow, and the merger rings the main hole down: a damped
+// ripple travelling out from its centre.
+// While it lives, each cell shows what a point lens would bend into it (the
+// source sits at d - E²/d from the hole, E being the Einstein radius, so the
+// inner images are flipped), twisted by frame dragging, and its centre is an
+// empty horizon ringed with accent-coloured light.
+// Returns false once the effect is over.
 // gx/gy are in grid-column/row units. Distances are computed in pixel-normalized
 // units (1 unit = charWidth) to keep the hole circular in pixel space.
 function applyClickBlackHole(cellBuf, distBuf, W, H, gx, gy, elapsed) {
-  const DURATION = 2.8;
-  const EINSTEIN_R = 7; // full-size Einstein radius, in column units
+  const FORM = 0.25; // seconds to form
+  const EINSTEIN_R = 7; // Einstein radius, in column units
   const HORIZON = 0.72; // horizon radius, as a fraction of the Einstein radius
   const RING_SIGMA = 0.6; // photon ring thickness, in column units
   const SWIRL = 1.6; // frame-dragging twist at the ring, in radians
+  const SQUASH = 0.45; // the orbit is tilted like the disk: flattened ellipse
+  const RINGDOWN = 1.6; // seconds of ripple after the merger
 
-  if (elapsed > DURATION) return false;
+  const main = mainHole(W, H);
+  // Orbit in "y up" pixel-normalized coordinates around the main hole.
+  const ox = gx - main.cx;
+  const oy = ((main.cy - gy) * ASPECT) / SQUASH;
+  const r0 = Math.max(0.001, Math.sqrt(ox * ox + oy * oy));
+  const theta0 = Math.atan2(oy, ox);
+  const inspiral = 1.6 + 0.08 * r0; // seconds until it would reach the centre
+  const omega0 = Math.min(3, 1.4 * Math.pow(12 / r0, 1.5)); // rad/s at r0
+  // Swallowed once it is half-way into the shadow.
+  const rGone = main.shadow * 0.5;
+  const tMerge = r0 > rGone ? inspiral * (1 - Math.pow(rGone / r0, 4)) : 0;
 
-  // Forms fast, holds, then evaporates.
-  const t = elapsed / DURATION;
-  const smooth = (a, b, x) => {
-    const k = Math.min(1, Math.max(0, (x - a) / (b - a)));
-    return k * k * (3 - 2 * k);
-  };
-  const strength = smooth(0, 0.18, t) * (1 - smooth(0.6, 1, t));
-  if (strength <= 0) return true;
-
-  const e = EINSTEIN_R * strength;
-  const e2 = e * e;
-  const horizon = e * HORIZON;
-  // The swirl keeps turning while the hole lives.
-  const twist = SWIRL * strength * (1 + elapsed * 0.8);
+  if (elapsed > tMerge + RINGDOWN) return false;
 
   distBuf.set(cellBuf);
 
+  if (elapsed < tMerge) {
+    const u = Math.min(1, elapsed / inspiral);
+    const left = 1 - u;
+    const r = r0 * Math.pow(left, 0.25);
+    // Closed-form integral of omega0 * (r0 / r)^1.5 over time.
+    const theta =
+      theta0 + omega0 * inspiral * 1.6 * (1 - Math.pow(left, 0.625));
+    const hx = main.cx + r * Math.cos(theta);
+    const hy = main.cy - (r * Math.sin(theta) * SQUASH) / ASPECT;
+
+    const strength =
+      smoothstep(0, FORM, elapsed) * smoothstep(rGone, main.shadow * 1.2, r);
+    if (strength > 0) lensAround(cellBuf, distBuf, W, H, hx, hy, strength);
+    return true;
+  }
+
+  // Ringdown: a damped ripple from the main hole's centre.
+  const t = elapsed - tMerge;
+  const decay = Math.exp(-t / 0.45);
+  const front = main.shadow * 0.9 + t * 16;
   for (let r = 0; r < H; r++) {
     for (let c = 0; c < W; c++) {
-      const dx = c - gx;
-      const dy = (r - gy) * ASPECT;
-      const d = Math.sqrt(dx * dx + dy * dy);
+      const dx = c - main.cx;
+      const dy = (r - main.cy) * ASPECT;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 0.5) continue;
+      const phase = dist - front;
+      const envelope = Math.exp(-(phase * phase) / 8);
+      const disp = 2.5 * envelope * decay;
+      if (disp < 0.1) continue;
+      const srcC = Math.round(c - (dx / dist) * disp);
+      const srcR = Math.round(r - (dy / dist / ASPECT) * disp);
       const cell = r * W + c;
-
-      // Far enough out, the deflection is under half a cell: leave as is.
-      if (e2 / Math.max(d, 0.001) < 0.4) continue;
-
-      if (d < horizon) {
+      if (srcC < 0 || srcC >= W || srcR < 0 || srcR >= H) {
         cellBuf[cell] = 0;
         continue;
       }
-
-      // Point-lens mapping plus a twist that fades with distance.
-      const scale = (d - e2 / d) / d;
-      const ang = twist * Math.min(1, e / d) * Math.min(1, e / d);
-      const cos = Math.cos(ang);
-      const sin = Math.sin(ang);
-      const sx = (dx * cos - dy * sin) * scale;
-      const sy = (dx * sin + dy * cos) * scale;
-      const srcC = Math.round(gx + sx);
-      const srcR = Math.round(gy + sy / ASPECT);
-
-      let v = 0;
-      if (srcC >= 0 && srcC < W && srcR >= 0 && srcR < H) {
-        v = distBuf[srcR * W + srcC];
-      }
-
-      // Light dims as it nears the horizon (gravitational redshift)...
-      let shade = v & SHADE_MASK;
-      if (shade > 0 && d < e) {
-        shade = Math.round(shade * ((d - horizon) / (e - horizon)));
-      }
-      v = shade > 0 ? (v & TINT) | shade : 0;
-
-      // ...and piles up in a bright accent ring around it.
-      const dr = (d - e) / RING_SIGMA;
-      const glow = strength * Math.exp(-dr * dr);
-      const ringShade = Math.round(glow * SHADE_MAX);
-      if (glow > 0.3) v = TINT | Math.max(ringShade, v & SHADE_MASK);
-
-      cellBuf[cell] = v;
+      const src = distBuf[srcR * W + srcC];
+      const boost = Math.round(5 * envelope * decay);
+      cellBuf[cell] =
+        src === 0
+          ? 0
+          : (src & TINT) | Math.min(SHADE_MAX, (src & SHADE_MASK) + boost);
     }
   }
   return true;
+
+  // Point lens + frame-dragging twist around the small hole at (hx, hy).
+  function lensAround(out, src, W, H, hx, hy, strength) {
+    const e = EINSTEIN_R * strength;
+    const e2 = e * e;
+    const horizon = e * HORIZON;
+    // The twist keeps winding while the hole lives.
+    const twist = SWIRL * strength * (1 + elapsed * 0.8);
+    for (let r = 0; r < H; r++) {
+      for (let c = 0; c < W; c++) {
+        const dx = c - hx;
+        const dy = (r - hy) * ASPECT;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        const cell = r * W + c;
+
+        // Far enough out, the deflection is under half a cell: leave as is.
+        if (e2 / Math.max(d, 0.001) < 0.4) continue;
+
+        if (d < horizon) {
+          out[cell] = 0;
+          continue;
+        }
+
+        const scale = (d - e2 / d) / d;
+        const k = Math.min(1, e / d);
+        const ang = twist * k * k;
+        const cos = Math.cos(ang);
+        const sin = Math.sin(ang);
+        const sx = (dx * cos - dy * sin) * scale;
+        const sy = (dx * sin + dy * cos) * scale;
+        const srcC = Math.round(hx + sx);
+        const srcR = Math.round(hy + sy / ASPECT);
+
+        let v = 0;
+        if (srcC >= 0 && srcC < W && srcR >= 0 && srcR < H) {
+          v = src[srcR * W + srcC];
+        }
+
+        // Light dims as it nears the horizon (gravitational redshift)...
+        let shade = v & SHADE_MASK;
+        if (shade > 0 && d < e) {
+          shade = Math.round(shade * ((d - horizon) / (e - horizon)));
+        }
+        v = shade > 0 ? (v & TINT) | shade : 0;
+
+        // ...and piles up in a bright accent ring around it.
+        const dr = (d - e) / RING_SIGMA;
+        const glow = strength * Math.exp(-dr * dr);
+        const ringShade = Math.round(glow * SHADE_MAX);
+        if (glow > 0.3) v = TINT | Math.max(ringShade, v & SHADE_MASK);
+
+        out[cell] = v;
+      }
+    }
+  }
 }
 
 // Render cellBuf directly onto a canvas context — zero string allocation per frame.
@@ -358,10 +431,10 @@ export const AsciiBlackHole = () => {
   // Rebuilt once on init and whenever the CSS colors change (theme switch).
   const paletteRef = useRef(null);
   const timeRef = useRef(0);
-  // Extra disk rotation that follows the mouse's horizontal position.
-  const spinRef = useRef(0);
-  const mouseTargetRef = useRef({ x: 0 });
-  const rectRef = useRef({ cx: 0, cy: 0 });
+  // Extra rotation speed fed by mouse movement, and the distance the mouse
+  // travelled since the last frame (in viewport widths).
+  const boostRef = useRef(0);
+  const mouseTravelRef = useRef(0);
   const rafRef = useRef(null);
   const clickHoleRef = useRef(null);
   // Mirror of `reducedMotion` for the native listeners, whose closures are
@@ -407,47 +480,21 @@ export const AsciiBlackHole = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Cache the element's viewport center; recompute only on scroll/resize,
-  // NOT on mousemove (which would force a layout during scroll and cause jank).
+  // Accumulate how far the mouse moves; the animation loop turns it into
+  // extra rotation speed.
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const readRect = () => {
-      const rect = el.getBoundingClientRect();
-      rectRef.current.cx = rect.left + rect.width / 2;
-      rectRef.current.cy = rect.top + rect.height / 2;
-    };
-    readRect();
-
-    // Coalesce rect reads to at most one per animation frame. Reading
-    // getBoundingClientRect() synchronously on every scroll event forces a
-    // layout flush per event; near the bottom of a long page the scroll events
-    // fire densely and interleave with the canvas RAF, tanking the framerate.
-    // rAF-throttling keeps the layout read off the scroll hot path.
-    let rectScheduled = false;
-    const scheduleRect = () => {
-      if (rectScheduled) return;
-      rectScheduled = true;
-      requestAnimationFrame(() => {
-        rectScheduled = false;
-        readRect();
-      });
-    };
-
+    let lastX = null;
+    let lastY = null;
     const onMouseMove = (e) => {
-      const { cx } = rectRef.current;
-      mouseTargetRef.current.x = ((e.clientX - cx) / window.innerWidth) * 2;
+      if (lastX !== null) {
+        mouseTravelRef.current +=
+          Math.hypot(e.clientX - lastX, e.clientY - lastY) / window.innerWidth;
+      }
+      lastX = e.clientX;
+      lastY = e.clientY;
     };
-
     window.addEventListener('mousemove', onMouseMove, { passive: true });
-    window.addEventListener('scroll', scheduleRect, { passive: true });
-    window.addEventListener('resize', scheduleRect);
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('scroll', scheduleRect);
-      window.removeEventListener('resize', scheduleRect);
-    };
+    return () => window.removeEventListener('mousemove', onMouseMove);
   }, []);
 
   // Use native mousedown instead of React onClick so the click black hole
@@ -552,13 +599,13 @@ export const AsciiBlackHole = () => {
     return () => themeObserver.disconnect();
   }, [W, H, buildPalette]);
 
-  // Draw exactly one frame at the current time and spin, without advancing
+  // Draw exactly one frame at the current time, without advancing
   // them or scheduling another. Shared by the animation loop and the
   // reduced-motion path.
   const drawFrame = useCallback(() => {
     const geo = geometryRef.current;
     if (!geo.built) buildGeometry(geo, W, H);
-    buildFrame(geo, W, H, timeRef.current, spinRef.current, cellBufRef.current);
+    buildFrame(geo, W, H, timeRef.current, cellBufRef.current);
 
     if (clickHoleRef.current) {
       const elapsed = (Date.now() - clickHoleRef.current.startTime) / 1000;
@@ -587,12 +634,16 @@ export const AsciiBlackHole = () => {
   drawFrameRef.current = drawFrame;
 
   const animate = useCallback(() => {
-    // Moving the mouse left/right gently drags the disk round, eased so it
-    // glides. The shape never changes, so the geometry is never re-traced.
-    const target = Math.max(-1, Math.min(1, mouseTargetRef.current.x)) * 0.8;
-    spinRef.current += (target - spinRef.current) * 0.04;
+    // Mouse movement spins the disk up; the extra speed then winds down
+    // smoothly. Speeding up time keeps the differential rotation (inner
+    // orbits faster), and the geometry never needs re-tracing.
+    boostRef.current = Math.min(
+      5,
+      boostRef.current * 0.97 + mouseTravelRef.current * 6
+    );
+    mouseTravelRef.current = 0;
     drawFrame();
-    timeRef.current += 0.015;
+    timeRef.current += 0.03 * (1 + boostRef.current);
     rafRef.current = requestAnimationFrame(animate);
   }, [drawFrame]);
 
