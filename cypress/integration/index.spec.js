@@ -168,4 +168,17 @@ describe('Accessibility tests', () => {
     cy.get('main article a', { timeout: 10000 }).first().click();
     cy.get('h1', { timeout: 10000 }).should('exist');
   });
+
+  it('should load the comments discussion matching the original post path', () => {
+    // Discussion #504 is titled "nobuild-angular/", the post path before
+    // posts moved under /blog. Giscus must look it up by that term, not by
+    // the current pathname ("blog/nobuild-angular/"), or comments vanish.
+    cy.visit('/blog/nobuild-angular/');
+    cy.get('giscus-widget', { timeout: 10000 })
+      .shadow()
+      .find('iframe')
+      .should('have.attr', 'src')
+      .and('include', 'term=nobuild-angular%2F')
+      .and('not.include', 'term=blog');
+  });
 });
