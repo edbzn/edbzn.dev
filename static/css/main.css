@@ -364,10 +364,21 @@ body::before {
   fill: var(--text-primary);
 }
 
-/* Text links: one hover style across the site. Unstyled links (post and
-   article links, post nav) and .text-link turn to the accent colour; an
-   underline, when the link has one, follows the text colour. Components
-   with their own link styling (nav, tags, cards) handle hover themselves. */
+/* Text links: one hover style across the site. Unstyled links (article
+   and page links) and .text-link turn to the accent colour on hover. Links
+   use a regular underline, which always matches the text colour.
+   Components with their own link styling (nav, tags, cards) handle hover
+   themselves. */
+a:not([class]),
+.text-link--underline {
+  text-decoration: underline;
+}
+
+/* Image and icon links (avatar, badges) aren't underlined */
+a:not([class]):has(img, svg) {
+  text-decoration: none;
+}
+
 .text-link {
   color: inherit;
   box-shadow: none;
@@ -375,10 +386,6 @@ body::before {
 
 .text-link--muted {
   color: var(--text-muted);
-}
-
-.text-link--underline {
-  box-shadow: 0 1px 0 0 var(--link-color);
 }
 
 a:not([class]):hover,
@@ -389,16 +396,16 @@ a:not([class]):focus-visible,
 }
 
 /* Inside blog posts, links stay blue; since the colour can't change on
-   hover, the faint underline turns solid instead. */
+   hover, the underline gets thicker instead. */
 .post-content a:not([class]) {
   color: var(--link-color);
-  box-shadow: 0 1px 0 0 color-mix(in srgb, var(--link-color) 40%, transparent);
+  text-decoration-thickness: 1px;
 }
 
 .post-content a:not([class]):hover,
 .post-content a:not([class]):focus-visible {
   color: var(--link-color);
-  box-shadow: 0 1px 0 0 var(--link-color);
+  text-decoration-thickness: 2px;
 }
 
 li {

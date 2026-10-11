@@ -14,10 +14,10 @@ wordpress2016.overrideThemeStyles = ({ rhythm }) => {
     'h2,h3,h4,h5,h6': {
       color: 'var(--text-primary)',
     },
-    // Text colour with an accent underline; turns accent on hover (main.css)
+    // Text colour; underline and hover come from "Text links" in main.css
     a: {
       color: 'var(--text-primary)',
-      boxShadow: '0 1px 0 0 var(--link-color)',
+      boxShadow: 'none',
     },
     'a.gatsby-resp-image-link': {
       boxShadow: `none`,
