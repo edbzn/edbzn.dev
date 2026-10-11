@@ -116,6 +116,6 @@
 .description {
   margin-top: 0.15rem;
   font-size: 0.9rem;
-  color: var(--text-secondary, var(--text-primary));
+  color: var(--text-primary);
   hyphens: manual;
 }
