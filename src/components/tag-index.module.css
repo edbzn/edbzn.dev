@@ -114,53 +114,13 @@
 
   /* Scrolls on its own when there are many tags */
   .list {
-    flex-direction: column;
-    flex-wrap: nowrap;
-    gap: 0;
+    align-content: flex-start;
     min-height: 0;
     padding: 2px;
-    border-left: 1px solid var(--border-color);
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
     scrollbar-color: var(--border-color) transparent;
-  }
-
-  .tag,
-  .tag:hover {
-    display: flex;
-    justify-content: space-between;
-    margin-left: -3px;
-    padding: 0.3rem 0 0.3rem 0.85rem;
-    border-left: 2px solid transparent;
-    border-radius: 0;
-    background: none;
-    box-shadow: none;
-    color: var(--text-secondary) !important;
-    font-size: 0.85rem;
-    line-height: 1.45;
-  }
-
-  .tag:hover {
-    color: var(--accent-color) !important;
-  }
-
-  .count {
-    background: none;
-    color: var(--text-muted);
-  }
-
-  .active,
-  .active:hover {
-    border-left-color: var(--accent-color);
-    background: none;
-    box-shadow: none;
-    color: var(--accent-color) !important;
-    font-weight: 600;
-  }
-
-  .active .count {
-    background: none;
   }
 }
 
