@@ -26,21 +26,32 @@ class BlogIndex extends React.Component {
 
     return (
       <Layout location={this.props.location} author={author} github={github}>
-        <section style={{ marginTop: rhythm(2) }}>
-          <div
-            style={{
-              marginBottom: rhythm(1.4),
-              fontFamily: '"Public Sans", sans-serif',
-              textTransform: 'uppercase',
-              fontWeight: '100',
-            }}
-          >
-            Tags
-          </div>
-          <TagIndex posts={data.allMdx.nodes} activeTag={tag} />
-        </section>
-        {!tag && (
-          <section style={{ marginTop: rhythm(2) }}>
+        <TagIndex posts={data.allMdx.nodes} activeTag={tag}>
+          {!tag && (
+            <section style={{ marginTop: rhythm(2) }}>
+              <div
+                style={{
+                  marginBottom: rhythm(1.4),
+                  fontFamily: '"Public Sans", sans-serif',
+                  textTransform: 'uppercase',
+                  fontWeight: '100',
+                }}
+              >
+                Blog ideas
+              </div>
+              <p
+                style={{
+                  fontFamily: '"Public Sans", sans-serif',
+                  marginBottom: rhythm(0.8),
+                  color: 'var(--text-secondary, var(--text-primary))',
+                }}
+              >
+                Upvote what you'd like me to write about next.
+              </p>
+              <BlogIdeas ideas={blogIdeas} />
+            </section>
+          )}
+          <section role="main" style={{ marginTop: rhythm(2) }}>
             <div
               style={{
                 marginBottom: rhythm(1.4),
@@ -49,40 +60,18 @@ class BlogIndex extends React.Component {
                 fontWeight: '100',
               }}
             >
-              Blog ideas
+              {tag ? `#${tag}` : 'All posts'}
             </div>
-            <p
-              style={{
-                fontFamily: '"Public Sans", sans-serif',
-                marginBottom: rhythm(0.8),
-                color: 'var(--text-secondary, var(--text-primary))',
-              }}
-            >
-              Upvote what you'd like me to write about next.
-            </p>
-            <BlogIdeas ideas={blogIdeas} />
+            {blogPosts.map((node) => (
+              <div
+                key={node.frontmatter.title}
+                style={{ marginTop: rhythm(1.4) }}
+              >
+                <PostPreview node={node} />
+              </div>
+            ))}
           </section>
-        )}
-        <section role="main" style={{ marginTop: rhythm(2) }}>
-          <div
-            style={{
-              marginBottom: rhythm(1.4),
-              fontFamily: '"Public Sans", sans-serif',
-              textTransform: 'uppercase',
-              fontWeight: '100',
-            }}
-          >
-            {tag ? `#${tag}` : 'All posts'}
-          </div>
-          {blogPosts.map((node) => (
-            <div
-              key={node.frontmatter.title}
-              style={{ marginTop: rhythm(1.4) }}
-            >
-              <PostPreview node={node} />
-            </div>
-          ))}
-        </section>
+        </TagIndex>
       </Layout>
     );
   }
