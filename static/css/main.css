@@ -132,43 +132,43 @@
 /* Abyss theme - inspired by VS Code Abyss */
 :root[data-theme='abyss'] {
   /* Deep petrol blue drifting to dark teal-green */
-  --bg-primary: #000b0f8c;
-  --bg-secondary: #011114;
-  --text-primary: #a7c9d3;
-  --text-secondary: rgba(174, 205, 212, 0.75);
-  --text-muted: rgba(140, 182, 192, 0.78);
-  --border-color: rgba(78, 128, 136, 0.25);
+  --bg-primary: #000b128c;
+  --bg-secondary: #011018;
+  --text-primary: #a9c5da;
+  --text-secondary: rgba(176, 201, 218, 0.75);
+  --text-muted: rgba(142, 176, 200, 0.78);
+  --border-color: rgba(78, 120, 146, 0.25);
   --box-shadow-light: rgba(0, 0, 0, 0.2);
   --box-shadow-dark: rgba(0, 0, 0, 0.3);
-  --accent-color: #2ba3c4;
+  --accent-color: #2b97d0;
   --code-bg: rgb(255 253 100 / 7%);
-  --code-text: #8dbdc8;
-  --link-color: #2ba3c4;
-  --blockquote-color: rgba(102, 172, 186, 0.9);
-  --highlight-bg: rgba(1, 18, 23, 0.95);
-  --highlight-border: rgba(43, 163, 196, 0.25);
-  --tag-bg: rgba(102, 168, 178, 0.1);
-  --tag-text: #8dbdc8;
-  --tag-bg-hover: rgba(102, 168, 178, 0.15);
+  --code-text: #8db6cf;
+  --link-color: #2b97d0;
+  --blockquote-color: rgba(102, 162, 196, 0.9);
+  --highlight-bg: rgba(1, 16, 26, 0.95);
+  --highlight-border: rgba(43, 151, 208, 0.25);
+  --tag-bg: rgba(102, 158, 192, 0.1);
+  --tag-text: #8db6cf;
+  --tag-bg-hover: rgba(102, 158, 192, 0.15);
   --tag-shadow: rgba(0, 0, 0, 0.452);
   --tag-shadow-hover: rgba(0, 0, 0, 0.661);
-  --note-bg: rgba(102, 168, 178, 0.05);
-  --note-border: rgba(102, 168, 178, 0.15);
+  --note-bg: rgba(102, 158, 192, 0.05);
+  --note-border: rgba(102, 158, 192, 0.15);
   --note-warning-bg: rgba(255, 238, 187, 0.1);
   --note-warning-border: rgba(255, 238, 187, 0.3);
   --note-tip-bg: rgba(34, 170, 68, 0.1);
   --note-tip-border: rgba(34, 170, 68, 0.3);
-  --table-border: rgba(78, 128, 136, 0.3);
-  --blockquote-border: rgba(78, 128, 136, 0.35);
-  --anchor-color: rgba(102, 168, 178, 0.4);
+  --table-border: rgba(78, 120, 146, 0.3);
+  --blockquote-border: rgba(78, 120, 146, 0.35);
+  --anchor-color: rgba(102, 158, 192, 0.4);
 
   /* --bg-primary is translucent here: the visible colour comes from the
      fixed gradient on body::after under the noise layer. */
-  --header-bg: #0d1a21;
+  --header-bg: #0d1a24;
 
   /* Nav pill */
-  --nav-pill-bg: rgba(102, 168, 178, 0.08);
-  --nav-active-bg: rgba(102, 168, 178, 0.15);
+  --nav-pill-bg: rgba(102, 158, 192, 0.08);
+  --nav-active-bg: rgba(102, 158, 192, 0.15);
 
   --site-bg-noise-opacity: 0.15;
   /* Two drifting glows, blue and teal-green (animated on body::after) */
@@ -180,7 +180,7 @@
     ),
     radial-gradient(
       45% 40% at 75% 70%,
-      rgba(20, 160, 120, 0.12),
+      rgba(20, 150, 150, 0.12),
       transparent 70%
     );
 
@@ -217,7 +217,7 @@ body::after {
 :root[data-theme='abyss'] body::after {
   background-image:
     var(--site-bg-wash),
-    linear-gradient(180deg, #000a0f 0%, #011319 45%, #011111 100%);
+    linear-gradient(180deg, #000a12 0%, #01121c 45%, #011318 100%);
   background-size: 100% 100%;
   background-position: 0 0;
   opacity: 1;
@@ -345,7 +345,7 @@ body::before {
 }
 
 :root[data-theme='abyss'] .logo-inner path[fill='rgb(255,255,255)'] {
-  fill: #000a0f !important;
+  fill: #000a12 !important;
 }
 
 :root[data-theme='dark'] .logo-inner polygon[fill='rgb(23,23,23)'] {
