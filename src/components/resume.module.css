@@ -1,23 +1,35 @@
 /*
- * One full-width row per experience, separated by horizontal rules:
- * period on the left, company in the middle, position on the right.
+ * Timeline: period on the left, then a continuous vertical line with one dot
+ * per experience, then company and position. Each row is underlined by a
+ * horizontal rule starting after the line.
  */
 .container {
+  --period-width: 7.5rem;
+  --rail-width: 12px;
+  --gap: 1.25rem;
+  --row-padding: 0.85rem;
+  position: relative;
+}
+
+.container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: calc(var(--period-width) + var(--rail-width) + 2 * var(--gap));
+  right: 0;
   border-bottom: 1px solid var(--border-color);
 }
 
 .content {
   display: grid;
-  grid-template-columns: 7.5rem minmax(0, 1fr) auto;
+  grid-template-columns:
+    var(--period-width) var(--rail-width) minmax(0, 1fr)
+    auto;
   align-items: center;
-  column-gap: 1.5rem;
-  padding: 0.85rem 0;
+  column-gap: var(--gap);
+  padding: var(--row-padding) 0;
   background-color: transparent;
   position: relative;
-}
-
-.container:first-child .content {
-  padding-top: 0;
 }
 
 .content > * {
@@ -32,39 +44,74 @@
 }
 
 .period {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
   font-family: 'Public Sans', sans-serif;
   font-size: 0.85rem;
   font-variant-numeric: tabular-nums;
+  text-align: right;
   color: var(--text-muted);
   white-space: nowrap;
 }
 
-/* Current position: pulsing dot next to the period */
 .current .period {
   color: var(--text-primary);
 }
 
-.current .period::after {
+/* Rail cell: vertical line across the whole row, dot in the middle */
+.marker {
+  position: relative;
+  align-self: stretch;
+  margin: calc(-1 * var(--row-padding)) 0;
+}
+
+.marker::before {
   content: '';
-  flex-shrink: 0;
-  width: 8px;
-  height: 8px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 0.5px);
+  width: 1px;
+  background-color: var(--text-muted);
+}
+
+.marker::after {
+  content: '';
+  position: absolute;
+  top: calc(50% - 5px);
+  left: calc(50% - 5px);
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
+  background-color: var(--bg-primary);
+  box-shadow: inset 0 0 0 2px var(--text-primary);
+}
+
+/* The line starts at the first dot and ends at the last one */
+.container:first-child .marker::before {
+  top: 50%;
+}
+
+.container:last-child .marker::before {
+  bottom: 50%;
+}
+
+/* Current position: filled, pulsing dot and a highlighted line */
+.current .marker::after {
   background-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
   animation: pulse 2s ease-in-out infinite;
+}
+
+.current .marker::before {
+  background: linear-gradient(to bottom, #2563eb, var(--text-muted));
 }
 
 @keyframes pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
   }
   50% {
-    box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 0 8px rgba(37, 99, 235, 0.1);
   }
 }
 
@@ -171,20 +218,46 @@
   transform: rotate(180deg);
 }
 
-/* Narrow screens: period on its own line, company and position stacked */
+/* Narrow screens: rail on the left, period, company and position stacked */
 @media (max-width: 640px) {
+  .container::after {
+    left: calc(var(--rail-width) + var(--gap));
+  }
+
   .content {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: var(--rail-width) minmax(0, 1fr);
     row-gap: 0.25rem;
   }
 
+  .marker {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+  }
+
+  .period,
+  .companyHeader,
   .position {
+    grid-column: 2;
     text-align: left;
+  }
+
+  /* Dot next to the period rather than the middle of the stacked row */
+  .marker::after {
+    top: calc(var(--row-padding) + 0.35rem);
+  }
+
+  .container:first-child .marker::before {
+    top: calc(var(--row-padding) + 0.35rem);
+  }
+
+  .container:last-child .marker::before {
+    bottom: auto;
+    height: calc(var(--row-padding) + 0.35rem);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .current .period::after {
+  .current .marker::after {
     animation: none;
   }
 }
