@@ -24,7 +24,7 @@ export const Resume = ({ experiences }) => {
                 rel="noopener noreferrer"
                 className={`${css.content} ${css.blockLink} ${index === 2 && !showAll ? css.partial : ''}`}
               >
-                <p>{experience.period}</p>
+                <p className={css.period}>{experience.period}</p>
                 <div className={css.companyHeader}>
                   {experience.logo && (
                     <img
@@ -41,7 +41,7 @@ export const Resume = ({ experiences }) => {
               <div
                 className={`${css.content} ${index === 2 && !showAll ? css.partial : ''}`}
               >
-                <p>{experience.period}</p>
+                <p className={css.period}>{experience.period}</p>
                 <div className={css.companyHeader}>
                   {experience.logo && (
                     <img

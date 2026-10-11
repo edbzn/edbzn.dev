@@ -1,62 +1,23 @@
+/*
+ * One full-width row per experience, separated by horizontal rules:
+ * period on the left, company in the middle, position on the right.
+ */
 .container {
-  padding: 10px 40px;
-  position: relative;
-}
-
-.container:first-child {
-  padding-top: 0;
-}
-
-.container::after {
-  content: '';
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  left: 0;
-  background-color: var(--text-primary);
-  top: calc(50% - 6px);
-  border-radius: 50%;
-}
-
-.container::before {
-  content: '';
-  position: absolute;
-  width: 1px;
-  height: 100%;
-  top: 50%;
-  left: 6px;
-  background-color: var(--text-primary);
-}
-
-.container:last-child::before {
-  display: none;
-}
-
-.current::after {
-  background-color: #2563eb;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
-  animation: pulse 2s ease-in-out infinite;
-  left: 0;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 0 8px rgba(37, 99, 235, 0.1);
-  }
-}
-
-.current::before {
-  background: linear-gradient(to bottom, #2563eb 0%, var(--text-primary) 100%);
-  left: 6px;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .content {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 1.5rem;
+  padding: 0.85rem 0;
   background-color: transparent;
   position: relative;
+}
+
+.container:first-child .content {
+  padding-top: 0;
 }
 
 .content > * {
@@ -70,11 +31,48 @@
   margin: 0;
 }
 
+.period {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Current position: pulsing dot next to the period */
+.current .period {
+  color: var(--text-primary);
+}
+
+.current .period::after {
+  content: '';
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.1);
+  }
+}
+
 .companyHeader {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin: 5px 0;
+  min-width: 0;
 }
 
 .logo {
@@ -87,7 +85,6 @@
 }
 
 .blockLink {
-  display: block;
   color: inherit;
   text-decoration: none;
   box-shadow: none;
@@ -95,12 +92,8 @@
   border-radius: 4px;
 }
 
-.current .blockLink:hover {
-  box-shadow: none;
-}
-
-.container:last-child .blockLink:hover {
-  box-shadow: none;
+.blockLink:hover h3 {
+  color: var(--accent-color);
 }
 
 .companyLink {
@@ -119,6 +112,7 @@
   font-size: 0.9rem;
   font-weight: 200;
   color: var(--text-secondary);
+  text-align: right;
 }
 
 .partial {
@@ -175,4 +169,22 @@
 
 .chevronOpen {
   transform: rotate(180deg);
+}
+
+/* Narrow screens: period on its own line, company and position stacked */
+@media (max-width: 640px) {
+  .content {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0.25rem;
+  }
+
+  .position {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .current .period::after {
+    animation: none;
+  }
 }
