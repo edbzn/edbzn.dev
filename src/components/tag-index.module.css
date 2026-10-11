@@ -1,3 +1,24 @@
+/*
+ * Below the wide breakpoint: pills above the page content.
+ * From the wide breakpoint: sticky side block in the right margin, next to
+ * the 698px text column (see the media query at the end of this file).
+ */
+
+.layout {
+  position: relative;
+}
+
+.wrapper {
+  margin-top: 3.5rem;
+}
+
+.title {
+  margin: 0 0 1.4rem;
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 100;
+  text-transform: uppercase;
+}
+
 .list {
   display: flex;
   flex-wrap: wrap;
@@ -60,6 +81,87 @@
 .active .count {
   background-color: color-mix(in srgb, var(--accent-color) 20%, transparent);
   color: var(--accent-color);
+}
+
+/* Sticky side block in the right margin */
+@media screen and (min-width: 1240px) {
+  .rail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(100% + 2rem);
+    width: 220px;
+  }
+
+  .wrapper {
+    position: sticky;
+    top: calc(var(--site-header-height) + 1.5rem);
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - var(--site-header-height) - 3rem);
+    margin-top: 0;
+    font-family: 'Public Sans', sans-serif;
+  }
+
+  .title {
+    flex-shrink: 0;
+    margin: 0 0 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+
+  /* Scrolls on its own when there are many tags */
+  .list {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 0;
+    min-height: 0;
+    padding: 2px;
+    border-left: 1px solid var(--border-color);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+  }
+
+  .tag,
+  .tag:hover {
+    display: flex;
+    justify-content: space-between;
+    margin-left: -3px;
+    padding: 0.3rem 0 0.3rem 0.85rem;
+    border-left: 2px solid transparent;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--text-secondary) !important;
+    font-size: 0.85rem;
+    line-height: 1.45;
+  }
+
+  .tag:hover {
+    color: var(--accent-color) !important;
+  }
+
+  .count {
+    background: none;
+    color: var(--text-muted);
+  }
+
+  .active,
+  .active:hover {
+    border-left-color: var(--accent-color);
+    background: none;
+    box-shadow: none;
+    color: var(--accent-color) !important;
+    font-weight: 600;
+  }
+
+  .active .count {
+    background: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
