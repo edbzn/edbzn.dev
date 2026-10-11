@@ -15,25 +15,6 @@ const sectionHeadingStyle = {
   fontWeight: '300',
 };
 
-const subheadingStyle = {
-  display: 'flex',
-  alignItems: 'baseline',
-  gap: '0.6rem',
-  marginTop: 0,
-  marginBottom: rhythm(0.6),
-  fontFamily: '"Public Sans", sans-serif',
-  fontWeight: '400',
-  fontSize: '1.15rem',
-  color: 'var(--text-primary)',
-};
-
-const dotfilesTextStyle = {
-  fontFamily: '"Public Sans", sans-serif',
-  fontSize: '0.95rem',
-  color: 'var(--text-secondary)',
-  marginBottom: rhythm(0.8),
-};
-
 class UsesPage extends React.Component {
   render() {
     const { data } = this.props;
@@ -47,26 +28,24 @@ class UsesPage extends React.Component {
           <p
             style={{
               fontFamily: '"Public Sans", sans-serif',
-              marginBottom: rhythm(1.5),
+              marginBottom: rhythm(1),
               color: 'var(--text-secondary)',
             }}
           >
-            Tools, software, and hardware I use daily for development.
+            Tools, software, and hardware I use daily for development. My entire
+            dev environment is automated with Ansible and GNU Stow.
           </p>
-
-          <h2 style={subheadingStyle}>Toolbox</h2>
-          <p style={dotfilesTextStyle}>
-            My entire dev environment is automated with Ansible and GNU Stow.
-          </p>
-          <div style={{ marginBottom: rhythm(1) }}>
+          <div style={{ marginBottom: '2rem' }}>
             <GitHubRepo
               name="edbzn/dotfiles"
               description="My dev environment provisioning scripts."
             />
           </div>
           <UsesTools categories={usesCategories} />
+        </section>
 
-          <h2 style={subheadingStyle}>AI usage</h2>
+        <section style={{ marginTop: rhythm(2) }}>
+          <div style={sectionHeadingStyle}>AI usage</div>
           <UsesAi
             categories={usesCategories}
             surfaces={aiSurfaces}

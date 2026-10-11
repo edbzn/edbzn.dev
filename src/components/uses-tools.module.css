@@ -1,73 +1,10 @@
-/* Category filters: same pills as the blog tag index (tag-index.module.css) */
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0 0 2rem;
-  padding: 0;
-  list-style: none;
-}
-
-.filters li {
-  margin: 0;
-}
-
-.filter {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.2rem 0.35rem 0.2rem 0.6rem;
-  border: none;
-  border-radius: 999px;
-  background-color: var(--tag-bg);
-  box-shadow: var(--tag-shadow);
-  color: var(--tag-text);
-  font-family: 'Public Sans', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 400;
-  cursor: pointer;
-}
-
-.filter:hover {
-  background-color: var(--tag-bg-hover);
-  box-shadow: var(--tag-shadow-hover);
-}
-
-.filter:focus-visible {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
-}
-
-.count {
-  min-width: 1.4em;
-  padding: 0 0.35rem;
-  border-radius: 999px;
-  background-color: var(--nav-active-bg);
-  font-size: 0.7rem;
-  font-variant-numeric: tabular-nums;
-  text-align: center;
-  color: var(--text-secondary);
-}
-
-.active,
-.active:hover {
-  background-color: color-mix(in srgb, var(--accent-color) 14%, transparent);
-  box-shadow: inset 0 0 0 1px var(--accent-color);
-  color: var(--accent-color);
-}
-
-.active .count {
-  background-color: color-mix(in srgb, var(--accent-color) 20%, transparent);
-  color: var(--accent-color);
-}
-
-/* One block per category: small heading, then name / description rows */
+/* One block per category: small heading, then a grid of name / description cards */
 .group {
   margin-bottom: 2rem;
 }
 
 .groupTitle {
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.75rem;
   font-family: 'Public Sans', sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
@@ -76,45 +13,54 @@
   color: var(--text-muted);
 }
 
-.list {
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
   margin: 0;
   padding: 0;
   list-style: none;
-  font-family: 'Public Sans', sans-serif;
 }
 
-.item {
-  display: grid;
-  grid-template-columns: 12rem minmax(0, 1fr);
-  column-gap: 1.25rem;
-  align-items: baseline;
+.cell {
+  display: flex;
   margin: 0;
-  padding: 0.55rem 0;
-  border-bottom: 1px solid var(--border-color);
+}
+
+.card {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--bg-primary);
+  font-family: 'Public Sans', sans-serif;
+  color: var(--text-primary);
+  hyphens: manual;
+}
+
+.cardLink {
+  text-decoration: none;
+  box-shadow: none;
+}
+
+.cardLink:hover {
+  border-color: var(--accent-color);
+}
+
+.cardLink:hover .name {
+  color: var(--accent-color);
 }
 
 .name {
   font-size: 0.95rem;
-  color: var(--text-primary);
-}
-
-a.name {
-  text-decoration: none;
-}
-
-a.name:hover {
-  color: var(--accent-color);
-  text-decoration: underline;
+  font-weight: 400;
 }
 
 .description {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
   color: var(--text-secondary);
-}
-
-@media (max-width: 640px) {
-  .item {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: 0.15rem;
-  }
 }
