@@ -66,7 +66,7 @@
 
   /* Opaque top bar: the colour the page actually shows at the top of the
      viewport, i.e. --bg-primary blended with the body::before noise layer
-     (and, in abyss, the body::after gradient). */
+     (and, in abyss, the #gatsby-focus-wrapper::after gradient). */
   --header-bg: #f1f0f0;
 
   /* Nav pill */
@@ -163,7 +163,7 @@
   --anchor-color: rgba(102, 158, 192, 0.4);
 
   /* --bg-primary is translucent here: the visible colour comes from the
-     fixed gradient on body::after under the noise layer. */
+     gradient on #gatsby-focus-wrapper::after under the noise layer. */
   --header-bg: #09141d;
 
   /* Nav pill */
@@ -171,7 +171,7 @@
   --nav-active-bg: rgba(102, 158, 192, 0.15);
 
   --site-bg-noise-opacity: 0.1;
-  /* Two drifting glows, blue and teal-green (animated on body::after) */
+  /* Two drifting glows, blue and teal-green (animated on #gatsby-focus-wrapper::after) */
   --site-bg-wash:
     radial-gradient(
       45% 40% at 25% 20%,
@@ -189,22 +189,27 @@
 
 body {
   background-color: var(--bg-primary);
-  background-image: var(--site-bg-wash);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
 }
 
-/* Animated gradient wash — lives on a position:fixed ::after so it uses
-   transform (GPU-compositable) instead of background-position/background-size
-   on the body (which forces full-page repaints every animation frame).
-   The element is oversized (120vw × 120vh, offset -10% each side) so edges
-   are never visible during translation. */
-body::after {
+/* Animated gradient wash. It lives on an ::after of Gatsby's full-page
+   wrapper, so it scrolls with the content instead of staying fixed to the
+   viewport. The wrapper clips it (overflow: clip is not a scroll container,
+   so the sticky header still works), and the layer animates with transform
+   (GPU-compositable) rather than background-position, which would repaint
+   the whole page every frame. It overhangs the wrapper by 10vh/10vw on each
+   side so its edges never show while it drifts. */
+#gatsby-focus-wrapper {
+  position: relative;
+  min-height: 100vh;
+  overflow: clip;
+}
+
+#gatsby-focus-wrapper::after {
   content: '';
-  position: fixed;
-  inset: -10%;
-  /* Furthest back: the noise texture (::before, z-index:-1) layers on top of
-     this wash, and both stay behind page content. */
+  position: absolute;
+  inset: -10vh -10vw;
+  /* Furthest back: the noise texture (body::before, z-index:-1) layers on
+     top of this wash, and both stay behind page content. */
   z-index: -2;
   pointer-events: none;
   background-image: var(--site-bg-wash);
@@ -214,55 +219,52 @@ body::after {
   opacity: 0;
 }
 
-:root[data-theme='abyss'] body::after {
+/* The two glows repeat every 150vh down the page; the base gradient spans
+   the whole page. */
+:root[data-theme='abyss'] #gatsby-focus-wrapper::after {
   background-image:
     var(--site-bg-wash),
     linear-gradient(180deg, #00080f 0%, #010e16 45%, #010f13 100%);
-  background-size: 100% 100%;
+  background-size:
+    100% 150vh,
+    100% 150vh,
+    100% 100%;
+  background-repeat: repeat-y, repeat-y, no-repeat;
   background-position: 0 0;
   opacity: 1;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  :root[data-theme='abyss'] body::after {
-    animation-duration: 30s;
-  }
-}
-
-/* Translate the oversized ::after pseudo-element — no scale needed since
-   the element already extends 10% beyond all viewport edges. */
+/* Fixed-size steps (not %), so the drift speed doesn't grow with the page
+   height. */
 @keyframes site-bg-wash-pan {
   0% {
-    transform: translate3d(0%, 0%, 0);
+    transform: translate3d(0, 0, 0);
   }
   20% {
-    transform: translate3d(-4%, -2%, 0);
+    transform: translate3d(-4vw, -2vh, 0);
   }
   40% {
-    transform: translate3d(-5%, -4%, 0);
+    transform: translate3d(-5vw, -4vh, 0);
   }
   60% {
-    transform: translate3d(-2%, -5%, 0);
+    transform: translate3d(-2vw, -5vh, 0);
   }
   80% {
-    transform: translate3d(-0.5%, -3%, 0);
+    transform: translate3d(-0.5vw, -3vh, 0);
   }
   100% {
-    transform: translate3d(0%, 0%, 0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  body::after {
+  #gatsby-focus-wrapper::after {
     animation: site-bg-wash-pan 50s ease-in-out infinite;
     will-change: transform;
   }
-}
 
-@media (prefers-reduced-motion: reduce) {
-  body::after {
-    animation: none;
-    will-change: auto;
+  :root[data-theme='abyss'] #gatsby-focus-wrapper::after {
+    animation-duration: 30s;
   }
 }
 
