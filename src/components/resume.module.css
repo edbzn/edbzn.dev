@@ -102,22 +102,28 @@
 
 /* Current position: filled, pulsing dot and a highlighted line */
 .current .marker::after {
-  background-color: #2563eb;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+  background-color: var(--accent-color);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-color) 20%, transparent);
   animation: pulse 2s ease-in-out infinite;
 }
 
 .current .marker::before {
-  background: linear-gradient(to bottom, #2563eb, var(--text-muted));
+  background: linear-gradient(
+    to bottom,
+    var(--accent-color),
+    var(--text-muted)
+  );
 }
 
 @keyframes pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+    box-shadow: 0 0 0 4px
+      color-mix(in srgb, var(--accent-color) 20%, transparent);
   }
   50% {
-    box-shadow: 0 0 0 8px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 0 8px
+      color-mix(in srgb, var(--accent-color) 10%, transparent);
   }
 }
 
