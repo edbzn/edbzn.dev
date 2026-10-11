@@ -426,21 +426,3 @@ export const usesCategories = [
     ],
   },
 ];
-
-/**
- * Where the AI tools above (the AI category, plus Warp from Terminal & Shell)
- * show up in my setup. `name` must match an item
- * name in `usesCategories`; `surfaces` are ids from `aiSurfaces`.
- */
-export const aiSurfaces = [
-  { id: 'editor', label: 'Editor' },
-  { id: 'terminal', label: 'Terminal' },
-  { id: 'desktop', label: 'Desktop' },
-];
-
-export const aiTools = [
-  { name: 'GitHub Copilot', surfaces: ['editor'] },
-  { name: 'Warp', surfaces: ['terminal'] },
-  { name: 'Claude CLI + Desktop', surfaces: ['terminal', 'desktop'] },
-  { name: 'ChatGPT Desktop', surfaces: ['desktop'] },
-];

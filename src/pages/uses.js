@@ -4,8 +4,7 @@ import Layout from '../components/layout';
 import { Seo } from '../components/seo';
 import { GitHubRepo } from '../components/github-repo';
 import { UsesTools } from '../components/uses-tools';
-import { UsesAi } from '../components/uses-ai';
-import { aiSurfaces, aiTools, usesCategories } from '../data/uses';
+import { usesCategories } from '../data/uses';
 import { rhythm } from '../utils/typography';
 
 const sectionHeadingStyle = {
@@ -42,15 +41,6 @@ class UsesPage extends React.Component {
             />
           </div>
           <UsesTools categories={usesCategories} />
-        </section>
-
-        <section style={{ marginTop: rhythm(2) }}>
-          <div style={sectionHeadingStyle}>AI usage</div>
-          <UsesAi
-            categories={usesCategories}
-            surfaces={aiSurfaces}
-            tools={aiTools}
-          />
         </section>
       </Layout>
     );
