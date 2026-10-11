@@ -43,9 +43,9 @@
 }
 
 .button:hover:not(:disabled) {
-  border-color: #7aa2f7;
-  background-color: rgba(122, 162, 247, 0.12);
-  color: #7aa2f7;
+  border-color: var(--accent-color);
+  background-color: color-mix(in srgb, var(--accent-color) 12%, transparent);
+  color: var(--accent-color);
 }
 
 .button:active:not(:disabled) {
