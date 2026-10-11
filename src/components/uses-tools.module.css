@@ -40,16 +40,31 @@
   list-style: none;
 }
 
-/* Monogram on the left; name, description and link stacked on the right */
+/*
+ * Card: monogram and name on top, description below, link pinned to the
+ * bottom. The link's ::after covers the card so the whole card is clickable.
+ */
 .card {
+  position: relative;
   display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
+  flex-direction: column;
+  gap: 0.5rem;
   margin: 0;
-  padding: 0.75rem 0.85rem;
+  padding: 0.85rem 0.9rem 0.75rem;
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: 8px;
   background-color: var(--bg-primary);
+}
+
+.card:has(.link):hover {
+  border-color: var(--tint-border);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
 }
 
 .monogram {
@@ -57,11 +72,11 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 7px;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 6px;
   font-family: 'Space Grotesk', 'Public Sans', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: -0.02em;
   color: var(--tint-fg);
@@ -70,17 +85,13 @@
   white-space: nowrap;
 }
 
-.text {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  min-width: 0;
-}
-
 .name {
-  font-size: 0.95rem;
-  font-weight: 400;
+  min-width: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.3;
   color: var(--text-primary);
+  overflow-wrap: anywhere;
 }
 
 .description {
@@ -93,10 +104,25 @@
   display: flex;
   gap: 0.25rem;
   min-width: 0;
-  margin-top: 0.2rem;
-  font-size: 0.75rem;
-  color: var(--link-color);
+  margin-top: auto;
+  font-size: 0.72rem;
+  color: var(--text-muted);
   text-decoration: none;
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.card:has(.link):hover .link {
+  color: var(--text-secondary);
+}
+
+.card:has(.link):hover .name {
+  color: var(--tint-fg);
 }
 
 /* Long paths are cut, the arrow stays visible */
@@ -106,6 +132,11 @@
   white-space: nowrap;
 }
 
-.link:hover {
-  text-decoration: underline;
+.link:focus-visible {
+  outline: none;
+}
+
+.link:focus-visible::after {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }

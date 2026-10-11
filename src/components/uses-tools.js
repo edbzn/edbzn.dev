@@ -37,26 +37,27 @@ export const UsesTools = ({ categories = [] }) => (
         <ul className={styles.grid}>
           {category.items.map((item) => (
             <li key={item.name} className={styles.card}>
-              <span className={styles.monogram} aria-hidden="true">
-                {monogramFor(item)}
-              </span>
-              <span className={styles.text}>
+              <span className={styles.header}>
+                <span className={styles.monogram} aria-hidden="true">
+                  {monogramFor(item)}
+                </span>
                 <span className={styles.name}>{item.name}</span>
-                {item.description && (
-                  <span className={styles.description}>{item.description}</span>
-                )}
-                {item.url && (
-                  <a
-                    href={item.url}
-                    className={styles.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <span className={styles.host}>{hostOf(item.url)}</span>
-                    <span aria-hidden="true">↗</span>
-                  </a>
-                )}
               </span>
+              {item.description && (
+                <span className={styles.description}>{item.description}</span>
+              )}
+              {item.url && (
+                <a
+                  href={item.url}
+                  className={styles.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${item.name} (${hostOf(item.url)})`}
+                >
+                  <span className={styles.host}>{hostOf(item.url)}</span>
+                  <span aria-hidden="true">↗</span>
+                </a>
+              )}
             </li>
           ))}
         </ul>
