@@ -171,15 +171,18 @@
   --nav-active-bg: rgba(102, 158, 192, 0.15);
 
   --site-bg-noise-opacity: 0.1;
-  /* Two drifting glows, blue and teal-green (animated on #gatsby-focus-wrapper::after) */
+  /* Two drifting glows, blue and teal-green (animated on
+     #gatsby-focus-wrapper::after). Sized in vw/vh and centred in their tile,
+     so each one fades out before the tile edge and the tiles repeat down the
+     page without a seam. */
   --site-bg-wash:
     radial-gradient(
-      45% 40% at 25% 20%,
+      70vw 60vh at 25% 50%,
       rgba(34, 130, 200, 0.13),
       transparent 70%
     ),
     radial-gradient(
-      45% 40% at 75% 70%,
+      70vw 60vh at 75% 50%,
       rgba(20, 150, 150, 0.1),
       transparent 70%
     );
@@ -200,6 +203,9 @@ body {
    side so its edges never show while it drifts. */
 #gatsby-focus-wrapper {
   position: relative;
+  /* Contain the layout's bottom margin (overflow: clip alone doesn't), so
+     the wash reaches the very bottom of the page. */
+  display: flow-root;
   min-height: 100vh;
   overflow: clip;
 }
@@ -219,18 +225,21 @@ body {
   opacity: 0;
 }
 
-/* The two glows repeat every 150vh down the page; the base gradient spans
-   the whole page. */
+/* Each glow repeats every 140vh, the teal one offset by half a tile so
+   they alternate down the page; the base gradient spans the whole page. */
 :root[data-theme='abyss'] #gatsby-focus-wrapper::after {
   background-image:
     var(--site-bg-wash),
     linear-gradient(180deg, #00080f 0%, #010e16 45%, #010f13 100%);
   background-size:
-    100% 150vh,
-    100% 150vh,
+    100% 140vh,
+    100% 140vh,
     100% 100%;
   background-repeat: repeat-y, repeat-y, no-repeat;
-  background-position: 0 0;
+  background-position:
+    0 0,
+    0 70vh,
+    0 0;
   opacity: 1;
 }
 
