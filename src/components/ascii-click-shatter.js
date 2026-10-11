@@ -11,11 +11,13 @@ const SHADE_MASK = TINT - 1;
 const ASPECT = 1.95; // cell height / cell width (13px line / ~6.6px glyph)
 
 const REACH = 9; // radius of the burst, in columns
-const KICK = 14; // peak flight distance next to the click, in columns
+const KICK = 6; // peak flight distance next to the click, in columns
 const SPRING = 2.6; // spring angular frequency, rad/s
 const DAMPING = 0.75; // seconds for the motion to decay by e
 const FOCAL = 6; // perspective: depth at which a particle looks twice as far out
-const DURATION = 4.5; // seconds until a burst has settled
+const MAX_DELAY = 0.18; // random extra delay per particle, in seconds
+const DELAY_PER_COL = 0.012; // the burst spreads out from the click
+const DURATION = 4.8; // seconds until a burst has settled
 
 // Stable pseudo-random value in [0, 1) per cell and burst.
 function hash(c, r, seed) {
@@ -32,12 +34,7 @@ export function applyClickShatter(cellBuf, outBuf, W, H, bursts, now) {
   const live = bursts.filter((b) => (now - b.startTime) / 1000 < DURATION);
   if (live.length === 0) return live;
 
-  // Impulse response of an under-damped spring: starts at home, flies out,
-  // swings back slightly past home, then settles. Normalised to peak at ~1.
-  const swing = live.map((b) => {
-    const t = (now - b.startTime) / 1000;
-    return (Math.exp(-t / DAMPING) * Math.sin(SPRING * t)) / 0.55;
-  });
+  const ages = live.map((b) => (now - b.startTime) / 1000);
 
   outBuf.fill(0);
   for (let r = 0; r < H; r++) {
@@ -55,11 +52,21 @@ export function applyClickShatter(cellBuf, outBuf, W, H, bursts, now) {
         const d2 = ox * ox + oy * oy;
         const falloff = Math.exp(-d2 / (REACH * REACH));
         if (falloff < 0.02) continue;
+        // Each particle starts a little later than the click: further out and
+        // a random bit more. Its flight is the impulse response of an
+        // under-damped spring: out, slightly past home on the way back, then
+        // settled (normalised to peak at ~1).
+        const t =
+          ages[k] -
+          Math.sqrt(d2) * DELAY_PER_COL -
+          hash(c + 11, r + 5, b.seed) * MAX_DELAY;
+        if (t <= 0) continue;
+        const swing = (Math.exp(-t / DAMPING) * Math.sin(SPRING * t)) / 0.55;
         // Mostly away from the click, with some scatter and depth.
         const jitter = (hash(c, r, b.seed) - 0.5) * 1.2;
         const ang = (d2 > 0.0001 ? Math.atan2(oy, ox) : 0) + jitter;
         const speed = KICK * falloff * (0.6 + 0.8 * hash(r, c, b.seed + 1));
-        const amount = speed * swing[k];
+        const amount = speed * swing;
         dx += Math.cos(ang) * amount;
         dy += Math.sin(ang) * amount;
         dz += (hash(c + 7, r + 3, b.seed) * 2 - 1) * amount * 0.6;
