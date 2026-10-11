@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { applyClickShatter } from './ascii-click-shatter';
 
 // Shading ramp from dark to bright
 const SHADE = ' .,-~:;=!*#$@';
@@ -6,9 +7,9 @@ const SHADE_MAX = SHADE.length - 1;
 
 // Cell values stored in the frame buffer: the low bits hold the shade index
 // (0 = empty, SHADE_MAX = brightest); TINT marks graticule, atmosphere and
-// click-marker cells, drawn with the accent colour instead of the text colour.
+// rim cells, drawn with the accent colour instead of the text colour.
+// ascii-click-shatter.js relies on this same encoding.
 const TINT = 16;
-const SHADE_MASK = TINT - 1;
 
 // Pre-computed opacity per shade level. Faint characters stay faint so the
 // ocean reads as a light dotted texture under the brighter continents.
@@ -78,17 +79,6 @@ const GRID_HALF_W = 0.022; // graticule half-width, in radians
 // right of the disc. The half-vector puts a soft glint on the ocean.
 const LIGHT = normalize(-0.55, 0.45, 0.7);
 const HALF = normalize(LIGHT[0], LIGHT[1], LIGHT[2] + 1);
-
-// Click markers.
-const MARKER_LIFE = 7; // seconds until a marker is gone...
-const MARKER_FADE = 2.5; // ...the last of which it spends fading out
-const MARKER_CORE = 0.06; // glowing dot radius, in radians on the globe
-const PULSE_EVERY = 1.5; // seconds between two rings
-const PULSE_TIME = 2.4; // seconds a ring takes to expand and vanish
-const PULSE_RADIUS = 0.45; // final ring radius, in radians (~26°)
-const PULSE_WIDTH = 0.07;
-const MARKER_REACH = Math.cos(PULSE_RADIUS + 3 * PULSE_WIDTH);
-const MAX_MARKERS = 12;
 
 function normalize(x, y, z) {
   const len = Math.sqrt(x * x + y * y + z * z);
@@ -161,9 +151,6 @@ function createGeometry(W, H) {
     sx: new Float32Array(n * SAMPLES), // their view-space normals
     sy: new Float32Array(n * SAMPLES),
     sz: new Float32Array(n * SAMPLES),
-    nx: new Float32Array(n), // mean normal of the cell, for click markers
-    ny: new Float32Array(n),
-    nz: new Float32Array(n),
     light: new Float32Array(n), // diffuse lighting, 0..1
     glint: new Float32Array(n), // specular highlight on water, 0..1
     rim: new Float32Array(n), // atmosphere just outside the disc, 0..1
@@ -204,9 +191,6 @@ function createGeometry(W, H) {
       geo.rim[cell] = rim / SAMPLES;
       if (count === 0) continue;
       const [nx, ny, nz] = normalize(mx, my, mz);
-      geo.nx[cell] = nx;
-      geo.ny[cell] = ny;
-      geo.nz[cell] = nz;
       const ndl = nx * LIGHT[0] + ny * LIGHT[1] + nz * LIGHT[2];
       geo.light[cell] = Math.pow(clamp((ndl + 0.25) / 1.15, 0, 1), 1.3);
       const ndh = Math.max(0, nx * HALF[0] + ny * HALF[1] + nz * HALF[2]);
@@ -274,69 +258,6 @@ function buildFrame(geo, W, H, lon0, tilt, cellBuf) {
   }
 }
 
-// Click marker: a glowing dot pinned to the globe that sends out soft rings
-// along its surface, then fades. Draws over cellBuf; returns false once the
-// marker is gone.
-function applyMarker(geo, W, H, lon0, tilt, marker, age, cellBuf) {
-  if (age > MARKER_LIFE) return false;
-  const { count, nx, ny, nz } = geo;
-  // Where the marker sits in view space right now.
-  const cosLat = Math.cos(marker.lat);
-  const px = cosLat * Math.sin(marker.lon - lon0);
-  const py = Math.sin(marker.lat);
-  const pz = cosLat * Math.cos(marker.lon - lon0);
-  const cosT = Math.cos(tilt);
-  const sinT = Math.sin(tilt);
-  const mx = px;
-  const my = py * cosT - pz * sinT;
-  const mz = py * sinT + pz * cosT;
-
-  const life =
-    smoothstep(0, 0.25, age) *
-    (1 - smoothstep(MARKER_LIFE - MARKER_FADE, MARKER_LIFE, age));
-  const breathe = 0.85 + 0.15 * Math.cos(age * 4);
-
-  for (let cell = 0; cell < W * H; cell++) {
-    if (count[cell] === 0) continue;
-    const c = nx[cell] * mx + ny[cell] * my + nz[cell] * mz;
-    if (c < MARKER_REACH) continue;
-    const d = Math.acos(Math.min(1, c));
-    // Rings already born and still expanding.
-    let ring = 0;
-    for (
-      let born =
-        Math.max(0, Math.floor((age - PULSE_TIME) / PULSE_EVERY) + 1) *
-        PULSE_EVERY;
-      born <= age && born < MARKER_LIFE - MARKER_FADE;
-      born += PULSE_EVERY
-    ) {
-      const p = (age - born) / PULSE_TIME;
-      const radius = PULSE_RADIUS * (1 - (1 - p) * (1 - p));
-      const dr = (d - radius) / PULSE_WIDTH;
-      ring = Math.max(ring, Math.pow(1 - p, 1.5) * Math.exp(-dr * dr));
-    }
-    ring *= life;
-    const under = cellBuf[cell] & SHADE_MASK;
-    const dc = d / MARKER_CORE;
-    const core = Math.exp(-dc * dc);
-    // The dot sits in a dim halo that replaces what is under it, so it stands
-    // out on land too; both blend back into the globe as the marker fades.
-    let si = -1;
-    if (core > 0.45) {
-      si = under + (SHADE_MAX - under) * life * breathe;
-    } else if (core > 0.04) {
-      si = Math.max(under + (3 - under) * life, ring * SHADE_MAX);
-    }
-    if (si >= 0) {
-      si = Math.round(si);
-      cellBuf[cell] = si > 0 && life > 0.25 ? TINT | si : si;
-    } else if (ring > 0.15) {
-      cellBuf[cell] = TINT | Math.max(Math.round(ring * SHADE_MAX), under);
-    }
-  }
-  return true;
-}
-
 // Render cellBuf directly onto a canvas context — zero string allocation per frame.
 // palette: precomputed fillStyle strings and glyphs per cell value (shade | TINT).
 function renderFrame(ctx, cellBuf, W, H, cw, lh, palette) {
@@ -380,8 +301,8 @@ export const AsciiGlobe = () => {
   const lastTimeRef = useRef(null);
   const rectRef = useRef({ cy: 0 });
   const rafRef = useRef(null);
-  // Live click markers, pinned to a latitude/longitude on the globe.
-  const markersRef = useRef([]);
+  // Live click bursts (see ascii-click-shatter.js).
+  const burstsRef = useRef([]);
   // Mirror of `reducedMotion` for the native listeners, whose closures are
   // created once and would otherwise capture a stale value.
   const reducedMotionRef = useRef(false);
@@ -395,6 +316,7 @@ export const AsciiGlobe = () => {
   const geometryRef = useRef(null);
   if (!geometryRef.current) geometryRef.current = createGeometry(W, H);
   const cellBufRef = useRef(new Uint8Array(W * H));
+  const distBufRef = useRef(new Uint8Array(W * H));
 
   // Respect prefers-reduced-motion: the globe is a permanent rAF loop, so a
   // reader who asked for less motion gets a single static frame instead.
@@ -473,9 +395,8 @@ export const AsciiGlobe = () => {
     };
   }, []);
 
-  // Use native mousedown instead of React onClick so the marker appears on
-  // press, before the next animation frame is drawn. The click is turned into
-  // a latitude/longitude so the marker turns with the globe.
+  // Use native mousedown instead of React onClick so the burst starts on
+  // press, before the next animation frame is drawn.
   useEffect(() => {
     const div = containerRef.current;
     if (!div) return;
@@ -483,30 +404,19 @@ export const AsciiGlobe = () => {
       const canvas = canvasRef.current;
       if (!canvas || reducedMotionRef.current) return;
       const rect = canvas.getBoundingClientRect();
-      const disc = discOf(W, H);
-      const x =
-        (((e.clientX - rect.left) / rect.width) * W - disc.cx) / disc.cols;
-      const y =
-        -(((e.clientY - rect.top) / rect.height) * H - disc.cy) / disc.rows;
-      const d2 = x * x + y * y;
-      if (d2 >= 1) return; // missed the globe
-      const z = Math.sqrt(1 - d2);
-      const cosT = Math.cos(tiltRef.current);
-      const sinT = Math.sin(tiltRef.current);
-      const markers = markersRef.current;
-      markers.push({
-        lat: Math.asin(clamp(y * cosT + z * sinT, -1, 1)),
-        lon: Math.atan2(x, z * cosT - y * sinT) + lonRef.current,
-        start: performance.now(),
+      burstsRef.current.push({
+        gx: ((e.clientX - rect.left) / rect.width) * W,
+        gy: ((e.clientY - rect.top) / rect.height) * H,
+        startTime: Date.now(),
+        seed: Math.floor(Math.random() * 1e6),
       });
-      if (markers.length > MAX_MARKERS) markers.shift();
     };
     div.addEventListener('mousedown', onMouseDown);
     return () => div.removeEventListener('mousedown', onMouseDown);
   }, [W, H]);
 
   // Build precomputed fillStyle strings from the --text-primary (globe) and
-  // --accent-color (atmosphere, markers) CSS variables. Reading the variables
+  // --accent-color (graticule, atmosphere) CSS variables. Reading the variables
   // directly is more reliable than getComputedStyle(canvas).color because
   // document.fonts.ready can fire before the stylesheet is parsed, which would
   // yield rgb(0,0,0) (invisible on dark background).
@@ -599,21 +509,15 @@ export const AsciiGlobe = () => {
     const tilt = tiltRef.current;
     buildFrame(geo, W, H, lon0, tilt, cellBufRef.current);
 
-    if (markersRef.current.length > 0) {
-      const now = performance.now();
-      markersRef.current = markersRef.current.filter((marker) =>
-        applyMarker(
-          geo,
-          W,
-          H,
-          lon0,
-          tilt,
-          marker,
-          (now - marker.start) / 1000,
-          cellBufRef.current
-        )
-      );
-    }
+    // Clicks burst the characters around them apart; several bursts stack.
+    burstsRef.current = applyClickShatter(
+      cellBufRef.current,
+      distBufRef.current,
+      W,
+      H,
+      burstsRef.current,
+      Date.now()
+    );
 
     const ctx = ctxRef.current;
     // Lazy fallback: if the palette wasn't built yet (CSS loaded after
@@ -708,5 +612,5 @@ const canvasStyle = {
   cursor: 'pointer',
 };
 
-// Reduced motion: click markers are disabled, so don't advertise them.
+// Reduced motion: the click burst is disabled, so don't advertise it.
 const canvasStyleStatic = { ...canvasStyle, cursor: 'default' };

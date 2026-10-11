@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { applyClickShatter } from './ascii-click-shatter';
 
 // Shading ramp from dark to bright
 const SHADE = ' .,-~:;=!*#$@';
@@ -7,8 +8,8 @@ const SHADE_MAX = SHADE.length - 1;
 // Cell values stored in the frame buffer: the low bits hold the shade index
 // (0 = empty, SHADE_MAX = brightest); TINT marks photon-ring cells, which are
 // drawn with the accent colour instead of the text colour.
+// ascii-click-shatter.js relies on this same encoding.
 const TINT = 16;
-const SHADE_MASK = TINT - 1;
 
 // Pre-computed opacity per shade level. Faint characters stay faint so the
 // outer disk dissolves into the background instead of ending on a hard edge.
@@ -251,162 +252,6 @@ function buildFrame(geo, W, H, t, cellBuf) {
   }
 }
 
-// Where the main black hole sits on the grid, in column/row units, and its
-// shadow radius in columns.
-function mainHole(W, H) {
-  const unit = W / 2 / HALF_W;
-  return {
-    cx: W / 2 - 0.5,
-    cy: H / 2 - 0.5 + (CENTER_Y * unit) / ASPECT,
-    shadow: SHADOW_R * unit,
-  };
-}
-
-const smoothstep = (a, b, x) => {
-  const k = Math.min(1, Math.max(0, (x - a) / (b - a)));
-  return k * k * (3 - 2 * k);
-};
-
-// Click effect: a small black hole forms at the click point and inspirals
-// into the main one, orbiting faster as it closes in (the orbit shrinks as
-// (1 - u)^¼, like a binary losing energy to gravitational waves). It is
-// swallowed by the shadow, and the merger rings the main hole down: a damped
-// ripple travelling out from its centre.
-// While it lives, each cell shows what a point lens would bend into it (the
-// source sits at d - E²/d from the hole, E being the Einstein radius, so the
-// inner images are flipped), twisted by frame dragging, and its centre is an
-// empty horizon ringed with accent-coloured light.
-// Returns false once the effect is over.
-// gx/gy are in grid-column/row units. Distances are computed in pixel-normalized
-// units (1 unit = charWidth) to keep the hole circular in pixel space.
-function applyClickBlackHole(cellBuf, distBuf, W, H, gx, gy, elapsed) {
-  const FORM = 0.25; // seconds to form
-  const EINSTEIN_R = 7; // Einstein radius, in column units
-  const HORIZON = 0.72; // horizon radius, as a fraction of the Einstein radius
-  const RING_SIGMA = 0.6; // photon ring thickness, in column units
-  const SWIRL = 1.6; // frame-dragging twist at the ring, in radians
-  const SQUASH = 0.45; // the orbit is tilted like the disk: flattened ellipse
-  const RINGDOWN = 1.6; // seconds of ripple after the merger
-
-  const main = mainHole(W, H);
-  // Orbit in "y up" pixel-normalized coordinates around the main hole.
-  const ox = gx - main.cx;
-  const oy = ((main.cy - gy) * ASPECT) / SQUASH;
-  const r0 = Math.max(0.001, Math.sqrt(ox * ox + oy * oy));
-  const theta0 = Math.atan2(oy, ox);
-  const inspiral = 1.6 + 0.08 * r0; // seconds until it would reach the centre
-  const omega0 = Math.min(3, 1.4 * Math.pow(12 / r0, 1.5)); // rad/s at r0
-  // Swallowed once it is half-way into the shadow.
-  const rGone = main.shadow * 0.5;
-  const tMerge = r0 > rGone ? inspiral * (1 - Math.pow(rGone / r0, 4)) : 0;
-
-  if (elapsed > tMerge + RINGDOWN) return false;
-
-  distBuf.set(cellBuf);
-
-  if (elapsed < tMerge) {
-    const u = Math.min(1, elapsed / inspiral);
-    const left = 1 - u;
-    const r = r0 * Math.pow(left, 0.25);
-    // Closed-form integral of omega0 * (r0 / r)^1.5 over time.
-    const theta =
-      theta0 + omega0 * inspiral * 1.6 * (1 - Math.pow(left, 0.625));
-    const hx = main.cx + r * Math.cos(theta);
-    const hy = main.cy - (r * Math.sin(theta) * SQUASH) / ASPECT;
-
-    const strength =
-      smoothstep(0, FORM, elapsed) * smoothstep(rGone, main.shadow * 1.2, r);
-    if (strength > 0) lensAround(cellBuf, distBuf, W, H, hx, hy, strength);
-    return true;
-  }
-
-  // Ringdown: a damped ripple from the main hole's centre.
-  const t = elapsed - tMerge;
-  const decay = Math.exp(-t / 0.45);
-  const front = main.shadow * 0.9 + t * 16;
-  for (let r = 0; r < H; r++) {
-    for (let c = 0; c < W; c++) {
-      const dx = c - main.cx;
-      const dy = (r - main.cy) * ASPECT;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 0.5) continue;
-      const phase = dist - front;
-      const envelope = Math.exp(-(phase * phase) / 8);
-      const disp = 2.5 * envelope * decay;
-      if (disp < 0.1) continue;
-      const srcC = Math.round(c - (dx / dist) * disp);
-      const srcR = Math.round(r - (dy / dist / ASPECT) * disp);
-      const cell = r * W + c;
-      if (srcC < 0 || srcC >= W || srcR < 0 || srcR >= H) {
-        cellBuf[cell] = 0;
-        continue;
-      }
-      const src = distBuf[srcR * W + srcC];
-      const boost = Math.round(5 * envelope * decay);
-      cellBuf[cell] =
-        src === 0
-          ? 0
-          : (src & TINT) | Math.min(SHADE_MAX, (src & SHADE_MASK) + boost);
-    }
-  }
-  return true;
-
-  // Point lens + frame-dragging twist around the small hole at (hx, hy).
-  function lensAround(out, src, W, H, hx, hy, strength) {
-    const e = EINSTEIN_R * strength;
-    const e2 = e * e;
-    const horizon = e * HORIZON;
-    // The twist keeps winding while the hole lives.
-    const twist = SWIRL * strength * (1 + elapsed * 0.8);
-    for (let r = 0; r < H; r++) {
-      for (let c = 0; c < W; c++) {
-        const dx = c - hx;
-        const dy = (r - hy) * ASPECT;
-        const d = Math.sqrt(dx * dx + dy * dy);
-        const cell = r * W + c;
-
-        // Far enough out, the deflection is under half a cell: leave as is.
-        if (e2 / Math.max(d, 0.001) < 0.4) continue;
-
-        if (d < horizon) {
-          out[cell] = 0;
-          continue;
-        }
-
-        const scale = (d - e2 / d) / d;
-        const k = Math.min(1, e / d);
-        const ang = twist * k * k;
-        const cos = Math.cos(ang);
-        const sin = Math.sin(ang);
-        const sx = (dx * cos - dy * sin) * scale;
-        const sy = (dx * sin + dy * cos) * scale;
-        const srcC = Math.round(hx + sx);
-        const srcR = Math.round(hy + sy / ASPECT);
-
-        let v = 0;
-        if (srcC >= 0 && srcC < W && srcR >= 0 && srcR < H) {
-          v = src[srcR * W + srcC];
-        }
-
-        // Light dims as it nears the horizon (gravitational redshift)...
-        let shade = v & SHADE_MASK;
-        if (shade > 0 && d < e) {
-          shade = Math.round(shade * ((d - horizon) / (e - horizon)));
-        }
-        v = shade > 0 ? (v & TINT) | shade : 0;
-
-        // ...and piles up in a bright accent ring around it.
-        const dr = (d - e) / RING_SIGMA;
-        const glow = strength * Math.exp(-dr * dr);
-        const ringShade = Math.round(glow * SHADE_MAX);
-        if (glow > 0.3) v = TINT | Math.max(ringShade, v & SHADE_MASK);
-
-        out[cell] = v;
-      }
-    }
-  }
-}
-
 // Render cellBuf directly onto a canvas context — zero string allocation per frame.
 // palette: precomputed fillStyle strings and glyphs per cell value (shade | TINT).
 function renderFrame(ctx, cellBuf, W, H, cw, lh, palette) {
@@ -443,8 +288,8 @@ export const AsciiBlackHole = () => {
   const boostRef = useRef(0);
   const mouseTravelRef = useRef(0);
   const rafRef = useRef(null);
-  // Live click black holes; each runs its own inspiral and ringdown.
-  const clickHolesRef = useRef([]);
+  // Live click bursts (see ascii-click-shatter.js).
+  const burstsRef = useRef([]);
   // Camera orbit phase: drives its elevation and roll.
   const cameraRef = useRef(0);
   // Mirror of `reducedMotion` for the native listeners, whose closures are
@@ -507,8 +352,8 @@ export const AsciiBlackHole = () => {
     return () => window.removeEventListener('mousemove', onMouseMove);
   }, []);
 
-  // Use native mousedown instead of React onClick so the click black hole
-  // starts on press, before the next animation frame is drawn.
+  // Use native mousedown instead of React onClick so the burst starts on
+  // press, before the next animation frame is drawn.
   useEffect(() => {
     const div = containerRef.current;
     if (!div) return;
@@ -518,7 +363,12 @@ export const AsciiBlackHole = () => {
       const rect = canvas.getBoundingClientRect();
       const gx = ((e.clientX - rect.left) / rect.width) * W;
       const gy = ((e.clientY - rect.top) / rect.height) * H;
-      clickHolesRef.current.push({ gx, gy, startTime: Date.now() });
+      burstsRef.current.push({
+        gx,
+        gy,
+        startTime: Date.now(),
+        seed: Math.floor(Math.random() * 1e6),
+      });
     };
     div.addEventListener('mousedown', onMouseDown);
     return () => div.removeEventListener('mousedown', onMouseDown);
@@ -629,18 +479,14 @@ export const AsciiBlackHole = () => {
     }
     buildFrame(geo, W, H, timeRef.current, cellBufRef.current);
 
-    // Clicks stack: each hole lenses what the previous ones already bent.
-    const now = Date.now();
-    clickHolesRef.current = clickHolesRef.current.filter((hole) =>
-      applyClickBlackHole(
-        cellBufRef.current,
-        distBufRef.current,
-        W,
-        H,
-        hole.gx,
-        hole.gy,
-        (now - hole.startTime) / 1000
-      )
+    // Clicks burst the characters around them apart; several bursts stack.
+    burstsRef.current = applyClickShatter(
+      cellBufRef.current,
+      distBufRef.current,
+      W,
+      H,
+      burstsRef.current,
+      Date.now()
     );
 
     const ctx = ctxRef.current;
@@ -720,5 +566,5 @@ const canvasStyle = {
   cursor: 'pointer',
 };
 
-// Reduced motion: the click black hole is disabled, so don't advertise it.
+// Reduced motion: the click burst is disabled, so don't advertise it.
 const canvasStyleStatic = { ...canvasStyle, cursor: 'default' };
