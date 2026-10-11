@@ -43,7 +43,7 @@ class BlogIndex extends React.Component {
                 style={{
                   fontFamily: '"Public Sans", sans-serif',
                   marginBottom: rhythm(0.8),
-                  color: 'var(--text-secondary, var(--text-primary))',
+                  color: 'var(--text-primary)',
                 }}
               >
                 Upvote what you'd like me to write about next.
