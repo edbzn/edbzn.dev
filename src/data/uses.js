@@ -1,18 +1,23 @@
 /**
  * Everything listed on /uses, grouped by category.
  *
- * Item shape: { name, url?, description? }
- * Category shape: { id, title, items }
+ * Item shape: { name, url?, description?, monogram? }
+ *   - `monogram` overrides the 1–2 letter badge derived from `name`.
+ *
+ * Category shape: { id, title, hue, items }
+ *   - `hue` (0–360) tints the monograms of that category.
  */
 export const usesCategories = [
   {
     id: 'editor',
     title: 'Editor',
+    hue: 212,
     items: [
       {
         name: 'VS Code',
         url: 'https://code.visualstudio.com',
         description: 'My daily driver for everything',
+        monogram: 'VS',
       },
       {
         name: 'Vim',
@@ -33,6 +38,7 @@ export const usesCategories = [
   {
     id: 'terminal',
     title: 'Terminal & Shell',
+    hue: 140,
     items: [
       {
         name: 'Warp',
@@ -53,20 +59,24 @@ export const usesCategories = [
         name: 'Powerlevel10k',
         url: 'https://github.com/romkatv/powerlevel10k',
         description: 'Fast and customizable Zsh prompt theme',
+        monogram: 'P10',
       },
       {
         name: 'zsh-syntax-highlighting',
         description: 'Syntax highlighting for Zsh commands',
+        monogram: 'SH',
       },
       {
         name: 'zsh-autosuggestions',
         description: 'Fish-like autosuggestions for Zsh',
+        monogram: 'AS',
       },
     ],
   },
   {
     id: 'cli',
     title: 'CLI Tools',
+    hue: 38,
     items: [
       {
         name: 'lsd',
@@ -82,6 +92,7 @@ export const usesCategories = [
         name: 'ripgrep',
         url: 'https://github.com/BurntSushi/ripgrep',
         description: 'Blazingly fast grep that respects .gitignore',
+        monogram: 'rg',
       },
       {
         name: 'fd',
@@ -97,11 +108,13 @@ export const usesCategories = [
         name: 'zoxide',
         url: 'https://github.com/ajeetdsouza/zoxide',
         description: 'Smarter cd that learns your habits',
+        monogram: 'z',
       },
       {
         name: 'delta',
         url: 'https://github.com/dandavison/delta',
         description: 'Syntax-highlighting pager for git diffs',
+        monogram: 'Δ',
       },
       {
         name: 'jq',
@@ -111,17 +124,20 @@ export const usesCategories = [
       {
         name: 'htop / btop',
         description: 'Interactive process viewers and resource monitors',
+        monogram: 'ht',
       },
       {
         name: 'GitHub CLI',
         url: 'https://cli.github.com',
         description: 'GitHub operations from the command line',
+        monogram: 'gh',
       },
     ],
   },
   {
     id: 'frontend',
     title: 'Frontend Frameworks',
+    hue: 278,
     items: [
       {
         name: 'Angular',
@@ -134,6 +150,7 @@ export const usesCategories = [
       {
         name: 'Vue.js',
         url: 'https://vuejs.org',
+        monogram: 'V',
       },
       {
         name: 'Qwik',
@@ -149,6 +166,7 @@ export const usesCategories = [
   {
     id: 'backend',
     title: 'Backend',
+    hue: 345,
     items: [
       {
         name: 'NestJS',
@@ -159,17 +177,20 @@ export const usesCategories = [
         name: 'Serverless Framework',
         url: 'https://www.serverless.com',
         description: 'Build and deploy serverless applications',
+        monogram: 'SLS',
       },
     ],
   },
   {
     id: 'languages',
     title: 'Languages & Tools',
+    hue: 188,
     items: [
       {
         name: 'TypeScript',
         url: 'https://www.typescriptlang.org',
         description: 'Primary language for everything',
+        monogram: 'TS',
       },
       {
         name: 'Python',
@@ -179,11 +200,13 @@ export const usesCategories = [
         name: 'Rust + Cargo',
         url: 'https://www.rust-lang.org',
         description: 'Systems programming language',
+        monogram: 'Rs',
       },
       {
         name: 'Node.js',
         url: 'https://nodejs.org',
         description: 'Managed with n for version switching',
+        monogram: 'N',
       },
       {
         name: 'Bun',
@@ -194,6 +217,7 @@ export const usesCategories = [
         name: 'pnpm',
         url: 'https://pnpm.io',
         description: 'Fast, disk space efficient package manager',
+        monogram: 'pn',
       },
       {
         name: 'Nx',
@@ -223,16 +247,19 @@ export const usesCategories = [
         name: 'Vitest',
         url: 'https://vitest.dev',
         description: 'Vite-native unit test framework',
+        monogram: 'Vt',
       },
       {
         name: 'Cypress',
         url: 'https://www.cypress.io',
         description: 'E2E and component testing',
+        monogram: 'Cy',
       },
       {
         name: 'Playwright',
         url: 'https://playwright.dev',
         description: 'Cross-browser end-to-end testing',
+        monogram: 'Pw',
       },
       {
         name: 'k6',
@@ -244,6 +271,7 @@ export const usesCategories = [
   {
     id: 'infrastructure',
     title: 'Infrastructure & Cloud',
+    hue: 18,
     items: [
       {
         name: 'Terraform',
@@ -269,6 +297,7 @@ export const usesCategories = [
         name: 'Kubernetes',
         url: 'https://kubernetes.io',
         description: 'Container orchestration',
+        monogram: 'K8s',
       },
       {
         name: 'Ansible',
@@ -280,6 +309,7 @@ export const usesCategories = [
   {
     id: 'ai',
     title: 'AI',
+    hue: 255,
     items: [
       {
         name: 'GitHub Copilot',
@@ -290,27 +320,32 @@ export const usesCategories = [
         name: 'Claude CLI + Desktop',
         url: 'https://claude.ai',
         description: 'Anthropic Claude AI assistant',
+        monogram: 'Cl',
       },
       {
         name: 'ChatGPT Desktop',
         url: 'https://chat.openai.com',
         description: 'OpenAI ChatGPT desktop application',
+        monogram: 'GPT',
       },
     ],
   },
   {
     id: 'services',
     title: 'Services',
+    hue: 165,
     items: [
       {
         name: 'GitHub',
         url: 'https://github.com',
         description: 'Code hosting, CI/CD, and project management',
+        monogram: 'GH',
       },
       {
         name: 'Cloudflare',
         url: 'https://cloudflare.com',
         description: 'Workers, KV, and DNS',
+        monogram: 'CF',
       },
       {
         name: 'New Relic',
@@ -321,12 +356,14 @@ export const usesCategories = [
         name: 'MongoDB Compass + mongosh',
         url: 'https://www.mongodb.com/products/compass',
         description: 'GUI and CLI for MongoDB',
+        monogram: 'MDB',
       },
     ],
   },
   {
     id: 'os',
     title: 'Operating System & Desktop',
+    hue: 305,
     items: [
       {
         name: 'Linux',
@@ -355,6 +392,7 @@ export const usesCategories = [
   {
     id: 'media',
     title: 'Media & Communication',
+    hue: 62,
     items: [
       {
         name: 'OBS Studio',
@@ -365,6 +403,7 @@ export const usesCategories = [
         name: 'Kdenlive',
         url: 'https://kdenlive.org',
         description: 'Video editing',
+        monogram: 'Kd',
       },
       {
         name: 'GIMP',

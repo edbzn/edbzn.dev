@@ -1,6 +1,24 @@
-/* One block per category: small heading, then a grid of name / description cards */
+.root {
+  font-family: 'Public Sans', sans-serif;
+  /* Short card text reads better unhyphenated (layout.js sets auto). */
+  hyphens: manual;
+}
+
+/* Per-category tint. `--hue` is set inline on each group, so the derived
+   colours are declared there (a custom property's var() resolves on the
+   element that declares it). They flip for the dark themes below. */
 .group {
+  --tint-bg: hsl(var(--hue, 210) 70% 50% / 0.12);
+  --tint-fg: hsl(var(--hue, 210) 65% 32%);
+  --tint-border: hsl(var(--hue, 210) 60% 45% / 0.35);
   margin-bottom: 2rem;
+}
+
+:global(:root[data-theme='dark']) .group,
+:global(:root[data-theme='abyss']) .group {
+  --tint-bg: hsl(var(--hue, 210) 70% 60% / 0.14);
+  --tint-fg: hsl(var(--hue, 210) 85% 76%);
+  --tint-border: hsl(var(--hue, 210) 70% 65% / 0.35);
 }
 
 .groupTitle {
@@ -22,45 +40,72 @@
   list-style: none;
 }
 
-.cell {
-  display: flex;
-  margin: 0;
-}
-
+/* Monogram on the left; name, description and link stacked on the right */
 .card {
   display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 0.2rem;
-  padding: 0.7rem 0.85rem;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0.75rem 0.85rem;
   border: 1px solid var(--border-color);
   border-radius: 6px;
   background-color: var(--bg-primary);
-  font-family: 'Public Sans', sans-serif;
-  color: var(--text-primary);
-  hyphens: manual;
 }
 
-.cardLink {
-  text-decoration: none;
-  box-shadow: none;
+.monogram {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 7px;
+  font-family: 'Space Grotesk', 'Public Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--tint-fg);
+  background: var(--tint-bg);
+  box-shadow: inset 0 0 0 1px var(--tint-border);
+  white-space: nowrap;
 }
 
-.cardLink:hover {
-  border-color: var(--accent-color);
-}
-
-.cardLink:hover .name {
-  color: var(--accent-color);
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
 }
 
 .name {
   font-size: 0.95rem;
   font-weight: 400;
+  color: var(--text-primary);
 }
 
 .description {
   font-size: 0.8rem;
   line-height: 1.45;
   color: var(--text-secondary);
+}
+
+.link {
+  display: flex;
+  gap: 0.25rem;
+  min-width: 0;
+  margin-top: 0.2rem;
+  font-size: 0.75rem;
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+/* Long paths are cut, the arrow stays visible */
+.host {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.link:hover {
+  text-decoration: underline;
 }
