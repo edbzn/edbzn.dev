@@ -214,7 +214,7 @@
 }
 
 .toggle:hover {
-  color: var(--text-primary);
+  color: var(--accent-color);
 }
 
 .chevron {

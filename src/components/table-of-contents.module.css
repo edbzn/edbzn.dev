@@ -230,7 +230,7 @@
   }
 
   .toc-link:hover {
-    color: var(--text-primary);
+    color: var(--accent-color);
   }
 
   .toc-link:focus-visible {

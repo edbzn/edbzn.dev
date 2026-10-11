@@ -52,13 +52,12 @@ class AboutMe extends React.Component {
           <PostTitleList nodes={blogPosts} />
           <Link
             to="/blog"
+            className="text-link text-link--muted"
             style={{
               display: 'inline-block',
               marginTop: rhythm(0.8),
               fontFamily: '"Public Sans", sans-serif',
               fontSize: '0.85rem',
-              color: 'var(--text-muted)',
-              boxShadow: 'none',
             }}
           >
             All posts →

@@ -14,8 +14,10 @@ wordpress2016.overrideThemeStyles = ({ rhythm }) => {
     'h2,h3,h4,h5,h6': {
       color: 'var(--text-primary)',
     },
+    // Text colour with an accent underline; turns accent on hover (main.css)
     a: {
-      color: 'var(--link-color)',
+      color: 'var(--text-primary)',
+      boxShadow: '0 1px 0 0 var(--link-color)',
     },
     'a.gatsby-resp-image-link': {
       boxShadow: `none`,
@@ -53,6 +55,15 @@ wordpress2016.overrideThemeStyles = ({ rhythm }) => {
 };
 
 delete wordpress2016.googleFonts;
+
+// The theme removes the link underline on hover; links instead keep their
+// underline and turn to the accent colour (see "Text links" in main.css).
+const themeOverrideStyles = wordpress2016.overrideStyles;
+wordpress2016.overrideStyles = (...args) => {
+  const styles = themeOverrideStyles(...args);
+  delete styles['a:hover,a:active'];
+  return styles;
+};
 
 const typography = new Typography({
   ...wordpress2016,

@@ -182,7 +182,7 @@ class Layout extends React.Component {
           >
             <a
               href="https://creativecommons.org/licenses/by-sa/4.0"
-              style={{ boxShadow: 'none', color: 'var(--text-color)' }}
+              className="text-link"
             >
               CC BY-SA 4.0
             </a>
@@ -190,26 +190,17 @@ class Layout extends React.Component {
             {new Date().getFullYear()}&nbsp;&copy;&nbsp;{author} ·{' '}
             <a
               href={github.repositoryUrl}
-              style={{
-                boxShadow: 'none',
-                color: 'var(--text-color)',
-              }}
+              className="text-link"
               title="Source code on GitHub"
             >
               SHA {github.commitSha ? github.commitSha.slice(0, 16) : 'source'}
             </a>{' '}
             ·{' '}
-            <a
-              href={github.sponsorUrl}
-              style={{ boxShadow: 'none', color: 'var(--text-color)' }}
-            >
+            <a href={github.sponsorUrl} className="text-link">
               Sponsor Me on GitHub
             </a>{' '}
             ·{' '}
-            <a
-              href="/rss.xml"
-              style={{ boxShadow: 'none', color: 'var(--text-color)' }}
-            >
+            <a href="/rss.xml" className="text-link">
               <img
                 src={rss}
                 alt="RSS feed icon"

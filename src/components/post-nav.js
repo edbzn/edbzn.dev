@@ -39,8 +39,8 @@ export const PostNav = ({ previous, next, relatedPosts }) => {
           <li key={post.id || post.fields.slug}>
             <Link
               to={post.fields.slug}
+              className="text-link text-link--underline"
               style={{
-                color: 'inherit',
                 fontWeight: '900',
                 marginTop: index > 0 ? rhythm(0.6) : 0,
               }}
