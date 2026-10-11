@@ -85,7 +85,11 @@ const BlogPostTemplate = (props) => {
 
   const post = props.data.mdx;
   const { author, github } = props.data.site.siteMetadata;
-  const { previous, next, relatedPosts } = props.pageContext;
+  const { previous, next, relatedPosts, slug } = props.pageContext;
+  // Giscus discussions are titled after the post's original path (before
+  // posts moved under /blog), e.g. "nobuild-angular/". Look them up by that
+  // term rather than the current pathname so existing comments still match.
+  const commentsTerm = slug.replace(/^\/blog\//, '');
   const { location, children } = props;
 
   return (
@@ -160,7 +164,8 @@ const BlogPostTemplate = (props) => {
           repoId="MDEwOlJlcG9zaXRvcnk5OTQ4MDU0Mw=="
           category="Comments"
           categoryId="DIC_kwDOBe3z384CkeQh"
-          mapping="pathname"
+          mapping="specific"
+          term={commentsTerm}
           strict="0"
           reactionsEnabled="0"
           emitMetadata="0"
