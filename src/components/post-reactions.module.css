@@ -18,10 +18,8 @@
   font-family: inherit;
   font-size: 0.95rem;
   cursor: pointer;
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    transform 0.05s ease;
+  /* Hover colours apply instantly; only the press nudge animates */
+  transition: transform 0.05s ease;
 }
 
 .reaction:hover:not(:disabled) {

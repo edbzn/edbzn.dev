@@ -119,7 +119,6 @@
   color: var(--text-primary);
   text-decoration: none;
   box-shadow: none;
-  transition: color 0.2s ease;
 }
 
 .toc-link:hover {
@@ -255,8 +254,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .toc-chevron,
-  .toc-content,
-  .toc-link {
+  .toc-content {
     transition: none;
   }
 }

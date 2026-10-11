@@ -368,13 +368,6 @@ body::before {
    article links, post nav) and .text-link turn to the accent colour; an
    underline, when the link has one, follows the text colour. Components
    with their own link styling (nav, tags, cards) handle hover themselves. */
-a:not([class]),
-.text-link {
-  transition:
-    color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
 .text-link {
   color: inherit;
   box-shadow: none;
@@ -395,11 +388,17 @@ a:not([class]):focus-visible,
   color: var(--accent-color);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  a:not([class]),
-  .text-link {
-    transition: none;
-  }
+/* Inside blog posts, links stay blue; since the colour can't change on
+   hover, the faint underline turns solid instead. */
+.post-content a:not([class]) {
+  color: var(--link-color);
+  box-shadow: 0 1px 0 0 color-mix(in srgb, var(--link-color) 40%, transparent);
+}
+
+.post-content a:not([class]):hover,
+.post-content a:not([class]):focus-visible {
+  color: var(--link-color);
+  box-shadow: 0 1px 0 0 var(--link-color);
 }
 
 li {
@@ -450,7 +449,6 @@ details {
     var(--box-shadow-light) 0px 4px 16px,
     var(--box-shadow-light) 0px 8px 32px;
   z-index: -1;
-  transition: box-shadow 0.2s ease;
   border-radius: 4px;
 }
 
@@ -625,20 +623,10 @@ p > img {
   background: var(--border-color);
 }
 
-/* On article pages the indicator stays on Blog; other links fade in their own highlight. */
-.site-nav-links--crumb .site-nav-link:not([data-active]) {
-  transition: background-color 0.15s ease;
-}
-
+/* On article pages the indicator stays on Blog; other links get their own highlight. */
 .site-nav-links--crumb .site-nav-link:not([data-active]):hover,
 .site-nav-links--crumb .site-nav-link:not([data-active]):focus-visible {
   background: var(--nav-active-bg);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .site-nav-links--crumb .site-nav-link:not([data-active]) {
-    transition: none;
-  }
 }
 
 /* Article breadcrumb: Blog › <post title> */

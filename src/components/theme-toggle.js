@@ -50,7 +50,6 @@ export const ThemeToggle = () => {
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: '4px',
-        transition: 'background-color 0.2s ease',
         color: 'var(--text-primary)',
         lineHeight: 0,
         height: '28px',

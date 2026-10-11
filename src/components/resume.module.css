@@ -154,7 +154,6 @@
   text-decoration: none;
   box-shadow: none;
   border-bottom: 1px solid transparent;
-  transition: border-color 0.2s ease;
 }
 
 .companyLink:hover {
@@ -210,7 +209,6 @@
   font-family: '"Public Sans"', sans-serif;
   cursor: pointer;
   color: var(--text-muted);
-  transition: color 0.2s ease;
 }
 
 .toggle:hover {
