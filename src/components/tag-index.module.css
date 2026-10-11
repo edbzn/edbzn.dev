@@ -118,7 +118,6 @@
     margin: -1.25rem;
     padding: 1.25rem;
     overflow-y: auto;
-    overscroll-behavior: contain;
     scrollbar-width: thin;
     scrollbar-color: var(--border-color) transparent;
   }
