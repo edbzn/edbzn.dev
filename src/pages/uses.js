@@ -40,24 +40,10 @@ const itemNameStyle = {
   fontWeight: '400',
 };
 
-const linkStyle = {
-  color: 'var(--link-color)',
-  boxShadow: 'none',
-  textDecoration: 'none',
-};
-
 function UsesItem({ name, url, description }) {
   return (
     <li style={itemStyle}>
-      <span style={itemNameStyle}>
-        {url ? (
-          <a href={url} style={linkStyle}>
-            {name}
-          </a>
-        ) : (
-          name
-        )}
-      </span>
+      <span style={itemNameStyle}>{url ? <a href={url}>{name}</a> : name}</span>
       {description && <> — {description}</>}
     </li>
   );
@@ -462,11 +448,7 @@ class UsesPage extends React.Component {
             }}
           >
             Tools, software, and hardware I use daily for development. Inspired
-            by{' '}
-            <a href="https://uses.tech" style={linkStyle}>
-              uses.tech
-            </a>
-            .
+            by <a href="https://uses.tech">uses.tech</a>.
           </p>
 
           {Object.values(uses).map((category) => (

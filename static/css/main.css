@@ -364,6 +364,44 @@ body::before {
   fill: var(--text-primary);
 }
 
+/* Text links: one hover style across the site. Unstyled links (post and
+   article links, post nav) and .text-link turn to the accent colour; an
+   underline, when the link has one, follows the text colour. Components
+   with their own link styling (nav, tags, cards) handle hover themselves. */
+a:not([class]),
+.text-link {
+  transition:
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.text-link {
+  color: inherit;
+  box-shadow: none;
+}
+
+.text-link--muted {
+  color: var(--text-muted);
+}
+
+.text-link--underline {
+  box-shadow: 0 1px 0 0 var(--link-color);
+}
+
+a:not([class]):hover,
+a:not([class]):focus-visible,
+.text-link:hover,
+.text-link:focus-visible {
+  color: var(--accent-color);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a:not([class]),
+  .text-link {
+    transition: none;
+  }
+}
+
 li {
   margin-bottom: 0;
 }
