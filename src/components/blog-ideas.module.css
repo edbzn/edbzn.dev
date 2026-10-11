@@ -13,7 +13,7 @@
   gap: 0.85rem;
   align-items: center;
   padding: 0.6rem 0.75rem;
-  border: 1px solid var(--note-border);
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   background: transparent;
 }
@@ -27,7 +27,7 @@
   width: 100%;
   padding: 0.35rem 0;
   margin: 0;
-  border: 1px solid var(--note-border);
+  border: 1px solid color-mix(in srgb, var(--text-muted) 45%, transparent);
   border-radius: 6px;
   background: transparent;
   color: var(--text-primary);
@@ -117,4 +117,5 @@
   margin-top: 0.15rem;
   font-size: 0.9rem;
   color: var(--text-secondary, var(--text-primary));
+  hyphens: manual;
 }
