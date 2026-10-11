@@ -4,7 +4,7 @@ import rss from '../../static/icons/rss.svg';
 import { rhythm } from '../utils/typography';
 import { ThemeToggle } from './theme-toggle';
 import { NavLinks } from './nav-links';
-import { AsciiSphere } from './ascii-sphere';
+import { AsciiBlackHole } from './ascii-black-hole';
 import { LogoProximityTrigger } from './logo-proximity-trigger';
 
 class Layout extends React.Component {
@@ -168,7 +168,7 @@ class Layout extends React.Component {
         </header>
         <main style={{ marginTop: rhythm(2) }}>{children}</main>
         <div style={{ marginTop: rhythm(2) }}>
-          <AsciiSphere />
+          <AsciiBlackHole />
         </div>
         <footer
           role="contentinfo"
