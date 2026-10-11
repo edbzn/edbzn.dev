@@ -88,7 +88,8 @@ function hslToRgb(h, s, l) {
 function createGeometry(W, H) {
   const n = W * H;
   return {
-    built: false,
+    incl: NaN, // camera the geometry was traced for
+    roll: NaN,
     r: new Float32Array(n), // disk radius seen by the cell
     phi: new Float32Array(n), // disk azimuth seen by the cell
     omega: new Float32Array(n), // Keplerian angular velocity at that radius
@@ -132,12 +133,14 @@ function lensFar(x, y, rho, incl, inclFar, out) {
   return w * Math.pow(DISK_IN / Math.sqrt(X * X + Z * Z), FAR_FALLOFF);
 }
 
-// Ray-trace (cheaply) every sub-sample once and average them per cell.
-// Everything here is static, so it runs once; only the disk turbulence
-// changes per frame, so the frame loop just evaluates a few sines per lit cell.
-function buildGeometry(geo, W, H) {
-  const incl = INCL;
-  const inclFar = INCL_FAR;
+// Ray-trace (cheaply) every sub-sample and average them per cell, for a
+// camera at elevation `incl` (sine of the angle above the disk plane) rolled
+// by `roll` radians. The disk turbulence is shaded separately per frame.
+function buildGeometry(geo, W, H, incl, roll) {
+  // Seen from higher up, the lensed far side wraps the shadow even more.
+  const inclFar = INCL_FAR + (incl - INCL) * 1.5;
+  const cr = Math.cos(roll);
+  const sr = Math.sin(roll);
   const unit = W / 2 / HALF_W; // columns per shadow radius
   const hit = { X: 0, Z: 0 };
   const under = { X: 0, Z: 0 };
@@ -153,9 +156,12 @@ function buildGeometry(geo, W, H) {
       let sinSum = 0;
       let omegaSum = 0;
       for (let j = 0; j < SY; j++) {
-        const y = (-(row + (j + 0.5) / SY - H / 2) * ASPECT) / unit + CENTER_Y;
+        const y0 = (-(row + (j + 0.5) / SY - H / 2) * ASPECT) / unit + CENTER_Y;
         for (let i = 0; i < SX; i++) {
-          const x = (col + (i + 0.5) / SX - W / 2) / unit;
+          const x0 = (col + (i + 0.5) / SX - W / 2) / unit;
+          // Camera roll: turn the view around the hole.
+          const x = x0 * cr + y0 * sr;
+          const y = y0 * cr - x0 * sr;
           const rho = Math.sqrt(x * x + y * y);
           let w = 0;
           let ring = 0;
@@ -213,7 +219,8 @@ function buildGeometry(geo, W, H) {
       }
     }
   }
-  geo.built = true;
+  geo.incl = incl;
+  geo.roll = roll;
 }
 
 // Shade every cell for time t: the disk turns differentially (inner orbits
@@ -436,7 +443,10 @@ export const AsciiBlackHole = () => {
   const boostRef = useRef(0);
   const mouseTravelRef = useRef(0);
   const rafRef = useRef(null);
-  const clickHoleRef = useRef(null);
+  // Live click black holes; each runs its own inspiral and ringdown.
+  const clickHolesRef = useRef([]);
+  // Camera orbit phase: drives its elevation and roll.
+  const cameraRef = useRef(0);
   // Mirror of `reducedMotion` for the native listeners, whose closures are
   // created once and would otherwise capture a stale value.
   const reducedMotionRef = useRef(false);
@@ -508,7 +518,7 @@ export const AsciiBlackHole = () => {
       const rect = canvas.getBoundingClientRect();
       const gx = ((e.clientX - rect.left) / rect.width) * W;
       const gy = ((e.clientY - rect.top) / rect.height) * H;
-      clickHoleRef.current = { gx, gy, startTime: Date.now() };
+      clickHolesRef.current.push({ gx, gy, startTime: Date.now() });
     };
     div.addEventListener('mousedown', onMouseDown);
     return () => div.removeEventListener('mousedown', onMouseDown);
@@ -604,22 +614,34 @@ export const AsciiBlackHole = () => {
   // reduced-motion path.
   const drawFrame = useCallback(() => {
     const geo = geometryRef.current;
-    if (!geo.built) buildGeometry(geo, W, H);
+    // The camera slowly bobs above/below its mean height over the disk
+    // and rolls a little, so the view keeps changing; reduced motion keeps
+    // it still. Re-traced only when it has actually moved.
+    const phase = cameraRef.current;
+    const incl = INCL + 0.11 * Math.sin(phase) + 0.05;
+    const roll = 0.14 * Math.sin(phase * 0.63 + 1.1);
+    if (
+      Math.abs(geo.incl - incl) > 1e-4 ||
+      Math.abs(geo.roll - roll) > 1e-4 ||
+      isNaN(geo.incl)
+    ) {
+      buildGeometry(geo, W, H, incl, roll);
+    }
     buildFrame(geo, W, H, timeRef.current, cellBufRef.current);
 
-    if (clickHoleRef.current) {
-      const elapsed = (Date.now() - clickHoleRef.current.startTime) / 1000;
-      const active = applyClickBlackHole(
+    // Clicks stack: each hole lenses what the previous ones already bent.
+    const now = Date.now();
+    clickHolesRef.current = clickHolesRef.current.filter((hole) =>
+      applyClickBlackHole(
         cellBufRef.current,
         distBufRef.current,
         W,
         H,
-        clickHoleRef.current.gx,
-        clickHoleRef.current.gy,
-        elapsed
-      );
-      if (!active) clickHoleRef.current = null;
-    }
+        hole.gx,
+        hole.gy,
+        (now - hole.startTime) / 1000
+      )
+    );
 
     const ctx = ctxRef.current;
     // Lazy fallback: if the palette wasn't built yet (CSS loaded after
@@ -636,7 +658,7 @@ export const AsciiBlackHole = () => {
   const animate = useCallback(() => {
     // Mouse movement spins the disk up; the extra speed then winds down
     // smoothly. Speeding up time keeps the differential rotation (inner
-    // orbits faster), and the geometry never needs re-tracing.
+    // orbits faster).
     boostRef.current = Math.min(
       5,
       boostRef.current * 0.97 + mouseTravelRef.current * 6
@@ -644,6 +666,8 @@ export const AsciiBlackHole = () => {
     mouseTravelRef.current = 0;
     drawFrame();
     timeRef.current += 0.03 * (1 + boostRef.current);
+    // One camera bob every ~20s, a bit quicker while the disk is spun up.
+    cameraRef.current += 0.005 * (1 + boostRef.current * 0.3);
     rafRef.current = requestAnimationFrame(animate);
   }, [drawFrame]);
 
