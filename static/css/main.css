@@ -132,8 +132,8 @@
 /* Abyss theme - inspired by VS Code Abyss */
 :root[data-theme='abyss'] {
   /* Deep petrol blue drifting to dark teal-green */
-  --bg-primary: #000b128c;
-  --bg-secondary: #011018;
+  --bg-primary: #00090f8c;
+  --bg-secondary: #010d14;
   --text-primary: #a9c5da;
   --text-secondary: rgba(176, 201, 218, 0.75);
   --text-muted: rgba(142, 176, 200, 0.78);
@@ -145,7 +145,7 @@
   --code-text: #8db6cf;
   --link-color: #2b97d0;
   --blockquote-color: rgba(102, 162, 196, 0.9);
-  --highlight-bg: rgba(1, 16, 26, 0.95);
+  --highlight-bg: rgba(1, 13, 21, 0.95);
   --highlight-border: rgba(43, 151, 208, 0.25);
   --tag-bg: rgba(102, 158, 192, 0.1);
   --tag-text: #8db6cf;
@@ -164,23 +164,23 @@
 
   /* --bg-primary is translucent here: the visible colour comes from the
      fixed gradient on body::after under the noise layer. */
-  --header-bg: #0d1a24;
+  --header-bg: #09141d;
 
   /* Nav pill */
   --nav-pill-bg: rgba(102, 158, 192, 0.08);
   --nav-active-bg: rgba(102, 158, 192, 0.15);
 
-  --site-bg-noise-opacity: 0.15;
+  --site-bg-noise-opacity: 0.1;
   /* Two drifting glows, blue and teal-green (animated on body::after) */
   --site-bg-wash:
     radial-gradient(
       45% 40% at 25% 20%,
-      rgba(34, 130, 200, 0.15),
+      rgba(34, 130, 200, 0.13),
       transparent 70%
     ),
     radial-gradient(
       45% 40% at 75% 70%,
-      rgba(20, 150, 150, 0.12),
+      rgba(20, 150, 150, 0.1),
       transparent 70%
     );
 
@@ -217,7 +217,7 @@ body::after {
 :root[data-theme='abyss'] body::after {
   background-image:
     var(--site-bg-wash),
-    linear-gradient(180deg, #000a12 0%, #01121c 45%, #011318 100%);
+    linear-gradient(180deg, #00080f 0%, #010e16 45%, #010f13 100%);
   background-size: 100% 100%;
   background-position: 0 0;
   opacity: 1;
@@ -345,7 +345,7 @@ body::before {
 }
 
 :root[data-theme='abyss'] .logo-inner path[fill='rgb(255,255,255)'] {
-  fill: #000a12 !important;
+  fill: #00080f !important;
 }
 
 :root[data-theme='dark'] .logo-inner polygon[fill='rgb(23,23,23)'] {
