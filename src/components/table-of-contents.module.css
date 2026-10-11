@@ -186,7 +186,6 @@
     margin: 0;
     padding: 2px;
     overflow-y: auto;
-    overscroll-behavior: contain;
     opacity: 1;
     visibility: visible;
     scrollbar-width: thin;
