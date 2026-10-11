@@ -14,7 +14,7 @@
 
 .year {
   font-size: 0.8rem;
-  font-weight: 200;
+  font-weight: 400;
   font-variant-numeric: tabular-nums;
   color: var(--text-muted);
 }
@@ -53,7 +53,7 @@
   flex-shrink: 0;
   width: 3.25rem;
   font-size: 0.8rem;
-  font-weight: 200;
+  font-weight: 400;
   font-variant-numeric: tabular-nums;
   color: var(--text-muted);
   white-space: nowrap;

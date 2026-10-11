@@ -34,7 +34,7 @@ class BlogIndex extends React.Component {
                   marginBottom: rhythm(1.4),
                   fontFamily: '"Public Sans", sans-serif',
                   textTransform: 'uppercase',
-                  fontWeight: '100',
+                  fontWeight: '300',
                 }}
               >
                 Blog ideas
@@ -57,7 +57,7 @@ class BlogIndex extends React.Component {
                 marginBottom: rhythm(1.4),
                 fontFamily: '"Public Sans", sans-serif',
                 textTransform: 'uppercase',
-                fontWeight: '100',
+                fontWeight: '300',
               }}
             >
               {tag ? `#${tag}` : 'All posts'}
