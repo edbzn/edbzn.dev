@@ -2,8 +2,7 @@
  * Build-time generator for dynamic social preview images (OpenGraph / Twitter).
  *
  * Renders a 1200×630 PNG for every page based on its title, description
- * and optional tags, styled to match the website's "abyss" theme so the
- * social cards feel consistent with the site's dark identity.
+ * and optional tags, styled to match the website's light theme.
  *
  * Invoked from `gatsby-node.js`'s `onPostBuild` hook.
  */
@@ -17,18 +16,18 @@ const { LOGO_SVG } = require('./og-logo');
 
 const WIDTH = 1200;
 const HEIGHT = 630;
+const PADDING = 72;
 
-// Abyss palette — kept in sync with static/css/main.css `[data-theme='abyss']`.
-const ABYSS = {
-  bgTop: '#000c18',
-  bgMid: '#050a30',
-  bgBottom: '#060621',
-  accent: '#ffffff',
-  text: '#ffffff',
-  textStrong: '#e6ecf8',
-  textMuted: 'rgba(141, 166, 216, 0.75)',
-  border: 'rgba(89, 111, 153, 0.35)',
-  tagBg: 'rgba(102, 136, 204, 0.1)',
+// Light palette — kept in sync with static/css/main.css `:root`.
+const LIGHT = {
+  bg: '#ffffff',
+  bgBottom: '#f6f5f5',
+  accent: '#007acc',
+  text: 'rgba(0, 0, 0, 0.9)',
+  textStrong: '#111111',
+  textMuted: 'rgba(0, 0, 0, 0.6)',
+  border: 'rgba(0, 0, 0, 0.1)',
+  tagBg: 'rgb(241, 241, 241)',
 };
 
 const FONTSOURCE_DIR = path.join(
@@ -114,7 +113,11 @@ const LOGO_DATA_URL = `data:image/svg+xml;base64,${Buffer.from(LOGO_SVG).toStrin
 
 function truncate(text, max) {
   if (!text) return '';
-  return text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text;
+  if (text.length <= max) return text;
+  // Cut at the last whole word, without a trailing comma or colon.
+  const cut = text.slice(0, max - 1);
+  const word = cut.slice(0, cut.lastIndexOf(' ')) || cut;
+  return `${word.replace(/[\s,;:]+$/, '')}…`;
 }
 
 function template({ title, description, tags, kind }) {
@@ -126,20 +129,22 @@ function template({ title, description, tags, kind }) {
     type: 'div',
     props: {
       style: {
-        width: '100%',
-        height: '100%',
+        // Satori adds the padding to width and height (content-box), so size
+        // the content box explicitly to keep the card at WIDTH × HEIGHT.
+        width: WIDTH - 2 * PADDING,
+        height: HEIGHT - 2 * PADDING,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        padding: '72px',
+        padding: PADDING,
         fontFamily: 'Merriweather',
-        color: ABYSS.text,
-        // Layered background mimicking the site's abyss body:
-        // a radial accent wash over a vertical abyss gradient.
-        backgroundColor: ABYSS.bgTop,
+        color: LIGHT.text,
+        // The site's light page: white fading to its off-white background,
+        // with a faint accent wash.
+        backgroundColor: LIGHT.bg,
         backgroundImage: [
-          'radial-gradient(120% 80% at 30% 20%, rgba(34, 119, 255, 0.18), transparent 70%)',
-          `linear-gradient(180deg, ${ABYSS.bgTop} 0%, ${ABYSS.bgMid} 40%, ${ABYSS.bgBottom} 100%)`,
+          'radial-gradient(120% 80% at 30% 20%, rgba(0, 122, 204, 0.06), transparent 70%)',
+          `linear-gradient(180deg, ${LIGHT.bg} 0%, ${LIGHT.bgBottom} 100%)`,
         ].join(', '),
       },
       children: [
@@ -171,7 +176,7 @@ function template({ title, description, tags, kind }) {
                     fontWeight: 700,
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
-                    color: ABYSS.accent,
+                    color: LIGHT.accent,
                   },
                   children: label,
                 },
@@ -196,11 +201,11 @@ function template({ title, description, tags, kind }) {
                   style: {
                     display: 'flex',
                     fontFamily: 'Public Sans',
-                    fontSize: safeTitle.length > 70 ? 58 : 70,
+                    fontSize: safeTitle.length > 70 ? 50 : 60,
                     fontWeight: 800,
                     lineHeight: 1.12,
                     letterSpacing: '-0.02em',
-                    color: ABYSS.textStrong,
+                    color: LIGHT.textStrong,
                   },
                   children: safeTitle,
                 },
@@ -215,7 +220,7 @@ function template({ title, description, tags, kind }) {
                         fontSize: 28,
                         lineHeight: 1.5,
                         fontWeight: 400,
-                        color: ABYSS.textMuted,
+                        color: LIGHT.textMuted,
                       },
                       children: safeDescription,
                     },
@@ -233,7 +238,7 @@ function template({ title, description, tags, kind }) {
               justifyContent: 'space-between',
               alignItems: 'center',
               paddingTop: 24,
-              borderTop: `1px solid ${ABYSS.border}`,
+              borderTop: `1px solid ${LIGHT.border}`,
               fontFamily: 'Public Sans, sans-serif',
             },
             children: [
@@ -254,10 +259,10 @@ function template({ title, description, tags, kind }) {
                         fontFamily: 'Public Sans',
                         fontSize: 22,
                         fontWeight: 600,
-                        color: ABYSS.text,
-                        backgroundColor: ABYSS.tagBg,
+                        color: LIGHT.text,
+                        backgroundColor: LIGHT.tagBg,
                         padding: '6px 16px',
-                        border: `1px solid ${ABYSS.border}`,
+                        border: `1px solid ${LIGHT.border}`,
                         borderRadius: 999,
                       },
                       children: `#${tag}`,
@@ -274,7 +279,7 @@ function template({ title, description, tags, kind }) {
                     fontFamily: 'Public Sans',
                     fontSize: 26,
                     fontWeight: 700,
-                    color: ABYSS.text,
+                    color: LIGHT.text,
                   },
                   children: 'Edouard Bozon · edbzn.dev',
                 },
