@@ -1,0 +1,83 @@
+[
+  {
+    "size": 12,
+    "variant": "baseline",
+    "parallel": 8,
+    "target": null,
+    "biggest": 506.5,
+    "work": 140.8,
+    "wall": 507.2
+  },
+  {
+    "size": 12,
+    "variant": "atomized",
+    "parallel": 8,
+    "target": null,
+    "biggest": 53.7,
+    "work": 179.4,
+    "wall": 211.3
+  },
+  {
+    "size": 12,
+    "variant": "sharded",
+    "parallel": 8,
+    "target": 10,
+    "biggest": 81.6,
+    "work": 149.1,
+    "wall": 171.4
+  },
+  {
+    "size": 50,
+    "variant": "baseline",
+    "parallel": 8,
+    "target": null,
+    "biggest": 1203.1,
+    "work": 480.5,
+    "wall": 1241
+  },
+  {
+    "size": 50,
+    "variant": "atomized",
+    "parallel": 8,
+    "target": null,
+    "biggest": 66.2,
+    "work": 638.5,
+    "wall": 650.6
+  },
+  {
+    "size": 50,
+    "variant": "sharded",
+    "parallel": 8,
+    "target": 10,
+    "biggest": 159.1,
+    "work": 484,
+    "wall": 489.9
+  },
+  {
+    "size": 100,
+    "variant": "baseline",
+    "parallel": 8,
+    "target": null,
+    "biggest": 1050.7,
+    "work": 896,
+    "wall": 1414
+  },
+  {
+    "size": 100,
+    "variant": "atomized",
+    "parallel": 8,
+    "target": null,
+    "biggest": 59.8,
+    "work": 1163.1,
+    "wall": 1170.3
+  },
+  {
+    "size": 100,
+    "variant": "sharded",
+    "parallel": 8,
+    "target": 10,
+    "biggest": 162.4,
+    "work": 960.1,
+    "wall": 966.4
+  }
+]

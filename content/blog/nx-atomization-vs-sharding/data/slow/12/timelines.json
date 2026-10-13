@@ -1,0 +1,2306 @@
+[
+  {
+    "variant": "baseline",
+    "task": "academy-0000:build",
+    "kind": "build",
+    "slot": 0,
+    "start_s": 0.65,
+    "end_s": 1.38
+  },
+  {
+    "variant": "baseline",
+    "task": "ct-invoice-0002:component-test",
+    "kind": "ct",
+    "slot": 3,
+    "start_s": 0.65,
+    "end_s": 507.15
+  },
+  {
+    "variant": "baseline",
+    "task": "ct-patient-0006:component-test",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 0.65,
+    "end_s": 41.1
+  },
+  {
+    "variant": "baseline",
+    "task": "ct-product-0000:component-test",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 0.65,
+    "end_s": 25.42
+  },
+  {
+    "variant": "baseline",
+    "task": "ct-ticket-0004:component-test",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 0.65,
+    "end_s": 27.72
+  },
+  {
+    "variant": "baseline",
+    "task": "unit-asset-0003:test",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 0.65,
+    "end_s": 178.52
+  },
+  {
+    "variant": "baseline",
+    "task": "unit-campaign-0007:test",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 0.65,
+    "end_s": 7.14
+  },
+  {
+    "variant": "baseline",
+    "task": "unit-contract-0008:test",
+    "kind": "unit",
+    "slot": 5,
+    "start_s": 0.65,
+    "end_s": 12.44
+  },
+  {
+    "variant": "baseline",
+    "task": "unit-employee-0001:test",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 1.38,
+    "end_s": 6.77
+  },
+  {
+    "variant": "baseline",
+    "task": "academy-0000-e2e:e2e--wait-for-webserver",
+    "kind": "e2e",
+    "slot": 0,
+    "start_s": 6.77,
+    "end_s": 6.92
+  },
+  {
+    "variant": "baseline",
+    "task": "unit-recipe-0009:test",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 6.92,
+    "end_s": 25.96
+  },
+  {
+    "variant": "baseline",
+    "task": "ct-shipment-0005:component-test",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 7.14,
+    "end_s": 102.55
+  },
+  {
+    "variant": "baseline",
+    "task": "academy-0000-e2e:e2e",
+    "kind": "e2e",
+    "slot": 5,
+    "start_s": 12.44,
+    "end_s": 222.96
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-product-0000:component-test-ci--src/lib/product-board/product-board.filtering.cy.tsx",
+    "kind": "ct",
+    "slot": 0,
+    "start_s": 0.69,
+    "end_s": 5.93
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-product-0000:component-test-ci--src/lib/product-board/product-board.workflow.cy.tsx",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 0.69,
+    "end_s": 6.64
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-product-0000:component-test-ci--src/lib/product-form/product-form.submission.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 0.69,
+    "end_s": 5.89
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-product-0000:component-test-ci--src/lib/product-form/product-form.validation.cy.tsx",
+    "kind": "ct",
+    "slot": 3,
+    "start_s": 0.69,
+    "end_s": 6.29
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-product-0000:component-test-ci--src/lib/product-table/product-table.filtering.cy.tsx",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 0.69,
+    "end_s": 6.34
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-product-0000:component-test-ci--src/lib/product-table/product-table.sorting.cy.tsx",
+    "kind": "ct",
+    "slot": 5,
+    "start_s": 0.69,
+    "end_s": 6.33
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-product-0000:component-test-ci--src/lib/product-wizard/product-wizard.happy-path.cy.tsx",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 0.69,
+    "end_s": 6.31
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-product-0000:component-test-ci--src/lib/product-wizard/product-wizard.validation.cy.tsx",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 0.69,
+    "end_s": 7.74
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-product-0000:component-test-ci--src/lib/tag-editor/tag-editor.adding.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 5.9,
+    "end_s": 10.01
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-board/asset-board.columns.spec.tsx",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 5.93,
+    "end_s": 9.36
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-board/asset-board.deleting.spec.tsx",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 6.3,
+    "end_s": 9.88
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-board/asset-board.duplicates.spec.tsx",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 6.31,
+    "end_s": 9.09
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-board/asset-board.filtering-2.spec.tsx",
+    "kind": "unit",
+    "slot": 5,
+    "start_s": 6.33,
+    "end_s": 11.13
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-board/asset-board.filtering.spec.tsx",
+    "kind": "unit",
+    "slot": 4,
+    "start_s": 6.34,
+    "end_s": 13.31
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-board/asset-board.moving-cards-2.spec.tsx",
+    "kind": "unit",
+    "slot": 1,
+    "start_s": 6.64,
+    "end_s": 10.01
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-board/asset-board.moving-cards.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 7.74,
+    "end_s": 13.64
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-board/asset-board.summary.spec.tsx",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 9.09,
+    "end_s": 15.49
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-board/asset-board.workflow-2.spec.tsx",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 9.37,
+    "end_s": 11.86
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-board/asset-board.workflow.spec.tsx",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 9.88,
+    "end_s": 13.14
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-form/asset-form.amount.spec.tsx",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 10.01,
+    "end_s": 14.26
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-form/asset-form.editing.spec.tsx",
+    "kind": "unit",
+    "slot": 1,
+    "start_s": 10.01,
+    "end_s": 16.82
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-form/asset-form.email.spec.tsx",
+    "kind": "unit",
+    "slot": 5,
+    "start_s": 11.13,
+    "end_s": 14.86
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-form/asset-form.error-summary.spec.tsx",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 11.86,
+    "end_s": 15.92
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-form/asset-form.notes.spec.tsx",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 13.14,
+    "end_s": 15.64
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-form/asset-form.required-fields.spec.tsx",
+    "kind": "unit",
+    "slot": 4,
+    "start_s": 13.31,
+    "end_s": 16.26
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-form/asset-form.submission-2.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 13.64,
+    "end_s": 16.92
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-form/asset-form.submission.spec.tsx",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 14.26,
+    "end_s": 18.32
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-form/asset-form.validation-2.spec.tsx",
+    "kind": "unit",
+    "slot": 5,
+    "start_s": 14.86,
+    "end_s": 22.22
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-form/asset-form.validation.spec.tsx",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 15.49,
+    "end_s": 19.67
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-table/asset-table.columns.spec.tsx",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 15.64,
+    "end_s": 19.23
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-table/asset-table.empty-results.spec.tsx",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 15.92,
+    "end_s": 19.76
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-table/asset-table.filtering-2.spec.tsx",
+    "kind": "unit",
+    "slot": 4,
+    "start_s": 16.26,
+    "end_s": 19.41
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-table/asset-table.filtering.spec.tsx",
+    "kind": "unit",
+    "slot": 1,
+    "start_s": 16.82,
+    "end_s": 19.48
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-table/asset-table.large-dataset.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 16.92,
+    "end_s": 21.57
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-table/asset-table.navigation.spec.tsx",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 18.32,
+    "end_s": 21.01
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-table/asset-table.pagination.spec.tsx",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 19.24,
+    "end_s": 21.67
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-table/asset-table.search.spec.tsx",
+    "kind": "unit",
+    "slot": 4,
+    "start_s": 19.41,
+    "end_s": 23.15
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-table/asset-table.sorting-2.spec.tsx",
+    "kind": "unit",
+    "slot": 1,
+    "start_s": 19.48,
+    "end_s": 23.39
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-table/asset-table.sorting.spec.tsx",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 19.67,
+    "end_s": 23.11
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-wizard/asset-wizard.back-and-forth.spec.tsx",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 19.76,
+    "end_s": 22.16
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-wizard/asset-wizard.happy-path-2.spec.tsx",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 21.01,
+    "end_s": 24.4
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-wizard/asset-wizard.happy-path.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 21.57,
+    "end_s": 23.9
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-wizard/asset-wizard.navigation-2.spec.tsx",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 21.67,
+    "end_s": 30.17
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-wizard/asset-wizard.navigation.spec.tsx",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 22.16,
+    "end_s": 25.35
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-wizard/asset-wizard.review-2.spec.tsx",
+    "kind": "unit",
+    "slot": 5,
+    "start_s": 22.22,
+    "end_s": 25.76
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-wizard/asset-wizard.review.spec.tsx",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 23.11,
+    "end_s": 27.87
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-wizard/asset-wizard.tags-step.spec.tsx",
+    "kind": "unit",
+    "slot": 4,
+    "start_s": 23.16,
+    "end_s": 26.99
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-wizard/asset-wizard.validation-2.spec.tsx",
+    "kind": "unit",
+    "slot": 1,
+    "start_s": 23.39,
+    "end_s": 25.33
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/asset-wizard/asset-wizard.validation.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 23.9,
+    "end_s": 28.23
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/tag-editor/tag-editor.adding-2.spec.tsx",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 24.4,
+    "end_s": 27.85
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/tag-editor/tag-editor.adding.spec.tsx",
+    "kind": "unit",
+    "slot": 1,
+    "start_s": 25.33,
+    "end_s": 30.6
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/tag-editor/tag-editor.clearing.spec.tsx",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 25.35,
+    "end_s": 29.16
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/tag-editor/tag-editor.duplicates-2.spec.tsx",
+    "kind": "unit",
+    "slot": 5,
+    "start_s": 25.76,
+    "end_s": 31.95
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/tag-editor/tag-editor.duplicates.spec.tsx",
+    "kind": "unit",
+    "slot": 4,
+    "start_s": 26.99,
+    "end_s": 30.36
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/tag-editor/tag-editor.keyboard.spec.tsx",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 27.85,
+    "end_s": 31.59
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/tag-editor/tag-editor.limits.spec.tsx",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 27.87,
+    "end_s": 30.42
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/tag-editor/tag-editor.normalization.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 28.23,
+    "end_s": 31.23
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-asset-0003:test-ci--src/lib/tag-editor/tag-editor.removal.spec.tsx",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 29.16,
+    "end_s": 33.74
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-board/invoice-board.deleting.cy.tsx",
+    "kind": "ct",
+    "slot": 3,
+    "start_s": 30.17,
+    "end_s": 49.23
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-board/invoice-board.duplicates.cy.tsx",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 30.36,
+    "end_s": 48.78
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-board/invoice-board.filtering.cy.tsx",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 30.42,
+    "end_s": 61.39
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-board/invoice-board.moving-cards.cy.tsx",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 30.6,
+    "end_s": 57.1
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-board/invoice-board.summary.cy.tsx",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 31.23,
+    "end_s": 75.25
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-board/invoice-board.workflow.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 31.59,
+    "end_s": 40.06
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-form/invoice-form.editing.cy.tsx",
+    "kind": "ct",
+    "slot": 5,
+    "start_s": 31.95,
+    "end_s": 60.29
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-form/invoice-form.email.cy.tsx",
+    "kind": "ct",
+    "slot": 0,
+    "start_s": 33.81,
+    "end_s": 67.82
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-form/invoice-form.required-fields.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 40.06,
+    "end_s": 58.29
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-form/invoice-form.submission.cy.tsx",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 48.78,
+    "end_s": 72.05
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-form/invoice-form.validation.cy.tsx",
+    "kind": "ct",
+    "slot": 3,
+    "start_s": 49.24,
+    "end_s": 71.07
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-table/invoice-table.columns.cy.tsx",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 57.1,
+    "end_s": 72.95
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-table/invoice-table.filtering.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 58.29,
+    "end_s": 73.15
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-table/invoice-table.large-dataset.cy.tsx",
+    "kind": "ct",
+    "slot": 5,
+    "start_s": 60.29,
+    "end_s": 75.11
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-table/invoice-table.pagination.cy.tsx",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 61.39,
+    "end_s": 78.27
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-table/invoice-table.search.cy.tsx",
+    "kind": "ct",
+    "slot": 0,
+    "start_s": 67.82,
+    "end_s": 86.72
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-table/invoice-table.sorting.cy.tsx",
+    "kind": "ct",
+    "slot": 3,
+    "start_s": 71.07,
+    "end_s": 86.09
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-wizard/invoice-wizard.back-and-forth.cy.tsx",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 72.05,
+    "end_s": 87.23
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-wizard/invoice-wizard.happy-path.cy.tsx",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 72.95,
+    "end_s": 83.79
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-wizard/invoice-wizard.navigation.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 73.16,
+    "end_s": 93.38
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-wizard/invoice-wizard.review.cy.tsx",
+    "kind": "ct",
+    "slot": 5,
+    "start_s": 75.11,
+    "end_s": 90.68
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-wizard/invoice-wizard.tags-step.cy.tsx",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 75.25,
+    "end_s": 94.3
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/invoice-wizard/invoice-wizard.validation.cy.tsx",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 78.27,
+    "end_s": 92.24
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/tag-editor/tag-editor.adding.cy.tsx",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 83.79,
+    "end_s": 95.55
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/tag-editor/tag-editor.duplicates.cy.tsx",
+    "kind": "ct",
+    "slot": 3,
+    "start_s": 86.09,
+    "end_s": 106.5
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/tag-editor/tag-editor.keyboard.cy.tsx",
+    "kind": "ct",
+    "slot": 0,
+    "start_s": 86.72,
+    "end_s": 103
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/tag-editor/tag-editor.limits.cy.tsx",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 87.23,
+    "end_s": 114.27
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/tag-editor/tag-editor.normalization.cy.tsx",
+    "kind": "ct",
+    "slot": 5,
+    "start_s": 90.68,
+    "end_s": 111.86
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-invoice-0002:component-test-ci--src/lib/tag-editor/tag-editor.removal.cy.tsx",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 92.24,
+    "end_s": 102.38
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-ticket-0004:component-test-ci--src/lib/tag-editor/tag-editor.adding.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 93.38,
+    "end_s": 97.27
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-ticket-0004:component-test-ci--src/lib/tag-editor/tag-editor.duplicates.cy.tsx",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 94.3,
+    "end_s": 98.08
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-ticket-0004:component-test-ci--src/lib/tag-editor/tag-editor.removal.cy.tsx",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 95.55,
+    "end_s": 99.48
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-ticket-0004:component-test-ci--src/lib/ticket-board/ticket-board.filtering.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 97.27,
+    "end_s": 102.18
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-ticket-0004:component-test-ci--src/lib/ticket-board/ticket-board.workflow.cy.tsx",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 98.08,
+    "end_s": 102.43
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-ticket-0004:component-test-ci--src/lib/ticket-form/ticket-form.submission.cy.tsx",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 99.48,
+    "end_s": 104
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-ticket-0004:component-test-ci--src/lib/ticket-form/ticket-form.validation.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 102.18,
+    "end_s": 108.82
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-ticket-0004:component-test-ci--src/lib/ticket-table/ticket-table.filtering.cy.tsx",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 102.38,
+    "end_s": 107.43
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-ticket-0004:component-test-ci--src/lib/ticket-table/ticket-table.sorting.cy.tsx",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 102.43,
+    "end_s": 106.4
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-ticket-0004:component-test-ci--src/lib/ticket-wizard/ticket-wizard.happy-path.cy.tsx",
+    "kind": "ct",
+    "slot": 0,
+    "start_s": 103,
+    "end_s": 108.04
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-ticket-0004:component-test-ci--src/lib/ticket-wizard/ticket-wizard.validation.cy.tsx",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 104,
+    "end_s": 108.79
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/contract-board/contract-board.deleting.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 106.4,
+    "end_s": 107.25
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/contract-board/contract-board.filtering.spec.tsx",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 106.5,
+    "end_s": 107.35
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/contract-board/contract-board.moving-cards.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 107.25,
+    "end_s": 108.17
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/contract-board/contract-board.workflow.spec.tsx",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 107.35,
+    "end_s": 108.31
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/contract-form/contract-form.editing.spec.tsx",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 107.43,
+    "end_s": 108.37
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/contract-form/contract-form.submission.spec.tsx",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 108.05,
+    "end_s": 108.96
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/contract-form/contract-form.validation.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 108.17,
+    "end_s": 109.13
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/contract-table/contract-table.filtering.spec.tsx",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 108.31,
+    "end_s": 109.19
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/contract-table/contract-table.pagination.spec.tsx",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 108.37,
+    "end_s": 109.1
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/contract-table/contract-table.search.spec.tsx",
+    "kind": "unit",
+    "slot": 1,
+    "start_s": 108.79,
+    "end_s": 109.63
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/contract-table/contract-table.sorting.spec.tsx",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 108.82,
+    "end_s": 109.51
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/contract-wizard/contract-wizard.happy-path.spec.tsx",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 108.96,
+    "end_s": 109.75
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/contract-wizard/contract-wizard.navigation.spec.tsx",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 109.1,
+    "end_s": 109.91
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/contract-wizard/contract-wizard.validation.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 109.13,
+    "end_s": 109.9
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/tag-editor/tag-editor.adding.spec.tsx",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 109.19,
+    "end_s": 109.88
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/tag-editor/tag-editor.duplicates.spec.tsx",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 109.51,
+    "end_s": 110.19
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/tag-editor/tag-editor.normalization.spec.tsx",
+    "kind": "unit",
+    "slot": 1,
+    "start_s": 109.63,
+    "end_s": 110.54
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-contract-0008:test-ci--src/lib/tag-editor/tag-editor.removal.spec.tsx",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 109.75,
+    "end_s": 110.71
+  },
+  {
+    "variant": "atomized",
+    "task": "academy-0000:build",
+    "kind": "build",
+    "slot": 3,
+    "start_s": 109.88,
+    "end_s": 110.53
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-patient-0006:component-test-ci--src/lib/patient-board/patient-board.deleting.cy.tsx",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 109.9,
+    "end_s": 114.66
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-patient-0006:component-test-ci--src/lib/patient-board/patient-board.filtering.cy.tsx",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 109.91,
+    "end_s": 115.02
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-patient-0006:component-test-ci--src/lib/patient-board/patient-board.moving-cards.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 110.19,
+    "end_s": 115.33
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-patient-0006:component-test-ci--src/lib/patient-board/patient-board.workflow.cy.tsx",
+    "kind": "ct",
+    "slot": 3,
+    "start_s": 110.53,
+    "end_s": 115.62
+  },
+  {
+    "variant": "atomized",
+    "task": "academy-0000-e2e:e2e--wait-for-webserver",
+    "kind": "e2e",
+    "slot": 1,
+    "start_s": 110.54,
+    "end_s": 110.7
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-patient-0006:component-test-ci--src/lib/patient-form/patient-form.editing.cy.tsx",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 110.71,
+    "end_s": 115.83
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-patient-0006:component-test-ci--src/lib/patient-form/patient-form.submission.cy.tsx",
+    "kind": "ct",
+    "slot": 0,
+    "start_s": 110.75,
+    "end_s": 116.65
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-patient-0006:component-test-ci--src/lib/patient-form/patient-form.validation.cy.tsx",
+    "kind": "ct",
+    "slot": 5,
+    "start_s": 111.86,
+    "end_s": 116.68
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-patient-0006:component-test-ci--src/lib/patient-table/patient-table.filtering.cy.tsx",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 114.27,
+    "end_s": 119.25
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-patient-0006:component-test-ci--src/lib/patient-table/patient-table.pagination.cy.tsx",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 114.66,
+    "end_s": 119.66
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-patient-0006:component-test-ci--src/lib/patient-table/patient-table.sorting.cy.tsx",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 115.02,
+    "end_s": 120.95
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-patient-0006:component-test-ci--src/lib/patient-wizard/patient-wizard.happy-path.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 115.33,
+    "end_s": 120.51
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-patient-0006:component-test-ci--src/lib/patient-wizard/patient-wizard.navigation.cy.tsx",
+    "kind": "ct",
+    "slot": 3,
+    "start_s": 115.62,
+    "end_s": 121.86
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-patient-0006:component-test-ci--src/lib/patient-wizard/patient-wizard.validation.cy.tsx",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 115.83,
+    "end_s": 121.36
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-patient-0006:component-test-ci--src/lib/tag-editor/tag-editor.adding.cy.tsx",
+    "kind": "ct",
+    "slot": 0,
+    "start_s": 116.65,
+    "end_s": 121.34
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-patient-0006:component-test-ci--src/lib/tag-editor/tag-editor.duplicates.cy.tsx",
+    "kind": "ct",
+    "slot": 5,
+    "start_s": 116.68,
+    "end_s": 121.01
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-patient-0006:component-test-ci--src/lib/tag-editor/tag-editor.removal.cy.tsx",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 119.25,
+    "end_s": 124.23
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-campaign-0007:test-ci--src/lib/campaign-board/campaign-board.filtering.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 119.66,
+    "end_s": 120.36
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-campaign-0007:test-ci--src/lib/campaign-board/campaign-board.workflow.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 120.36,
+    "end_s": 121.17
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-campaign-0007:test-ci--src/lib/campaign-form/campaign-form.submission.spec.tsx",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 120.51,
+    "end_s": 121.39
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-campaign-0007:test-ci--src/lib/campaign-form/campaign-form.validation.spec.tsx",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 120.95,
+    "end_s": 122.01
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-campaign-0007:test-ci--src/lib/campaign-table/campaign-table.filtering.spec.tsx",
+    "kind": "unit",
+    "slot": 5,
+    "start_s": 121.01,
+    "end_s": 121.72
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-campaign-0007:test-ci--src/lib/campaign-wizard/campaign-wizard.happy-path.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 121.17,
+    "end_s": 121.99
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-campaign-0007:test-ci--src/lib/campaign-wizard/campaign-wizard.validation.spec.tsx",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 121.34,
+    "end_s": 122.31
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-campaign-0007:test-ci--src/lib/tag-editor/tag-editor.adding.spec.tsx",
+    "kind": "unit",
+    "slot": 1,
+    "start_s": 121.36,
+    "end_s": 122.47
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-campaign-0007:test-ci--src/lib/tag-editor/tag-editor.duplicates.spec.tsx",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 121.39,
+    "end_s": 122.28
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-employee-0001:test-ci--src/lib/employee-board/employee-board.filtering.spec.tsx",
+    "kind": "unit",
+    "slot": 5,
+    "start_s": 121.72,
+    "end_s": 122.87
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-employee-0001:test-ci--src/lib/employee-board/employee-board.workflow.spec.tsx",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 121.86,
+    "end_s": 122.69
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-employee-0001:test-ci--src/lib/employee-form/employee-form.submission.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 121.99,
+    "end_s": 122.88
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-employee-0001:test-ci--src/lib/employee-form/employee-form.validation.spec.tsx",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 122.01,
+    "end_s": 122.89
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-employee-0001:test-ci--src/lib/employee-table/employee-table.filtering.spec.tsx",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 122.28,
+    "end_s": 123.34
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-employee-0001:test-ci--src/lib/employee-wizard/employee-wizard.happy-path.spec.tsx",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 122.31,
+    "end_s": 123.29
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-employee-0001:test-ci--src/lib/tag-editor/tag-editor.adding.spec.tsx",
+    "kind": "unit",
+    "slot": 1,
+    "start_s": 122.52,
+    "end_s": 123.39
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-board/recipe-board.deleting.spec.tsx",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 122.69,
+    "end_s": 123.77
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-board/recipe-board.duplicates.spec.tsx",
+    "kind": "unit",
+    "slot": 5,
+    "start_s": 122.87,
+    "end_s": 123.63
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-board/recipe-board.filtering.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 122.88,
+    "end_s": 123.68
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-board/recipe-board.moving-cards.spec.tsx",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 122.89,
+    "end_s": 123.6
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-board/recipe-board.workflow.spec.tsx",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 123.29,
+    "end_s": 124.07
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-form/recipe-form.amount.spec.tsx",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 123.34,
+    "end_s": 124.28
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-form/recipe-form.editing.spec.tsx",
+    "kind": "unit",
+    "slot": 1,
+    "start_s": 123.43,
+    "end_s": 124.91
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-form/recipe-form.email.spec.tsx",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 123.6,
+    "end_s": 124.47
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-form/recipe-form.required-fields.spec.tsx",
+    "kind": "unit",
+    "slot": 5,
+    "start_s": 123.64,
+    "end_s": 124.65
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-form/recipe-form.submission.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 123.68,
+    "end_s": 125.18
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-form/recipe-form.validation.spec.tsx",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 123.77,
+    "end_s": 125
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-table/recipe-table.columns.spec.tsx",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 124.07,
+    "end_s": 125.24
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-table/recipe-table.filtering.spec.tsx",
+    "kind": "unit",
+    "slot": 4,
+    "start_s": 124.23,
+    "end_s": 124.97
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-table/recipe-table.large-dataset.spec.tsx",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 124.29,
+    "end_s": 125.08
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-table/recipe-table.pagination.spec.tsx",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 124.47,
+    "end_s": 125.34
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-table/recipe-table.search.spec.tsx",
+    "kind": "unit",
+    "slot": 5,
+    "start_s": 124.65,
+    "end_s": 125.51
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-table/recipe-table.sorting.spec.tsx",
+    "kind": "unit",
+    "slot": 1,
+    "start_s": 124.91,
+    "end_s": 125.7
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-wizard/recipe-wizard.happy-path.spec.tsx",
+    "kind": "unit",
+    "slot": 4,
+    "start_s": 124.97,
+    "end_s": 125.8
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-wizard/recipe-wizard.navigation.spec.tsx",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 125,
+    "end_s": 126.06
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-wizard/recipe-wizard.review.spec.tsx",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 125.08,
+    "end_s": 125.97
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-wizard/recipe-wizard.tags-step.spec.tsx",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 125.18,
+    "end_s": 126.12
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/recipe-wizard/recipe-wizard.validation.spec.tsx",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 125.24,
+    "end_s": 126.15
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/tag-editor/tag-editor.adding.spec.tsx",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 125.34,
+    "end_s": 126.04
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/tag-editor/tag-editor.duplicates.spec.tsx",
+    "kind": "unit",
+    "slot": 5,
+    "start_s": 125.51,
+    "end_s": 126.39
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/tag-editor/tag-editor.limits.spec.tsx",
+    "kind": "unit",
+    "slot": 1,
+    "start_s": 125.7,
+    "end_s": 126.6
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/tag-editor/tag-editor.normalization.spec.tsx",
+    "kind": "unit",
+    "slot": 4,
+    "start_s": 125.8,
+    "end_s": 126.5
+  },
+  {
+    "variant": "atomized",
+    "task": "unit-recipe-0009:test-ci--src/lib/tag-editor/tag-editor.removal.spec.tsx",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 125.97,
+    "end_s": 126.68
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-board/shipment-board.columns.cy.tsx",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 126.04,
+    "end_s": 130.22
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-board/shipment-board.deleting.cy.tsx",
+    "kind": "ct",
+    "slot": 3,
+    "start_s": 126.06,
+    "end_s": 130.25
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-board/shipment-board.duplicates.cy.tsx",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 126.12,
+    "end_s": 131.3
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-board/shipment-board.filtering.cy.tsx",
+    "kind": "ct",
+    "slot": 0,
+    "start_s": 126.16,
+    "end_s": 131.38
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-board/shipment-board.moving-cards.cy.tsx",
+    "kind": "ct",
+    "slot": 5,
+    "start_s": 126.39,
+    "end_s": 131.52
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-board/shipment-board.summary.cy.tsx",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 126.5,
+    "end_s": 132.2
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-board/shipment-board.workflow-2.cy.tsx",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 126.6,
+    "end_s": 131.99
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-board/shipment-board.workflow.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 126.74,
+    "end_s": 131.43
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-form/shipment-form.amount.cy.tsx",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 130.22,
+    "end_s": 135.18
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-form/shipment-form.editing.cy.tsx",
+    "kind": "ct",
+    "slot": 3,
+    "start_s": 130.25,
+    "end_s": 134.89
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-form/shipment-form.email.cy.tsx",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 131.3,
+    "end_s": 136.02
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-form/shipment-form.error-summary.cy.tsx",
+    "kind": "ct",
+    "slot": 0,
+    "start_s": 131.38,
+    "end_s": 136.51
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-form/shipment-form.notes.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 131.43,
+    "end_s": 136.51
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-form/shipment-form.required-fields.cy.tsx",
+    "kind": "ct",
+    "slot": 5,
+    "start_s": 131.52,
+    "end_s": 137.55
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-form/shipment-form.submission.cy.tsx",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 131.99,
+    "end_s": 137.11
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-form/shipment-form.validation-2.cy.tsx",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 132.2,
+    "end_s": 137.3
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-form/shipment-form.validation.cy.tsx",
+    "kind": "ct",
+    "slot": 3,
+    "start_s": 134.89,
+    "end_s": 139.42
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-table/shipment-table.columns.cy.tsx",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 135.19,
+    "end_s": 140.13
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-table/shipment-table.empty-results.cy.tsx",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 136.02,
+    "end_s": 139.98
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-table/shipment-table.filtering-2.cy.tsx",
+    "kind": "ct",
+    "slot": 0,
+    "start_s": 136.51,
+    "end_s": 141.64
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-table/shipment-table.filtering.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 136.51,
+    "end_s": 141.53
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-table/shipment-table.large-dataset.cy.tsx",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 137.11,
+    "end_s": 141.23
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-table/shipment-table.navigation.cy.tsx",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 137.3,
+    "end_s": 142.42
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-table/shipment-table.pagination.cy.tsx",
+    "kind": "ct",
+    "slot": 5,
+    "start_s": 137.55,
+    "end_s": 142.99
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-table/shipment-table.search.cy.tsx",
+    "kind": "ct",
+    "slot": 3,
+    "start_s": 139.42,
+    "end_s": 144.45
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-table/shipment-table.sorting.cy.tsx",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 139.98,
+    "end_s": 144.78
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-wizard/shipment-wizard.back-and-forth.cy.tsx",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 140.13,
+    "end_s": 144.8
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-wizard/shipment-wizard.happy-path-2.cy.tsx",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 141.23,
+    "end_s": 146.26
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-wizard/shipment-wizard.happy-path.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 141.53,
+    "end_s": 146.24
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-wizard/shipment-wizard.navigation-2.cy.tsx",
+    "kind": "ct",
+    "slot": 0,
+    "start_s": 141.64,
+    "end_s": 146.44
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-wizard/shipment-wizard.navigation.cy.tsx",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 142.42,
+    "end_s": 147.98
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-wizard/shipment-wizard.review.cy.tsx",
+    "kind": "ct",
+    "slot": 5,
+    "start_s": 142.99,
+    "end_s": 147.96
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-wizard/shipment-wizard.tags-step.cy.tsx",
+    "kind": "ct",
+    "slot": 3,
+    "start_s": 144.45,
+    "end_s": 150.54
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-wizard/shipment-wizard.validation-2.cy.tsx",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 144.78,
+    "end_s": 149.64
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/shipment-wizard/shipment-wizard.validation.cy.tsx",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 144.8,
+    "end_s": 149.83
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/tag-editor/tag-editor.adding-2.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 146.24,
+    "end_s": 150.26
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/tag-editor/tag-editor.adding.cy.tsx",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 146.26,
+    "end_s": 151.3
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/tag-editor/tag-editor.clearing.cy.tsx",
+    "kind": "ct",
+    "slot": 0,
+    "start_s": 146.44,
+    "end_s": 150.4
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/tag-editor/tag-editor.duplicates-2.cy.tsx",
+    "kind": "ct",
+    "slot": 5,
+    "start_s": 147.96,
+    "end_s": 152.57
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/tag-editor/tag-editor.duplicates.cy.tsx",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 147.98,
+    "end_s": 151.92
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/tag-editor/tag-editor.keyboard.cy.tsx",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 149.65,
+    "end_s": 153.72
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/tag-editor/tag-editor.limits.cy.tsx",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 149.83,
+    "end_s": 153.91
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/tag-editor/tag-editor.normalization.cy.tsx",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 150.26,
+    "end_s": 154.88
+  },
+  {
+    "variant": "atomized",
+    "task": "ct-shipment-0005:component-test-ci--src/lib/tag-editor/tag-editor.removal.cy.tsx",
+    "kind": "ct",
+    "slot": 0,
+    "start_s": 150.4,
+    "end_s": 154.45
+  },
+  {
+    "variant": "atomized",
+    "task": "academy-0000-e2e:e2e-ci--src/board-workflow.spec.ts",
+    "kind": "e2e",
+    "slot": 3,
+    "start_s": 150.54,
+    "end_s": 163.49
+  },
+  {
+    "variant": "atomized",
+    "task": "academy-0000-e2e:e2e-ci--src/cart-add-items.spec.ts",
+    "kind": "e2e",
+    "slot": 1,
+    "start_s": 151.3,
+    "end_s": 163.76
+  },
+  {
+    "variant": "atomized",
+    "task": "academy-0000-e2e:e2e-ci--src/cart-quantities.spec.ts",
+    "kind": "e2e",
+    "slot": 4,
+    "start_s": 151.93,
+    "end_s": 205.66
+  },
+  {
+    "variant": "atomized",
+    "task": "academy-0000-e2e:e2e-ci--src/catalog-filtering.spec.ts",
+    "kind": "e2e",
+    "slot": 5,
+    "start_s": 152.57,
+    "end_s": 167.37
+  },
+  {
+    "variant": "atomized",
+    "task": "academy-0000-e2e:e2e-ci--src/checkout-happy-path.spec.ts",
+    "kind": "e2e",
+    "slot": 7,
+    "start_s": 153.72,
+    "end_s": 157.93
+  },
+  {
+    "variant": "atomized",
+    "task": "academy-0000-e2e:e2e-ci--src/checkout-validation.spec.ts",
+    "kind": "e2e",
+    "slot": 6,
+    "start_s": 153.91,
+    "end_s": 161.78
+  },
+  {
+    "variant": "atomized",
+    "task": "academy-0000-e2e:e2e-ci--src/navigation-menu.spec.ts",
+    "kind": "e2e",
+    "slot": 0,
+    "start_s": 154.45,
+    "end_s": 167.79
+  },
+  {
+    "variant": "atomized",
+    "task": "academy-0000-e2e:e2e-ci--src/navigation-smoke.spec.ts",
+    "kind": "e2e",
+    "slot": 2,
+    "start_s": 154.88,
+    "end_s": 195.7
+  },
+  {
+    "variant": "atomized",
+    "task": "academy-0000-e2e:e2e-ci--src/settings-notifications.spec.ts",
+    "kind": "e2e",
+    "slot": 7,
+    "start_s": 157.93,
+    "end_s": 166.24
+  },
+  {
+    "variant": "atomized",
+    "task": "academy-0000-e2e:e2e-ci--src/settings-profile.spec.ts",
+    "kind": "e2e",
+    "slot": 6,
+    "start_s": 161.78,
+    "end_s": 210.9
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-product-0000:component-test-ci--shard-1-of-2",
+    "kind": "ct",
+    "slot": 0,
+    "start_s": 0.81,
+    "end_s": 15.09
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-product-0000:component-test-ci--shard-2-of-2",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 0.81,
+    "end_s": 13.73
+  },
+  {
+    "variant": "sharded",
+    "task": "unit-asset-0003:test-ci--shard-1-of-8",
+    "kind": "unit",
+    "slot": 2,
+    "start_s": 0.81,
+    "end_s": 23.14
+  },
+  {
+    "variant": "sharded",
+    "task": "unit-asset-0003:test-ci--shard-2-of-8",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 0.81,
+    "end_s": 26.1
+  },
+  {
+    "variant": "sharded",
+    "task": "unit-asset-0003:test-ci--shard-3-of-8",
+    "kind": "unit",
+    "slot": 4,
+    "start_s": 0.81,
+    "end_s": 20.86
+  },
+  {
+    "variant": "sharded",
+    "task": "unit-asset-0003:test-ci--shard-4-of-8",
+    "kind": "unit",
+    "slot": 5,
+    "start_s": 0.81,
+    "end_s": 20.01
+  },
+  {
+    "variant": "sharded",
+    "task": "unit-asset-0003:test-ci--shard-5-of-8",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 0.81,
+    "end_s": 24.53
+  },
+  {
+    "variant": "sharded",
+    "task": "unit-asset-0003:test-ci--shard-6-of-8",
+    "kind": "unit",
+    "slot": 7,
+    "start_s": 0.81,
+    "end_s": 24.31
+  },
+  {
+    "variant": "sharded",
+    "task": "unit-asset-0003:test-ci--shard-7-of-8",
+    "kind": "unit",
+    "slot": 1,
+    "start_s": 13.73,
+    "end_s": 42.28
+  },
+  {
+    "variant": "sharded",
+    "task": "unit-asset-0003:test-ci--shard-8-of-8",
+    "kind": "unit",
+    "slot": 0,
+    "start_s": 15.09,
+    "end_s": 41.73
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-invoice-0002:component-test-ci--shard-1-of-8",
+    "kind": "ct",
+    "slot": 5,
+    "start_s": 20.01,
+    "end_s": 94.09
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-invoice-0002:component-test-ci--shard-2-of-8",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 20.86,
+    "end_s": 77.44
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-invoice-0002:component-test-ci--shard-3-of-8",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 23.14,
+    "end_s": 82.99
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-invoice-0002:component-test-ci--shard-4-of-8",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 24.31,
+    "end_s": 105.89
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-invoice-0002:component-test-ci--shard-5-of-8",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 24.53,
+    "end_s": 81.17
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-invoice-0002:component-test-ci--shard-6-of-8",
+    "kind": "ct",
+    "slot": 3,
+    "start_s": 26.1,
+    "end_s": 80.79
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-invoice-0002:component-test-ci--shard-7-of-8",
+    "kind": "ct",
+    "slot": 0,
+    "start_s": 41.73,
+    "end_s": 104.59
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-invoice-0002:component-test-ci--shard-8-of-8",
+    "kind": "ct",
+    "slot": 1,
+    "start_s": 42.28,
+    "end_s": 120.96
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-ticket-0004:component-test-ci--shard-1-of-2",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 77.44,
+    "end_s": 93.04
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-ticket-0004:component-test-ci--shard-2-of-2",
+    "kind": "ct",
+    "slot": 3,
+    "start_s": 80.79,
+    "end_s": 94.11
+  },
+  {
+    "variant": "sharded",
+    "task": "unit-contract-0008:test",
+    "kind": "unit",
+    "slot": 6,
+    "start_s": 81.17,
+    "end_s": 92.74
+  },
+  {
+    "variant": "sharded",
+    "task": "academy-0000:build",
+    "kind": "build",
+    "slot": 2,
+    "start_s": 82.99,
+    "end_s": 83.61
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-patient-0006:component-test-ci--shard-1-of-3",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 83.61,
+    "end_s": 100.34
+  },
+  {
+    "variant": "sharded",
+    "task": "academy-0000-e2e:e2e--wait-for-webserver",
+    "kind": "e2e",
+    "slot": 6,
+    "start_s": 92.74,
+    "end_s": 92.91
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-patient-0006:component-test-ci--shard-2-of-3",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 92.91,
+    "end_s": 108.11
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-patient-0006:component-test-ci--shard-3-of-3",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 93.04,
+    "end_s": 106.88
+  },
+  {
+    "variant": "sharded",
+    "task": "unit-campaign-0007:test",
+    "kind": "unit",
+    "slot": 5,
+    "start_s": 94.09,
+    "end_s": 100.51
+  },
+  {
+    "variant": "sharded",
+    "task": "unit-employee-0001:test",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 94.11,
+    "end_s": 99.5
+  },
+  {
+    "variant": "sharded",
+    "task": "unit-recipe-0009:test",
+    "kind": "unit",
+    "slot": 3,
+    "start_s": 99.5,
+    "end_s": 119.64
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-shipment-0005:component-test-ci--shard-1-of-7",
+    "kind": "ct",
+    "slot": 2,
+    "start_s": 100.34,
+    "end_s": 117.24
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-shipment-0005:component-test-ci--shard-2-of-7",
+    "kind": "ct",
+    "slot": 5,
+    "start_s": 100.51,
+    "end_s": 116.62
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-shipment-0005:component-test-ci--shard-3-of-7",
+    "kind": "ct",
+    "slot": 0,
+    "start_s": 104.59,
+    "end_s": 118.87
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-shipment-0005:component-test-ci--shard-4-of-7",
+    "kind": "ct",
+    "slot": 7,
+    "start_s": 105.89,
+    "end_s": 124.21
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-shipment-0005:component-test-ci--shard-5-of-7",
+    "kind": "ct",
+    "slot": 4,
+    "start_s": 106.88,
+    "end_s": 124.96
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-shipment-0005:component-test-ci--shard-6-of-7",
+    "kind": "ct",
+    "slot": 6,
+    "start_s": 108.11,
+    "end_s": 123.68
+  },
+  {
+    "variant": "sharded",
+    "task": "ct-shipment-0005:component-test-ci--shard-7-of-7",
+    "kind": "ct",
+    "slot": 5,
+    "start_s": 116.62,
+    "end_s": 133.15
+  },
+  {
+    "variant": "sharded",
+    "task": "academy-0000-e2e:e2e-ci--shard-1-of-8",
+    "kind": "e2e",
+    "slot": 2,
+    "start_s": 117.24,
+    "end_s": 171.04
+  },
+  {
+    "variant": "sharded",
+    "task": "academy-0000-e2e:e2e-ci--shard-2-of-8",
+    "kind": "e2e",
+    "slot": 0,
+    "start_s": 118.87,
+    "end_s": 168.46
+  },
+  {
+    "variant": "sharded",
+    "task": "academy-0000-e2e:e2e-ci--shard-3-of-8",
+    "kind": "e2e",
+    "slot": 3,
+    "start_s": 119.64,
+    "end_s": 160.78
+  },
+  {
+    "variant": "sharded",
+    "task": "academy-0000-e2e:e2e-ci--shard-4-of-8",
+    "kind": "e2e",
+    "slot": 1,
+    "start_s": 120.96,
+    "end_s": 135.96
+  },
+  {
+    "variant": "sharded",
+    "task": "academy-0000-e2e:e2e-ci--shard-5-of-8",
+    "kind": "e2e",
+    "slot": 6,
+    "start_s": 123.68,
+    "end_s": 136.31
+  },
+  {
+    "variant": "sharded",
+    "task": "academy-0000-e2e:e2e-ci--shard-6-of-8",
+    "kind": "e2e",
+    "slot": 7,
+    "start_s": 124.22,
+    "end_s": 132.14
+  },
+  {
+    "variant": "sharded",
+    "task": "academy-0000-e2e:e2e-ci--shard-7-of-8",
+    "kind": "e2e",
+    "slot": 4,
+    "start_s": 124.96,
+    "end_s": 145.82
+  },
+  {
+    "variant": "sharded",
+    "task": "academy-0000-e2e:e2e-ci--shard-8-of-8",
+    "kind": "e2e",
+    "slot": 7,
+    "start_s": 132.14,
+    "end_s": 147.67
+  }
+]

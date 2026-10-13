@@ -1,0 +1,17 @@
+[
+  {
+    "runner": "ct",
+    "startup_tax_s": 2.81,
+    "source": "measured here (atoms vs whole-project run)"
+  },
+  {
+    "runner": "e2e",
+    "startup_tax_s": 0.63,
+    "source": "measured here (atoms vs whole-project run)"
+  },
+  {
+    "runner": "unit",
+    "startup_tax_s": 0.3,
+    "source": "measured here (atoms vs whole-project run)"
+  }
+]
