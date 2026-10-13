@@ -1,0 +1,35 @@
+[
+  {
+    "size": 100,
+    "workload": "slow",
+    "variant": "atomized",
+    "agents": 8,
+    "tests_s": 1001.5,
+    "boot_s": 140.9,
+    "total_s": 1142.5,
+    "agent_min": 152.3,
+    "run": "38361456020"
+  },
+  {
+    "size": 100,
+    "workload": "slow",
+    "variant": "baseline",
+    "agents": 8,
+    "tests_s": 1296.2,
+    "boot_s": 145.2,
+    "total_s": 1441.4,
+    "agent_min": 192.2,
+    "run": "38357658573"
+  },
+  {
+    "size": 100,
+    "workload": "slow",
+    "variant": "sharded",
+    "agents": 8,
+    "tests_s": 650.8,
+    "boot_s": 142.0,
+    "total_s": 792.8,
+    "agent_min": 105.7,
+    "run": "38360069115"
+  }
+]

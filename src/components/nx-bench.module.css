@@ -1,0 +1,568 @@
+/*
+ * Charts for the "Nx atomization vs sharding" post. Series colors are mid-luminance steps
+ * that keep >= 3:1 against the light, dark and abyss backgrounds; text and grid come from
+ * the site's theme variables.
+ */
+.figure {
+  --nx-baseline: #7d8590;
+  --nx-atomized: #d9622b;
+  --nx-sharded: #2f80d8;
+  --nx-ct: #8b5cf6;
+  --nx-e2e: #129e74;
+  --nx-unit: #b07800;
+  --nx-build: #7d8590;
+  --nx-startup: #d9622b;
+  --nx-work: #2f80d8;
+  --nx-tail: #c4cad3;
+  --nx-grid: var(--border-color);
+  --nx-label: var(--text-secondary);
+  --nx-muted: var(--text-muted);
+
+  position: relative;
+  /* Bleeds into the side padding like code blocks and images (pre: margin 2.25em -1rem). */
+  margin: 2.25rem -1rem;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  font-family: 'Public Sans', sans-serif;
+}
+
+:global(:root[data-theme='abyss']) .figure {
+  border-color: rgba(92, 188, 236, 0.22);
+}
+
+@media screen and (max-width: 700px) {
+  .figure {
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+}
+
+/* Title and description, then the controls, then the legend and the chart. */
+.head {
+  margin: 0 0 0.85rem;
+}
+
+:global(:root[data-theme='dark']) .figure,
+:global(:root[data-theme='abyss']) .figure {
+  --nx-atomized: #ec7a45;
+  --nx-sharded: #4b98ea;
+  --nx-ct: #a07cf7;
+  --nx-e2e: #1fb487;
+  --nx-unit: #d29a1c;
+  --nx-startup: #ec7a45;
+  --nx-work: #4b98ea;
+  --nx-tail: #4b525e;
+  --nx-baseline: #8f97a3;
+  --nx-build: #8f97a3;
+}
+
+.title {
+  margin: 0 0 0.3rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.caption {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.1rem;
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.swatch {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 2px;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  touch-action: pan-y;
+}
+
+.svg text {
+  fill: var(--nx-label);
+}
+
+.svg .muted {
+  fill: var(--nx-muted);
+}
+
+/* Labels drawn on top of a bar segment. */
+.svg .onBar {
+  fill: var(--text-primary);
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Wide charts keep readable text on phones and scroll sideways instead of shrinking. */
+.wide {
+  min-width: 34rem;
+}
+
+.panels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 1rem 1.5rem;
+}
+
+.panelTitle {
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.hit {
+  cursor: pointer;
+}
+
+.hit:hover {
+  filter: brightness(1.15);
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 5;
+  min-width: 11rem;
+  max-width: 20rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-secondary);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.tooltipTitle {
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.tooltipRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--text-secondary);
+}
+
+.tooltipLabel {
+  flex: 1;
+}
+
+.tooltipRow b {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Mermaid diagrams: scale the generated SVG to the text column. */
+.diagram {
+  margin: 2rem 0;
+}
+
+/* Subgraph titles render as <p>, which the site's text color would otherwise override. */
+.diagram :global(.cluster-label p) {
+  color: #1a1a1a;
+}
+
+.diagram :global(svg) {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto;
+}
+
+.setup {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin: 1.5rem 0;
+  font-family: 'Public Sans', sans-serif;
+}
+
+@media (min-width: 700px) {
+  .setup {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.setup div {
+  min-width: 0;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+}
+
+.setup dt {
+  margin: 0 0 0.3rem;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.setup dd {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.setup dd b {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.setup dd span {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+/* Tabs over code blocks. Code is always on a dark background, so the tab bar is too. */
+.codeTabs {
+  --tabs-bg: #1e1e1e;
+  /* Same box as the site's code blocks: 1rem past the text column, full-bleed on phones. */
+  margin: 1.75rem -1rem 2rem;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--tabs-bg);
+}
+
+:global(:root[data-theme='dark']) .codeTabs {
+  --tabs-bg: #0d1117;
+}
+
+:global(:root[data-theme='abyss']) .codeTabs {
+  --tabs-bg: #07090f;
+}
+
+@media (max-width: 600px) {
+  .codeTabs {
+    border-radius: 0;
+  }
+}
+
+.tabList {
+  display: flex;
+  overflow-x: auto;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tabList button {
+  flex-shrink: 0;
+  padding: 0.6rem 0.95rem;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tabList button:hover {
+  color: #fff;
+}
+
+.tabList button[aria-selected='true'] {
+  border-bottom-color: var(--accent-color);
+  background: var(--tabs-bg);
+  color: #fff;
+}
+
+.tabNote {
+  margin: 0;
+  padding: 0.75rem 1rem 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.codeTabs :global(pre) {
+  margin: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+.tableScroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 0 1.5rem;
+}
+
+.tableScroll table {
+  margin-bottom: 0;
+  min-width: 32rem;
+}
+
+.tableScroll table {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}
+
+.tableScroll th {
+  hyphens: none;
+  white-space: nowrap;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tableScroll td {
+  color: var(--text-primary);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.4rem;
+  margin: 0 0 0.9rem;
+  padding: 0.65rem 0 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.toggleLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.sizeSwitch {
+  display: inline-flex;
+  margin: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.sizeSwitch button {
+  padding: 0.25rem 0.7rem;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.sizeSwitch button:not([aria-pressed='true']):hover {
+  background: var(--tag-bg);
+  color: var(--text-primary);
+}
+
+.sizeSwitch button + button {
+  border-left: 1px solid var(--border-color);
+}
+
+.sizeSwitch button[aria-pressed='true'] {
+  background: var(--text-primary);
+  /* --bg-primary is translucent in abyss; the opaque surface keeps the label readable. */
+  color: var(--bg-secondary);
+  font-weight: 600;
+}
+
+:global(:root[data-theme='abyss']) .sizeSwitch,
+:global(:root[data-theme='abyss']) .sizeSwitch button + button {
+  border-color: rgba(92, 188, 236, 0.35);
+}
+
+:global(:root[data-theme='abyss']) .sizeSwitch button {
+  color: var(--text-primary);
+}
+
+:global(:root[data-theme='abyss']) .sizeSwitch button[aria-pressed='true'] {
+  background: var(--accent-color);
+  color: var(--bg-secondary);
+}
+
+.details {
+  margin: 0 0 1.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+}
+
+.details > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: none;
+  list-style: none;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.details > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Chevron: points right when closed, down when open. */
+.details > summary::before {
+  content: '';
+  flex-shrink: 0;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin: 0 0.15rem;
+  border-right: 2px solid var(--accent-color);
+  border-bottom: 2px solid var(--accent-color);
+  transform: rotate(-45deg);
+  transition: transform 0.15s ease;
+}
+
+.details[open] > summary::before {
+  transform: rotate(45deg);
+}
+
+.details > summary::after {
+  content: 'Show';
+  flex-shrink: 0;
+  margin-left: auto;
+  padding: 0.1rem 0.65rem;
+  border: 1px solid var(--accent-color);
+  border-radius: 999px;
+  color: var(--accent-color);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.details[open] > summary::after {
+  content: 'Hide';
+}
+
+.details > summary:hover::after {
+  background: var(--accent-color);
+  color: #fff;
+}
+
+.details[open] > summary {
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 8px 8px 0 0;
+}
+
+.details > div {
+  padding: 1rem 1rem 0.25rem;
+}
+
+.modes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12.5rem), 1fr));
+  gap: 0.75rem;
+  margin: 0 0 1.25rem;
+}
+
+.mode {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--border-color);
+  border-top: 3px solid var(--mode);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.mode:hover {
+  border-color: var(--mode);
+}
+
+.mode[aria-pressed='true'] {
+  border-color: var(--mode);
+  box-shadow: 0 0 0 1px var(--mode);
+}
+
+.modeName {
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.modeTasks {
+  font-size: 0.85rem;
+}
+
+.modeTree {
+  display: flex;
+  flex-direction: column;
+  margin: 0.2rem 0;
+  padding: 0.45rem 0.55rem;
+  border-radius: 4px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  line-height: 1.55;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+.modeSource {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}

@@ -1,0 +1,110 @@
+[
+  {
+    "workload": "quick",
+    "size": 12,
+    "variant": "atomized",
+    "mem_gb": 8.2
+  },
+  {
+    "workload": "quick",
+    "size": 12,
+    "variant": "baseline",
+    "mem_gb": 6.5
+  },
+  {
+    "workload": "quick",
+    "size": 12,
+    "variant": "sharded",
+    "mem_gb": 7.1
+  },
+  {
+    "workload": "quick",
+    "size": 50,
+    "variant": "atomized",
+    "mem_gb": 7.4
+  },
+  {
+    "workload": "quick",
+    "size": 50,
+    "variant": "baseline",
+    "mem_gb": 8
+  },
+  {
+    "workload": "quick",
+    "size": 50,
+    "variant": "sharded",
+    "mem_gb": 7.8
+  },
+  {
+    "workload": "quick",
+    "size": 100,
+    "variant": "atomized",
+    "mem_gb": 7.5
+  },
+  {
+    "workload": "quick",
+    "size": 100,
+    "variant": "baseline",
+    "mem_gb": 7.7
+  },
+  {
+    "workload": "quick",
+    "size": 100,
+    "variant": "sharded",
+    "mem_gb": 8
+  },
+  {
+    "workload": "slow",
+    "size": 12,
+    "variant": "atomized",
+    "mem_gb": 7.7
+  },
+  {
+    "workload": "slow",
+    "size": 12,
+    "variant": "baseline",
+    "mem_gb": 6.2
+  },
+  {
+    "workload": "slow",
+    "size": 12,
+    "variant": "sharded",
+    "mem_gb": 8.1
+  },
+  {
+    "workload": "slow",
+    "size": 50,
+    "variant": "atomized",
+    "mem_gb": 8
+  },
+  {
+    "workload": "slow",
+    "size": 50,
+    "variant": "baseline",
+    "mem_gb": 7.3
+  },
+  {
+    "workload": "slow",
+    "size": 50,
+    "variant": "sharded",
+    "mem_gb": 8.3
+  },
+  {
+    "workload": "slow",
+    "size": 100,
+    "variant": "atomized",
+    "mem_gb": 8.3
+  },
+  {
+    "workload": "slow",
+    "size": 100,
+    "variant": "baseline",
+    "mem_gb": 7.7
+  },
+  {
+    "workload": "slow",
+    "size": 100,
+    "variant": "sharded",
+    "mem_gb": 8.6
+  }
+]

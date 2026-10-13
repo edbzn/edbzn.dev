@@ -1,0 +1,218 @@
+[
+  {
+    "size": 12,
+    "variant": "baseline",
+    "parallel": 8,
+    "target": null,
+    "biggest": 94.8,
+    "work": 42.6,
+    "wall": 102.0
+  },
+  {
+    "size": 12,
+    "variant": "atomized",
+    "parallel": 8,
+    "target": null,
+    "biggest": 7.2,
+    "work": 84.1,
+    "wall": 86.9
+  },
+  {
+    "size": 12,
+    "variant": "baseline",
+    "parallel": 16,
+    "target": null,
+    "biggest": 96.5,
+    "work": 21.7,
+    "wall": 97.2
+  },
+  {
+    "size": 12,
+    "variant": "atomized",
+    "parallel": 16,
+    "target": null,
+    "biggest": 8.8,
+    "work": 56.7,
+    "wall": 59.4
+  },
+  {
+    "size": 12,
+    "variant": "sharded",
+    "parallel": 8,
+    "target": 10,
+    "biggest": 20.1,
+    "work": 49.1,
+    "wall": 53.6
+  },
+  {
+    "size": 12,
+    "variant": "sharded",
+    "parallel": 16,
+    "target": 10,
+    "biggest": 22.7,
+    "work": 30.1,
+    "wall": 39.3
+  },
+  {
+    "size": 12,
+    "variant": "sharded",
+    "parallel": 8,
+    "target": 30,
+    "biggest": 41.6,
+    "work": 44.5,
+    "wall": 64.1
+  },
+  {
+    "size": 12,
+    "variant": "sharded",
+    "parallel": 8,
+    "target": 5,
+    "biggest": 16.9,
+    "work": 52.0,
+    "wall": 57.2
+  },
+  {
+    "size": 50,
+    "variant": "baseline",
+    "parallel": 8,
+    "target": null,
+    "biggest": 147.4,
+    "work": 173.9,
+    "wall": 196.3
+  },
+  {
+    "size": 50,
+    "variant": "atomized",
+    "parallel": 8,
+    "target": null,
+    "biggest": 7.2,
+    "work": 320.8,
+    "wall": 323.8
+  },
+  {
+    "size": 50,
+    "variant": "baseline",
+    "parallel": 16,
+    "target": null,
+    "biggest": 159.2,
+    "work": 105.0,
+    "wall": 168.1
+  },
+  {
+    "size": 50,
+    "variant": "atomized",
+    "parallel": 16,
+    "target": null,
+    "biggest": 10.2,
+    "work": 224.9,
+    "wall": 228.4
+  },
+  {
+    "size": 50,
+    "variant": "sharded",
+    "parallel": 8,
+    "target": 10,
+    "biggest": 22.8,
+    "work": 191.9,
+    "wall": 198.5
+  },
+  {
+    "size": 50,
+    "variant": "sharded",
+    "parallel": 16,
+    "target": 10,
+    "biggest": 30.1,
+    "work": 123.8,
+    "wall": 130.9
+  },
+  {
+    "size": 50,
+    "variant": "sharded",
+    "parallel": 8,
+    "target": 30,
+    "biggest": 43.4,
+    "work": 177.4,
+    "wall": 189.6
+  },
+  {
+    "size": 50,
+    "variant": "sharded",
+    "parallel": 8,
+    "target": 5,
+    "biggest": 22.0,
+    "work": 205.1,
+    "wall": 210.2
+  },
+  {
+    "size": 100,
+    "variant": "atomized",
+    "parallel": 16,
+    "target": null,
+    "biggest": 11.3,
+    "work": 411.5,
+    "wall": 417.3
+  },
+  {
+    "size": 100,
+    "variant": "sharded",
+    "parallel": 8,
+    "target": 10,
+    "biggest": 22.7,
+    "work": 347.8,
+    "wall": 353.3
+  },
+  {
+    "size": 100,
+    "variant": "sharded",
+    "parallel": 16,
+    "target": 10,
+    "biggest": 32.1,
+    "work": 227.9,
+    "wall": 234.2
+  },
+  {
+    "size": 100,
+    "variant": "sharded",
+    "parallel": 8,
+    "target": 30,
+    "biggest": 49.9,
+    "work": 323.6,
+    "wall": 332.7
+  },
+  {
+    "size": 100,
+    "variant": "sharded",
+    "parallel": 8,
+    "target": 5,
+    "biggest": 21.4,
+    "work": 377.7,
+    "wall": 381.5
+  },
+  {
+    "size": 100,
+    "variant": "atomized",
+    "parallel": 8,
+    "target": null,
+    "biggest": 7.6,
+    "work": 587.6,
+    "wall": 594.3
+  },
+  {
+    "size": 100,
+    "variant": "baseline",
+    "parallel": 8,
+    "target": null,
+    "biggest": 129.5,
+    "work": 316.5,
+    "wall": 351.2
+  },
+  {
+    "size": 100,
+    "variant": "baseline",
+    "parallel": 16,
+    "target": null,
+    "biggest": 138.5,
+    "work": 197.9,
+    "wall": 267.3
+  }
+]
