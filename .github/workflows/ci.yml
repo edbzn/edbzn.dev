@@ -3,6 +3,14 @@ name: Build & Test
 on:
   push:
 
+# Runs on main queue up instead of running side by side, so two quick merges
+# can't deploy out of order. Other branches keep a group per run (no queuing).
+# GitHub keeps one pending run per group: a newer push replaces an older one
+# that hasn't started yet, and the newest commit is always the one deployed.
+concurrency:
+  group: ${{ github.ref == 'refs/heads/main' && 'ci-main' || format('ci-{0}', github.run_id) }}
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
