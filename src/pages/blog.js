@@ -62,14 +62,11 @@ class BlogIndex extends React.Component {
             >
               {tag ? `#${tag}` : 'All posts'}
             </div>
-            {blogPosts.map((node) => (
-              <div
-                key={node.frontmatter.title}
-                style={{ marginTop: rhythm(1.4) }}
-              >
-                <PostPreview node={node} />
-              </div>
-            ))}
+            <div style={{ marginTop: rhythm(1.4) }}>
+              {blogPosts.map((node) => (
+                <PostPreview key={node.id} node={node} />
+              ))}
+            </div>
           </section>
         </TagIndex>
       </Layout>
@@ -108,7 +105,21 @@ export const pageQuery = graphql`
         fields {
           slug
         }
+        previewImage {
+          publicURL
+          childImageSharp {
+            gatsbyImageData(
+              width: 192
+              aspectRatio: 1.6
+              placeholder: BLURRED
+              transformOptions: { cropFocus: CENTER }
+            )
+          }
+        }
         frontmatter {
+          cover {
+            id
+          }
           description
           date(formatString: "MMMM DD, YYYY")
           title

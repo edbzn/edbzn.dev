@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="1200" height="500">
+<circle cx="330.6" cy="367.9" r="9.0" fill="#8f8f8f" opacity="0.3"/>
+<circle cx="305.0" cy="342.0" r="8.8" fill="#8f8f8f" opacity="0.3"/>
+<circle cx="296.1" cy="312.8" r="8.5" fill="#8f8f8f" opacity="0.4"/>
+<circle cx="303.3" cy="282.2" r="8.3" fill="#8f8f8f" opacity="0.4"/>
+<circle cx="325.4" cy="251.8" r="8.0" fill="#8f8f8f" opacity="0.4"/>
+<circle cx="360.3" cy="223.2" r="7.8" fill="#8f8f8f" opacity="0.4"/>
+<circle cx="405.3" cy="197.8" r="7.6" fill="#8f8f8f" opacity="0.5"/>
+<circle cx="457.4" cy="176.9" r="7.3" fill="#8f8f8f" opacity="0.5"/>
+<circle cx="513.2" cy="161.2" r="7.1" fill="#8f8f8f" opacity="0.5"/>
+<circle cx="569.6" cy="151.2" r="6.8" fill="#8f8f8f" opacity="0.5"/>
+<circle cx="623.3" cy="147.2" r="6.6" fill="#8f8f8f" opacity="0.6"/>
+<circle cx="671.6" cy="148.8" r="6.4" fill="#8f8f8f" opacity="0.6"/>
+<circle cx="712.3" cy="155.7" r="6.1" fill="#8f8f8f" opacity="0.6"/>
+<circle cx="743.6" cy="166.9" r="5.9" fill="#8f8f8f" opacity="0.7"/>
+<circle cx="764.6" cy="181.5" r="5.6" fill="#8f8f8f" opacity="0.7"/>
+<circle cx="774.8" cy="198.5" r="5.4" fill="#8f8f8f" opacity="0.7"/>
+<circle cx="774.7" cy="216.5" r="5.2" fill="#8f8f8f" opacity="0.7"/>
+<circle cx="765.2" cy="234.6" r="4.9" fill="#8f8f8f" opacity="0.8"/>
+<circle cx="747.8" cy="251.5" r="4.7" fill="#8f8f8f" opacity="0.8"/>
+<circle cx="724.1" cy="266.5" r="4.4" fill="#8f8f8f" opacity="0.8"/>
+<circle cx="696.4" cy="278.7" r="4.2" fill="#8f8f8f" opacity="0.8"/>
+<circle cx="666.8" cy="287.8" r="4.0" fill="#8f8f8f" opacity="0.9"/>
+<circle cx="637.4" cy="293.5" r="3.7" fill="#8f8f8f" opacity="0.9"/>
+<circle cx="610.0" cy="295.8" r="3.5" fill="#8f8f8f" opacity="0.9"/>
+<circle cx="586.4" cy="294.9" r="3.2" fill="#8f8f8f" opacity="0.9"/>
+<circle cx="567.6" cy="291.5" r="3.0" fill="#8f8f8f" opacity="1.0"/>
+<path d="M 380 250 A 220 44 0 0 1 820 250" transform="rotate(-10 600 250)" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+<circle cx="600.0" cy="250.0" r="72" fill="#000000" />
+<path d="M 380 250 A 220 44 0 0 0 820 250" transform="rotate(-10 600 250)" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+<circle cx="600.0" cy="250.0" r="72" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.6"/>
+</svg>

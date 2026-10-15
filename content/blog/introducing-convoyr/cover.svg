@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="1200" height="500">
+<line x1="220" y1="250" x2="980" y2="250" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-dasharray="8 10"/>
+<path d="M 430 150 Q 474 250 430 350 Q 386 250 430 150 Z" fill="rgba(255, 255, 255, 0.08)" stroke="#8f8f8f" stroke-width="4" stroke-linejoin="round"/>
+<path d="M 600 150 Q 644 250 600 350 Q 556 250 600 150 Z" fill="rgba(255, 255, 255, 0.08)" stroke="#8f8f8f" stroke-width="4" stroke-linejoin="round"/>
+<path d="M 770 150 Q 814 250 770 350 Q 726 250 770 150 Z" fill="rgba(255, 255, 255, 0.08)" stroke="#8f8f8f" stroke-width="4" stroke-linejoin="round"/>
+<polyline points="240.0,250.0 430.0,185.0 770.0,185.0 960.0,250.0" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+<polyline points="240.0,250.0 430.0,315.0 770.0,315.0 960.0,250.0" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+<circle cx="240.0" cy="250.0" r="14" fill="#8f8f8f" />
+<circle cx="960.0" cy="250.0" r="14" fill="#ffffff" />
+</svg>

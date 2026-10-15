@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="1200" height="500">
+<line x1="600" y1="330" x2="600" y2="120" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-dasharray="8 10"/>
+<line x1="600" y1="330" x2="680" y2="460" stroke="rgba(255, 255, 255, 0.3)" stroke-width="4" stroke-dasharray="2 12" stroke-linecap="round"/>
+<line x1="330" y1="336" x2="314" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="356" y1="336" x2="340" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="382" y1="336" x2="366" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="408" y1="336" x2="392" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="434" y1="336" x2="418" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="460" y1="336" x2="444" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="486" y1="336" x2="470" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="512" y1="336" x2="496" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="538" y1="336" x2="522" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="564" y1="336" x2="548" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="590" y1="336" x2="574" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="616" y1="336" x2="600" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="642" y1="336" x2="626" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="668" y1="336" x2="652" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="694" y1="336" x2="678" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="720" y1="336" x2="704" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="746" y1="336" x2="730" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="772" y1="336" x2="756" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="798" y1="336" x2="782" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="824" y1="336" x2="808" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="850" y1="336" x2="834" y2="354" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-linecap="round"/>
+<line x1="320" y1="330" x2="880" y2="330" stroke="#8f8f8f" stroke-width="6" stroke-linecap="round"/>
+<line x1="360.0" y1="110.0" x2="595.9" y2="325.9" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+<path d="M 596.0 326.0 L 595.9 326.0 L 596.0 325.9 Z" fill="#ffffff"/>
+<line x1="604.0" y1="326.0" x2="823.8" y2="124.9" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+<path d="M 840.0 110.0 L 831.9 133.8 L 815.6 115.9 Z" fill="#ffffff"/>
+</svg>

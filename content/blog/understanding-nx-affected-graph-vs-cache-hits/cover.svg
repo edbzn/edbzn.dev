@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="1200" height="500">
+<line x1="359.5" y1="155.5" x2="570.5" y2="194.5" stroke="#8f8f8f" stroke-width="5" stroke-linecap="round"/>
+<line x1="359.5" y1="244.5" x2="570.5" y2="205.5" stroke="rgba(255, 255, 255, 0.22)" stroke-width="3" stroke-linecap="round"/>
+<line x1="359.5" y1="255.5" x2="570.5" y2="294.5" stroke="rgba(255, 255, 255, 0.22)" stroke-width="3" stroke-linecap="round"/>
+<line x1="359.5" y1="344.5" x2="570.5" y2="305.5" stroke="rgba(255, 255, 255, 0.22)" stroke-width="3" stroke-linecap="round"/>
+<line x1="629.5" y1="194.5" x2="840.5" y2="155.5" stroke="#8f8f8f" stroke-width="5" stroke-linecap="round"/>
+<line x1="629.5" y1="205.5" x2="840.5" y2="244.5" stroke="#8f8f8f" stroke-width="5" stroke-linecap="round"/>
+<line x1="629.5" y1="294.5" x2="840.5" y2="255.5" stroke="rgba(255, 255, 255, 0.22)" stroke-width="3" stroke-linecap="round"/>
+<line x1="629.5" y1="305.5" x2="840.5" y2="344.5" stroke="rgba(255, 255, 255, 0.22)" stroke-width="3" stroke-linecap="round"/>
+<circle cx="330" cy="150" r="30" fill="#ffffff" />
+<circle cx="330" cy="250" r="30" fill="none" stroke="rgba(255, 255, 255, 0.22)" stroke-width="3"/>
+<circle cx="330" cy="350" r="30" fill="none" stroke="rgba(255, 255, 255, 0.22)" stroke-width="3"/>
+<circle cx="600" cy="200" r="30" fill="#8f8f8f" />
+<circle cx="600" cy="300" r="30" fill="none" stroke="rgba(255, 255, 255, 0.22)" stroke-width="3"/>
+<circle cx="870" cy="150" r="30" fill="#8f8f8f" />
+<circle cx="870" cy="250" r="30" fill="#8f8f8f" />
+<circle cx="870" cy="350" r="30" fill="none" stroke="rgba(255, 255, 255, 0.22)" stroke-width="3"/>
+</svg>

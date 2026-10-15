@@ -3,6 +3,7 @@ title: 'Nx 20: Exploring the new TS preset and TypeScript project references'
 date: '2024-11-23T00:00:00.000Z'
 description: Explore Nx 20's new TypeScript preset and project references, their benefits, limitations, and future potential for large-scale monorepos.
 tags: [monorepo, tooling]
+cover: ./cover.svg
 ---
 
 Nx 20 introduces a new [TS preset](https://nx.dev/nx-api/js/documents/typescript-project-references#create-a-new-nx-workspace-using-project-references), allowing developers to generate workspaces that leverage TypeScript project references. Given the promising claims, the confusion in the community, and the lack of literature on it, I decided to explore the feature.

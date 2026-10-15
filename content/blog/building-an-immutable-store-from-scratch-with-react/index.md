@@ -3,6 +3,7 @@ title: Building an immutable store from scratch with React
 date: '2019-03-13T00:00:00.000Z'
 tags: [javascript]
 description: Learn how to build a simple store using React and Meiosis pattern.
+cover: ./cover.svg
 ---
 
 We're going to create a store using React and [Meiosis](https://meiosis.js.org/).

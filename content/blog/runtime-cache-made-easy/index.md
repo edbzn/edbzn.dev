@@ -3,6 +3,7 @@ title: Service worker runtime cache made easy
 date: '2019-01-24T00:00:00.000Z'
 tags: [javascript, performance]
 description: Learn how to simplify service worker creation using sw-precache.
+cover: ./cover.svg
 ---
 
 Service workers improve client-side performance but they are not easy to build. They bring complexity in the build pipeline and they have a huge impact on what's going on in the browser.
