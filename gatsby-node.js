@@ -157,6 +157,24 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
   }
 };
 
+const IMAGE_EXTENSIONS = /\.(png|jpe?g|gif|webp|avif|svg)$/i;
+
+/**
+ * Returns the path of the first image in a Markdown/MDX body that points to a
+ * file next to the post (remote URLs are ignored), or null.
+ */
+function findFirstLocalImage(body = '') {
+  const pattern =
+    /!\[[^\]]*\]\(\s*<?([^)\s>]+)>?[^)]*\)|<img[^>]*\bsrc=["']([^"']+)["']/g;
+  for (const match of body.matchAll(pattern)) {
+    const src = match[1] ?? match[2];
+    if (!/^([a-z]+:)?\/\//i.test(src) && IMAGE_EXTENSIONS.test(src)) {
+      return src;
+    }
+  }
+  return null;
+}
+
 /**
  * @type {import('gatsby').GatsbyNode['createSchemaCustomization']}
  */
@@ -174,6 +192,26 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
             }
 
             return !frontmatter.draft;
+          },
+        },
+        // Thumbnail for post lists: the `cover` frontmatter if set, otherwise
+        // the first local image referenced in the post body.
+        previewImage: {
+          type: 'File',
+          resolve: async (source, args, context) => {
+            const src =
+              source.frontmatter?.cover ?? findFirstLocalImage(source.body);
+            if (!src) {
+              return null;
+            }
+            const absolutePath = path.resolve(
+              path.dirname(source.internal.contentFilePath),
+              src
+            );
+            return context.nodeModel.findOne({
+              type: 'File',
+              query: { filter: { absolutePath: { eq: absolutePath } } },
+            });
           },
         },
       },

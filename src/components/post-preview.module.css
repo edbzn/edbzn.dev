@@ -1,0 +1,96 @@
+/* Plain rows: thumbnail on the left, text on the right, a thin divider
+   between posts, no card chrome */
+.article {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.75rem 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.article:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Clamped so every row has about the same height */
+.title,
+.description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+/* Cover banners are drawn at 2.4:1 with their subject kept in the middle
+   two thirds, so a 1.6:1 crop shows all of it */
+.banner {
+  flex-shrink: 0;
+  display: block;
+  width: 192px;
+  aspect-ratio: 1.6;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  /* Cover banners are transparent: the tile colour comes from the theme */
+  background: linear-gradient(135deg, #0c1c28, #020b12);
+  box-shadow: none;
+}
+
+:global(:root[data-theme='dark']) .banner {
+  background: linear-gradient(135deg, #1c1c1c, #0e0e0e);
+}
+
+:global(:root[data-theme='light']) .banner {
+  background: linear-gradient(135deg, #f2f2f2, #e6e6e6);
+}
+
+.banner :global(.gatsby-image-wrapper) {
+  display: block;
+  height: 100%;
+}
+
+/* SVG diagrams and logos: show them whole instead of cropping */
+.vector {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0.5rem;
+  object-fit: contain;
+}
+
+.fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  object-fit: cover;
+}
+
+/* Cover banners are white and grey shapes: invert them for the light theme */
+:global(:root[data-theme='light']) .fill {
+  filter: invert(1);
+}
+
+@media screen and (max-width: 640px) {
+  .article {
+    gap: 0.875rem;
+    padding: 1.5rem 0;
+  }
+
+  .banner {
+    width: 104px;
+  }
+
+  .title {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+}
