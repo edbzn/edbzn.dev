@@ -3,16 +3,17 @@ import React from 'react';
 import { rhythm } from '../utils/typography';
 import { ThemeToggle } from './theme-toggle';
 import { NavLinks } from './nav-links';
-import { AsciiBlackHole } from './ascii-black-hole';
-import { AsciiGlobe } from './ascii-globe';
+import { LazyAscii } from './lazy-ascii';
 import { LogoProximityTrigger } from './logo-proximity-trigger';
 
 class Layout extends React.Component {
   render() {
     const { children, github, author, location, breadcrumb } = this.props;
-    // The blog (index, tag pages and articles) gets the black hole, every
-    // other page the globe.
-    const onBlog = /^\/(blog|tags)(\/|$)/.test(location?.pathname || '/');
+    // The blog (index, tag pages and articles) gets the black hole, Uses the
+    // galaxy, every other page the globe.
+    const pathname = location?.pathname || '/';
+    const onBlog = /^\/(blog|tags)(\/|$)/.test(pathname);
+    const onUses = /^\/uses(\/|$)/.test(pathname);
     return (
       <div
         style={{
@@ -171,7 +172,9 @@ class Layout extends React.Component {
         </header>
         <main style={{ marginTop: rhythm(2) }}>{children}</main>
         <div style={{ marginTop: rhythm(2) }}>
-          {onBlog ? <AsciiBlackHole /> : <AsciiGlobe />}
+          <LazyAscii
+            scene={onBlog ? 'black-hole' : onUses ? 'galaxy' : 'globe'}
+          />
         </div>
         <footer
           role="contentinfo"
