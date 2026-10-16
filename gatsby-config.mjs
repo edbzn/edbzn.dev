@@ -130,12 +130,15 @@ export default {
       options: {
         extensions: [`.md`, `.mdx`],
         gatsbyRemarkPlugins: [
+          // Must run before the oembed plugin, which only handles YouTube
+          // now: tweets are rendered statically instead of through widgets.js.
+          `gatsby-remark-static-tweet`,
           {
             resolve: `@raae/gatsby-remark-oembed`,
             options: {
               usePrefix: true,
               providers: {
-                include: ['Twitter', 'YouTube'],
+                include: ['YouTube'],
               },
             },
           },

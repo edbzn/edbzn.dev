@@ -520,8 +520,235 @@ h6[id] {
   scroll-margin-top: calc(var(--site-header-height) + 1rem);
 }
 
-twitter-widget {
-  margin: 2.25em auto !important;
+/* Static tweet cards rendered at build time by the gatsby-remark-static-tweet
+   plugin. Built on .box so they follow the site theme like the other cards. */
+.tweet {
+  margin: 2.25em 0;
+  padding: 1rem 1.25rem;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--text-primary);
+  hyphens: manual;
+}
+
+.tweet a {
+  color: inherit;
+  text-decoration: none;
+  box-shadow: none;
+}
+
+.tweet p {
+  margin: 0;
+}
+
+.tweet svg {
+  fill: currentColor;
+}
+
+.tweet-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.tweet-author {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.tweet-avatar {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  border-radius: 50%;
+}
+
+.tweet-avatar--square {
+  border-radius: 6px;
+}
+
+.tweet-author-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.tweet-author-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tweet-author-handle {
+  color: var(--text-muted);
+}
+
+a.tweet-author:hover .tweet-author-name {
+  text-decoration: underline;
+}
+
+.tweet-verified {
+  flex-shrink: 0;
+  width: 1.05em;
+  height: 1.05em;
+  fill: var(--link-color) !important;
+}
+
+.tweet-brand {
+  flex-shrink: 0;
+  color: var(--text-primary) !important;
+}
+
+.tweet-brand-icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.tweet-replying {
+  margin-bottom: 0.4rem !important;
+  color: var(--text-muted);
+}
+
+.tweet-text {
+  display: block;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.tweet-text a,
+.tweet-replying a,
+.tweet-entity {
+  color: var(--link-color) !important;
+}
+
+.tweet-text a:hover,
+.tweet-replying a:hover {
+  text-decoration: underline;
+}
+
+.tweet-media {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr);
+  gap: 2px;
+  margin-top: 0.75rem;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.tweet-media--1 {
+  display: block;
+  aspect-ratio: auto;
+}
+
+.tweet-media--3,
+.tweet-media--4 {
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.tweet-media--3 .tweet-media-item:first-child {
+  grid-row: span 2;
+}
+
+.tweet-media-item {
+  position: relative;
+  display: block;
+  min-height: 0;
+  max-height: 520px;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+.tweet-media-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0 !important;
+  border-radius: 0;
+  object-fit: cover;
+}
+
+.tweet-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 56px;
+  height: 56px;
+  padding: 12px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  fill: #fff !important;
+}
+
+.tweet-quote {
+  display: block;
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 0.9em;
+}
+
+.tweet-quote:hover {
+  background: var(--nav-pill-bg);
+}
+
+.tweet-quote-header .tweet-author {
+  margin-bottom: 0.4rem;
+}
+
+.tweet-quote-header .tweet-author-text {
+  flex-direction: row;
+  gap: 0.35rem;
+}
+
+.tweet-quote .tweet-avatar {
+  width: 20px;
+  height: 20px;
+}
+
+.tweet-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  color: var(--text-muted);
+}
+
+.tweet-footer a:hover {
+  color: var(--accent-color);
+}
+
+.tweet-stats {
+  display: flex;
+  gap: 1rem;
+}
+
+.tweet-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.tweet-stat-icon {
+  width: 1.05em;
+  height: 1.05em;
 }
 
 p > img {
