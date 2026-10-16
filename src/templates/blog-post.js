@@ -1,6 +1,5 @@
 import { graphql } from 'gatsby';
 import React, { useState, useEffect } from 'react';
-import Giscus from '@giscus/react';
 import { MDXProvider } from '@mdx-js/react';
 import Bio from '../components/bio';
 import Layout from '../components/layout';
@@ -10,6 +9,7 @@ import { BenchChart } from '../components/bench-chart';
 import { BlogIdeas } from '../components/blog-ideas';
 import { blogIdeas } from '../data/blog-ideas';
 import { PostReactions } from '../components/post-reactions';
+import { Comments } from '../components/comments';
 import { PostNav } from '../components/post-nav';
 import { Seo } from '../components/seo';
 import { Tags } from '../components/tags';
@@ -158,23 +158,10 @@ const BlogPostTemplate = (props) => {
               .pop()}
           />
         </div>
-        <Giscus
-          id="comments"
-          repo="edbzn/edbzn.dev"
-          repoId="MDEwOlJlcG9zaXRvcnk5OTQ4MDU0Mw=="
-          category="Comments"
-          categoryId="DIC_kwDOBe3z384CkeQh"
-          mapping="specific"
+        <Comments
           term={commentsTerm}
-          strict="0"
-          reactionsEnabled="0"
-          emitMetadata="0"
-          inputPosition="bottom"
           theme={giscusTheme}
-          loading="lazy"
           lang={post.frontmatter.lang ?? 'en'}
-          crossorigin="anonymous"
-          async
         />
         <PostNav previous={previous} next={next} relatedPosts={relatedPosts} />
         <section

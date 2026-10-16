@@ -174,6 +174,8 @@ describe('Accessibility tests', () => {
     // posts moved under /blog. Giscus must look it up by that term, not by
     // the current pathname ("blog/nobuild-angular/"), or comments vanish.
     cy.visit('/blog/nobuild-angular/');
+    // The widget mounts as the reader scrolls towards it
+    cy.get('#comments').scrollIntoView();
     cy.get('giscus-widget', { timeout: 10000 })
       .shadow()
       .find('iframe')
