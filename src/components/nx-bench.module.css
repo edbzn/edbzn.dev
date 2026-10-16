@@ -24,7 +24,7 @@
   padding: 1rem;
   border: 1px solid var(--border-color);
   border-radius: 10px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
 }
 
 :global(:root[data-theme='abyss']) .figure {
@@ -211,7 +211,7 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.6rem;
   margin: 1.5rem 0;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
 }
 
 @media (min-width: 700px) {
@@ -294,7 +294,7 @@
   border-bottom: 2px solid transparent;
   background: transparent;
   color: rgba(255, 255, 255, 0.6);
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -314,7 +314,7 @@
   margin: 0;
   padding: 0.75rem 1rem 0;
   color: rgba(255, 255, 255, 0.72);
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.85rem;
   line-height: 1.45;
 }
@@ -337,7 +337,7 @@
 }
 
 .tableScroll table {
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.9rem;
   font-variant-numeric: tabular-nums;
   line-height: 1.4;
@@ -443,7 +443,7 @@
   border-radius: 8px;
   background: none;
   list-style: none;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-primary);

@@ -434,7 +434,7 @@ summary {
   color: white;
   padding: 10px;
   border-radius: 4px;
-  font-family: 'Public Sans', serif;
+  font-family: var(--font-sans);
 }
 
 details .gatsby-highlight {
@@ -525,7 +525,7 @@ h6[id] {
 .tweet {
   margin: 2.25em 0;
   padding: 1rem 1.25rem;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.95rem;
   line-height: 1.45;
   color: var(--text-primary);
@@ -882,7 +882,7 @@ p > img {
 .site-nav-crumb-separator {
   flex-shrink: 0;
   padding: 0 2px 0 5px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1;
   color: var(--text-muted);
@@ -895,7 +895,7 @@ p > img {
   max-width: 280px;
   padding: 5px 12px 5px 4px;
   overflow: hidden;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   line-height: 1.2;
   color: var(--text-secondary);

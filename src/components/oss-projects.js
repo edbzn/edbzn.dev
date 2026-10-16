@@ -10,7 +10,7 @@ export const Projects = ({ ossProjects }) => (
       listStyle: 'none',
       display: 'grid',
       gap: rhythm(0.5),
-      fontFamily: '"Public Sans", sans-serif',
+      fontFamily: 'var(--font-sans)',
     }}
   >
     {ossProjects.map((project) => (

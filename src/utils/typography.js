@@ -8,7 +8,7 @@ wordpress2016.overrideThemeStyles = ({ rhythm }) => {
       color: 'var(--text-primary)',
     },
     h1: {
-      fontFamily: "'Public Sans', sans-serif",
+      fontFamily: 'var(--font-sans)',
       color: 'var(--text-primary)',
     },
     'h2,h3,h4,h5,h6': {
@@ -67,6 +67,9 @@ wordpress2016.overrideStyles = (...args) => {
 
 const typography = new Typography({
   ...wordpress2016,
+  // Merriweather with its metric-matched fallback (see static/css/fonts.css)
+  headerFontFamily: ['var(--font-serif)'],
+  bodyFontFamily: ['var(--font-serif)'],
   baseLineHeight: 1.666,
   boldWeight: 900,
 });

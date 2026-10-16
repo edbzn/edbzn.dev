@@ -9,7 +9,7 @@ import { rhythm } from '../utils/typography';
 
 const sectionHeadingStyle = {
   marginBottom: rhythm(1),
-  fontFamily: '"Public Sans", sans-serif',
+  fontFamily: 'var(--font-sans)',
   textTransform: 'uppercase',
   fontWeight: '300',
 };
@@ -26,7 +26,7 @@ class UsesPage extends React.Component {
           <div style={sectionHeadingStyle}>Uses</div>
           <p
             style={{
-              fontFamily: '"Public Sans", sans-serif',
+              fontFamily: 'var(--font-sans)',
               marginBottom: rhythm(1),
               color: 'var(--text-secondary)',
             }}

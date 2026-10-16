@@ -23,7 +23,7 @@ class AboutMe extends React.Component {
           <div
             style={{
               marginBottom: rhythm(1.4),
-              fontFamily: '"Public Sans", sans-serif',
+              fontFamily: 'var(--font-sans)',
               textTransform: 'uppercase',
             }}
           >
@@ -42,7 +42,7 @@ class AboutMe extends React.Component {
           <div
             style={{
               marginBottom: rhythm(1.4),
-              fontFamily: '"Public Sans", sans-serif',
+              fontFamily: 'var(--font-sans)',
               textTransform: 'uppercase',
               fontWeight: '300',
             }}
@@ -56,7 +56,7 @@ class AboutMe extends React.Component {
             style={{
               display: 'inline-block',
               marginTop: rhythm(0.8),
-              fontFamily: '"Public Sans", sans-serif',
+              fontFamily: 'var(--font-sans)',
               fontSize: '0.85rem',
             }}
           >
@@ -68,7 +68,7 @@ class AboutMe extends React.Component {
           <div
             style={{
               marginBottom: rhythm(1.4),
-              fontFamily: '"Public Sans", sans-serif',
+              fontFamily: 'var(--font-sans)',
               textTransform: 'uppercase',
             }}
           >

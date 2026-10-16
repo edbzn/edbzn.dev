@@ -1,5 +1,5 @@
 .root {
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   /* Short card text reads better unhyphenated (layout.js sets auto). */
   hyphens: manual;
 }
@@ -23,7 +23,7 @@
 
 .groupTitle {
   margin: 0 0 0.75rem;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -75,7 +75,7 @@
   width: 1.9rem;
   height: 1.9rem;
   border-radius: 6px;
-  font-family: 'Space Grotesk', 'Public Sans', sans-serif;
+  font-family: 'Space Grotesk', var(--font-sans);
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: -0.02em;

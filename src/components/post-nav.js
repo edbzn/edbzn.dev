@@ -16,7 +16,7 @@ const style = {
   },
   nav: {
     margin: rhythm(2.4) + ' auto',
-    fontFamily: '"Public Sans", sans-serif',
+    fontFamily: 'var(--font-sans)',
   },
 };
 

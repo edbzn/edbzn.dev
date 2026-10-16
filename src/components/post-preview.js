@@ -46,7 +46,7 @@ export const PostPreview = ({ node }) => {
             style={{
               marginTop: 0,
               marginBottom: 0,
-              fontFamily: '"Public Sans", sans-serif',
+              fontFamily: 'var(--font-sans)',
             }}
           >
             <Link

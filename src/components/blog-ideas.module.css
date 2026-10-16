@@ -2,7 +2,7 @@
   list-style: none;
   margin: 1.5em 0;
   padding: 0;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   /* One bordered list, ideas separated by dividers */
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -99,6 +99,10 @@
 }
 
 .count {
+  /* Room for two digits, so the '·' placeholder doesn't shift its neighbours
+     when the count loads */
+  min-width: 2ch;
+  text-align: center;
   font-variant-numeric: tabular-nums;
   font-size: 0.95rem;
   font-weight: 500;

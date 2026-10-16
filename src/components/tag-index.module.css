@@ -14,7 +14,7 @@
 
 .title {
   margin: 0 0 1.4rem;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 300;
   text-transform: uppercase;
 }
@@ -41,7 +41,7 @@
   background-color: var(--tag-bg);
   box-shadow: var(--tag-shadow);
   color: var(--tag-text) !important;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.8rem;
   font-weight: 400;
   text-decoration: none;
@@ -98,7 +98,7 @@
     flex-direction: column;
     max-height: calc(100vh - var(--site-header-height) - 3rem);
     margin-top: 0;
-    font-family: 'Public Sans', sans-serif;
+    font-family: var(--font-sans);
   }
 
   .title {

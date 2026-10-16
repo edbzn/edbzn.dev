@@ -54,7 +54,7 @@ class Layout extends React.Component {
               display: 'block',
               width: 'fit-content',
               boxShadow: `none`,
-              fontFamily: "'Public Sans', sans-serif",
+              fontFamily: 'var(--font-sans)',
             }}
             to={`/`}
           >
@@ -197,7 +197,7 @@ class Layout extends React.Component {
           <div
             style={{
               textAlign: 'center',
-              fontFamily: '"Public Sans", sans-serif',
+              fontFamily: 'var(--font-sans)',
             }}
           >
             <a
