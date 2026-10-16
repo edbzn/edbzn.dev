@@ -1009,3 +1009,11 @@ p > img {
     margin-left: 0;
   }
 }
+
+/* Giscus comments (see comments.js): the widget and its iframe are inline by
+   default, which adds a baseline gap under the iframe and makes it overflow
+   the height reserved for it. */
+giscus-widget,
+giscus-widget::part(iframe) {
+  display: block;
+}
