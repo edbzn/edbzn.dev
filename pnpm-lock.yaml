@@ -166,6 +166,12 @@ importers:
         specifier: ^5.0.0
         version: 5.1.0
 
+  plugins/gatsby-remark-static-tweet:
+    dependencies:
+      unist-util-visit:
+        specifier: ^5.0.0
+        version: 5.1.0
+
 packages:
 
   '@antfu/install-pkg@2.1.0':
