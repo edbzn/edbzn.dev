@@ -645,12 +645,6 @@ p > img {
   background: var(--border-color);
 }
 
-/* On article pages the indicator stays on Blog; other links get their own highlight. */
-.site-nav-links--crumb .site-nav-link:not([data-active]):hover,
-.site-nav-links--crumb .site-nav-link:not([data-active]):focus-visible {
-  background: var(--nav-active-bg);
-}
-
 /* Article breadcrumb: Blog › <post title> */
 .site-nav-crumb-separator {
   flex-shrink: 0;

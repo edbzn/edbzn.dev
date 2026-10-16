@@ -23,10 +23,6 @@ export const NavLinks = ({ pathname, breadcrumb }) => {
   const linkRefs = useRef({});
   const [indicator, setIndicator] = useState(null);
   const [hoveredTo, setHoveredTo] = useState(null);
-  // With a breadcrumb the post title sits between Blog and Uses: sliding the indicator across
-  // it on hover looks odd, so it stays on the active section and hovered links get their own
-  // highlight instead (see .site-nav-links--crumb in main.css).
-  const crumbShown = Boolean(breadcrumb) && isActive('/blog', pathname);
 
   const measureLink = useCallback((to) => {
     const container = containerRef.current;
@@ -42,23 +38,27 @@ export const NavLinks = ({ pathname, breadcrumb }) => {
   }, []);
 
   const updateIndicator = useCallback(() => {
-    const active = links.find((l) => isActive(l.to, pathname))?.to;
-    const target = crumbShown ? active : hoveredTo || active;
+    const target = hoveredTo || links.find((l) => isActive(l.to, pathname))?.to;
     if (!target) {
       setIndicator(null);
       return;
     }
     const pos = measureLink(target);
     if (pos) setIndicator(pos);
-  }, [pathname, hoveredTo, crumbShown, measureLink]);
+  }, [pathname, hoveredTo, measureLink]);
 
   useEffect(() => {
     updateIndicator();
   }, [updateIndicator]);
 
+  // Re-measure whenever the pill changes size: window resizes, but also web
+  // fonts loading late or the breadcrumb title shrinking, which shift the links.
   useEffect(() => {
-    window.addEventListener('resize', updateIndicator);
-    return () => window.removeEventListener('resize', updateIndicator);
+    const container = containerRef.current;
+    if (!container || typeof ResizeObserver === 'undefined') return undefined;
+    const observer = new ResizeObserver(() => updateIndicator());
+    observer.observe(container);
+    return () => observer.disconnect();
   }, [updateIndicator]);
 
   const handleMouseEnter = (to) => {
@@ -72,7 +72,7 @@ export const NavLinks = ({ pathname, breadcrumb }) => {
   return (
     <div
       ref={containerRef}
-      className={`site-nav-links${crumbShown ? ' site-nav-links--crumb' : ''}`}
+      className="site-nav-links"
       onMouseLeave={handleMouseLeave}
       style={{
         display: 'flex',
@@ -113,7 +113,6 @@ export const NavLinks = ({ pathname, breadcrumb }) => {
                 linkRefs.current[to] = el;
               }}
               className="site-nav-link"
-              data-active={active ? '' : undefined}
               aria-current={active && !crumb ? 'page' : undefined}
               onMouseEnter={() => handleMouseEnter(to)}
               style={{
