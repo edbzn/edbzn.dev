@@ -75,7 +75,7 @@
   width: 1.9rem;
   height: 1.9rem;
   border-radius: 6px;
-  font-family: 'Space Grotesk', var(--font-sans);
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: -0.02em;
