@@ -1,6 +1,5 @@
 import { Link } from 'gatsby';
 import React from 'react';
-import rss from '../../static/icons/rss.svg';
 import { rhythm } from '../utils/typography';
 import { ThemeToggle } from './theme-toggle';
 import { NavLinks } from './nav-links';
@@ -205,16 +204,18 @@ class Layout extends React.Component {
             </a>{' '}
             ·{' '}
             <a href="/rss.xml" className="text-link">
-              <img
-                src={rss}
-                alt="RSS feed icon"
-                style={{
-                  width: 14,
-                  marginBottom: -2,
-                  marginRight: 2,
-                  marginLeft: 2,
-                }}
-              />{' '}
+              <svg
+                viewBox="0 0 16 16"
+                width="12"
+                height="12"
+                fill="currentColor"
+                aria-hidden="true"
+                style={{ marginBottom: -1, marginRight: 2, marginLeft: 2 }}
+              >
+                <circle cx="2.5" cy="13.5" r="2" />
+                <path d="M1 6.5a.75.75 0 0 1 .75-.75 8.5 8.5 0 0 1 8.5 8.5.75.75 0 0 1-1.5 0 7 7 0 0 0-7-7A.75.75 0 0 1 1 6.5Z" />
+                <path d="M1 1.75A.75.75 0 0 1 1.75 1 13.25 13.25 0 0 1 15 14.25a.75.75 0 0 1-1.5 0A11.75 11.75 0 0 0 1.75 2.5.75.75 0 0 1 1 1.75Z" />
+              </svg>{' '}
               RSS
             </a>{' '}
           </div>
