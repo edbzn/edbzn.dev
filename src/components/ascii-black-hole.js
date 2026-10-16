@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { applyAssemble } from './ascii-assemble';
+import { useFillColumns } from './use-fill-columns';
 import { applyClickShatter } from './ascii-click-shatter';
 
 // Shading ramp from dark to bright
@@ -35,12 +37,18 @@ const UNDER_W = 0.4; // band under the shadow showing the secondary image
 const UNDER_STRETCH = 2.2; // radial compression of that secondary image
 const UNDER_DIM = 0.6;
 const DOPPLER = 0.3; // relativistic beaming: approaching (left) side brighter
-const HALF_W = 3.45; // half-width of the view, in shadow radii
-const EDGE_FADE = 0.7; // the disk fades out before reaching the canvas sides
+const UNIT = 8.5; // columns per shadow radius: sets the drawing's size
+const HALF_W = 3.45; // the disk fades out this far from the centre, in shadow radii
+const EDGE_FADE = 0.7; // ...over this distance, in shadow radii
 const CENTER_Y = 0.3; // shifts the hole down to balance the halo above it
 const SX = 2; // horizontal sub-samples per cell
 const SY = 3; // vertical sub-samples per cell (cells are ~2x taller than wide)
 const SAMPLES = SX * SY;
+
+// Canvas size: the same height for every footer animation, and at least
+// this many columns (it widens to fill the content column).
+const ROWS = 22;
+const MIN_COLS = 60; // the disk, out to where it fades
 
 function parseCssColor(raw) {
   if (!raw) return null;
@@ -142,7 +150,6 @@ function buildGeometry(geo, W, H, incl, roll) {
   const inclFar = INCL_FAR + (incl - INCL) * 1.5;
   const cr = Math.cos(roll);
   const sr = Math.sin(roll);
-  const unit = W / 2 / HALF_W; // columns per shadow radius
   const hit = { X: 0, Z: 0 };
   const under = { X: 0, Z: 0 };
   let cell = 0;
@@ -157,9 +164,9 @@ function buildGeometry(geo, W, H, incl, roll) {
       let sinSum = 0;
       let omegaSum = 0;
       for (let j = 0; j < SY; j++) {
-        const y0 = (-(row + (j + 0.5) / SY - H / 2) * ASPECT) / unit + CENTER_Y;
+        const y0 = (-(row + (j + 0.5) / SY - H / 2) * ASPECT) / UNIT + CENTER_Y;
         for (let i = 0; i < SX; i++) {
-          const x0 = (col + (i + 0.5) / SX - W / 2) / unit;
+          const x0 = (col + (i + 0.5) / SX - W / 2) / UNIT;
           // Camera roll: turn the view around the hole.
           const x = x0 * cr + y0 * sr;
           const y = y0 * cr - x0 * sr;
@@ -290,6 +297,9 @@ export const AsciiBlackHole = () => {
   const rafRef = useRef(null);
   // Live click bursts (see ascii-click-shatter.js).
   const burstsRef = useRef([]);
+  // When the entrance started (see ascii-assemble.js): null until the canvas
+  // first scrolls into view, 0 once it has played.
+  const introRef = useRef(null);
   // Camera orbit phase: drives its elevation and roll.
   const cameraRef = useRef(0);
   // Mirror of `reducedMotion` for the native listeners, whose closures are
@@ -300,12 +310,17 @@ export const AsciiBlackHole = () => {
   // earlier) repaint the static frame without depending on declaration order.
   const drawFrameRef = useRef(null);
 
-  const W = 64;
-  const H = 24;
+  // The canvas spans the full content width; the drawing keeps its size.
+  const W = useFillColumns(containerRef, MIN_COLS);
+  const H = ROWS;
   const geometryRef = useRef(null);
-  if (!geometryRef.current) geometryRef.current = createGeometry(W, H);
-  const cellBufRef = useRef(new Uint8Array(W * H));
-  const distBufRef = useRef(new Uint8Array(W * H));
+  const cellBufRef = useRef(null);
+  const distBufRef = useRef(null);
+  if (cellBufRef.current?.length !== W * H) {
+    geometryRef.current = createGeometry(W, H);
+    cellBufRef.current = new Uint8Array(W * H);
+    distBufRef.current = new Uint8Array(W * H);
+  }
 
   // Respect prefers-reduced-motion: the disk is a permanent rAF loop, so a
   // reader who asked for less motion gets a single static frame instead.
@@ -479,6 +494,18 @@ export const AsciiBlackHole = () => {
     }
     buildFrame(geo, W, H, timeRef.current, cellBufRef.current);
 
+    // On first appearance the characters gather from random spots.
+    if (introRef.current) {
+      const live = applyAssemble(
+        cellBufRef.current,
+        distBufRef.current,
+        W,
+        H,
+        (Date.now() - introRef.current) / 1000
+      );
+      if (!live) introRef.current = 0;
+    }
+
     // Clicks burst the characters around them apart; several bursts stack.
     burstsRef.current = applyClickShatter(
       cellBufRef.current,
@@ -528,6 +555,7 @@ export const AsciiBlackHole = () => {
       return undefined;
     }
     if (isVisible) {
+      if (introRef.current === null) introRef.current = Date.now();
       rafRef.current = requestAnimationFrame(animate);
     } else if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
@@ -556,6 +584,8 @@ const containerStyle = {
   overflow: 'hidden',
   userSelect: 'none',
   maxWidth: '100%',
+  // No blue tap rectangle on mobile when the canvas is tapped.
+  WebkitTapHighlightColor: 'transparent',
 };
 
 const canvasStyle = {

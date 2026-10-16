@@ -1,0 +1,547 @@
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { applyAssemble } from './ascii-assemble';
+import { useFillColumns } from './use-fill-columns';
+import { applyClickShatter } from './ascii-click-shatter';
+
+// Shading ramp from dark to bright
+const SHADE = ' .,-~:;=!*#$@';
+const SHADE_MAX = SHADE.length - 1;
+
+// Cell values stored in the frame buffer: the low bits hold the shade index
+// (0 = empty, SHADE_MAX = brightest); TINT marks the young star clusters
+// along the arms, drawn with the accent colour instead of the text colour.
+// ascii-click-shatter.js relies on this same encoding.
+const TINT = 16;
+
+// Pre-computed opacity per shade level. Faint characters stay faint so the
+// outer disk dissolves into the background instead of ending on a hard edge.
+const SHADE_OPACITY_VALUES = [...SHADE].map((_, i) =>
+  i === 0 ? 0 : 0.18 + 0.82 * Math.pow(i / SHADE_MAX, 0.9)
+);
+
+// Galaxy geometry, in columns (rows are scaled by ASPECT so distances are
+// round on screen). A spiral galaxy in 3D: two logarithmic arms on a thin
+// disk around a puffy bulge, filmed by a perspective camera while it slowly
+// tumbles, from nearly face-on to steeply inclined and round again.
+const ASPECT = 1.95; // cell height / cell width (13px line / ~6.6px glyph)
+const BULGE_R = 3.4; // radius of the bulge
+const BULGE_FLAT = 0.6; // the bulge is flattened along the galaxy's axis
+const DUST = 0.45; // how much the near side of the disk dims the bulge
+const DISK_R = 22; // e-folding radius of the arm brightness
+const DISK_OUT = 20; // outer edge of the disk
+const DISK_FADE = 8; // radial distance over which the outer arms fade out
+const ARM_START = 2; // the arms come out of the bulge here
+const ARMS = 2; // number of spiral arms
+const PITCH = 0.42; // tan(pitch angle): how loosely the arms wind
+const ARM_SHARP = 3; // higher = thinner arms
+const SPIN = 0.18; // the disk turns about its axis, in radians per time unit
+const TILT_MID = 0.75; // the disk tilts between ~17° and ~69° from face-on
+const TILT_SWING = 0.45;
+const TILT_SPEED = 0.22; // tilt cycle speed, in radians per time unit (~40 s)
+const AXIS_SWING = 0.5; // the tilt axis swings ~30° either side of horizontal,
+const AXIS_SPEED = 0.11; // ...once every ~80 s, so the disk stays wider than tall
+const FOCAL = 60; // camera distance: smaller = stronger perspective
+const STARS = 0.022; // share of cells holding a background star
+const STAR_DIM = SHADE.indexOf('.');
+const STAR_BRIGHT = SHADE.indexOf('*');
+const SX = 2; // horizontal sub-samples per cell
+const SY = 3; // vertical sub-samples per cell (cells are ~2x taller than wide)
+const SAMPLES = SX * SY;
+
+// Rotate v about the unit axis k by angle a (Rodrigues' formula).
+function rotate(v, k, a) {
+  const c = Math.cos(a);
+  const s = Math.sin(a);
+  const dot = (k[0] * v[0] + k[1] * v[1] + k[2] * v[2]) * (1 - c);
+  return [
+    v[0] * c + (k[1] * v[2] - k[2] * v[1]) * s + k[0] * dot,
+    v[1] * c + (k[2] * v[0] - k[0] * v[2]) * s + k[1] * dot,
+    v[2] * c + (k[0] * v[1] - k[1] * v[0]) * s + k[2] * dot,
+  ];
+}
+
+// Stable pseudo-random value in [0, 1) per cell.
+function hash(c, r) {
+  let h = (c * 374761393 + r * 668265263) | 0;
+  h = Math.imul(h ^ (h >>> 13), 1274126177);
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+}
+
+// Canvas size: the same height for every footer animation, and at least
+// this many columns (it widens to fill the content column).
+const ROWS = 22;
+const MIN_COLS = 60; // the disk, even when tilted towards the camera
+
+function parseCssColor(raw) {
+  if (!raw) return null;
+  // Parse hex (#rrggbb or #rgb), rgb/rgba(...), or hsl/hsla(...).
+  // Browsers normalize computed colors to different formats (e.g. Chrome
+  // returns hsla() for colors with alpha), so all three must be handled.
+  const hex = raw.match(/^#([0-9a-f]{3,8})$/i)?.[1];
+  const hsl = raw.match(
+    /^hsla?\(\s*([\d.]+)(?:deg)?[\s,]+([\d.]+)%[\s,]+([\d.]+)%/i
+  );
+  if (hex) {
+    if (hex.length === 3) {
+      return [
+        parseInt(hex[0] + hex[0], 16),
+        parseInt(hex[1] + hex[1], 16),
+        parseInt(hex[2] + hex[2], 16),
+      ];
+    }
+    return [
+      parseInt(hex.slice(0, 2), 16),
+      parseInt(hex.slice(2, 4), 16),
+      parseInt(hex.slice(4, 6), 16),
+    ];
+  }
+  if (hsl) return hslToRgb(Number(hsl[1]), Number(hsl[2]), Number(hsl[3]));
+  const m = raw.match(/(\d+)/g);
+  if (!m || m.length < 3) return null;
+  return m.slice(0, 3).map(Number);
+}
+
+function hslToRgb(h, s, l) {
+  s /= 100;
+  l /= 100;
+  const k = (n) => (n + h / 30) % 12;
+  const a = s * Math.min(l, 1 - l);
+  const f = (n) =>
+    l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  return [
+    Math.round(f(0) * 255),
+    Math.round(f(8) * 255),
+    Math.round(f(4) * 255),
+  ];
+}
+
+// Disk brightness at disk-plane point (x, y) at time t: the spiral arms
+// (`out.arms`) and the clusters of young stars dotted along them
+// (`out.hot`). The pattern turns as a whole, so the spiral keeps its shape.
+function diskAt(x, y, t, out) {
+  out.arms = 0;
+  out.hot = 0;
+  const r = Math.sqrt(x * x + y * y);
+  if (r > DISK_OUT) return;
+  const a = Math.atan2(y, x) + t * SPIN;
+  const lr = Math.log(Math.max(r, ARM_START) / ARM_START);
+  const phase = ARMS * (a - lr / PITCH);
+  const crest = Math.pow(0.5 + 0.5 * Math.cos(phase), ARM_SHARP);
+  // Arms grow out of the bulge rather than starting abruptly.
+  const grow = Math.min(1, Math.max(0, (r - ARM_START) / 2));
+  const fade = Math.exp(-r / DISK_R) * Math.min(1, (DISK_OUT - r) / DISK_FADE);
+  const grain =
+    0.85 + 0.15 * Math.sin(a * 11 + r * 1.9) * Math.sin(r * 2.7 - a * 7);
+  out.arms = fade * (crest * grow * grain + 0.12);
+  // Bright knots where two slow ripples line up, only on the outer arms.
+  const clump =
+    0.5 + 0.5 * Math.sin(a * 9 + r * 1.3) * Math.sin(r * 2.2 - a * 5);
+  out.hot = r > 6 ? fade * crest * grow * Math.pow(clump, 6) : 0;
+}
+
+// Shade every cell for time t. The disk is tilted `tilt` radians away from
+// face-on about an axis in the screen plane at angle `axis`. Each sub-sample
+// casts a ray from the camera (at z = -FOCAL, looking along +z) onto the
+// disk plane, so the near side of the disk comes out larger than the far
+// side; the bulge is an ellipsoid flattened along the galaxy's axis.
+function buildFrame(W, H, t, tilt, axis, cellBuf) {
+  const k = [Math.cos(axis), Math.sin(axis), 0];
+  const n = rotate([0, 0, -1], k, tilt); // disk normal
+  const e1 = rotate([1, 0, 0], k, tilt); // disk plane axes
+  const e2 = rotate([0, 1, 0], k, tilt);
+  // Seen at an angle, the disk shows more stars along each line of sight.
+  const thick = Math.min(1.8, 1 / Math.sqrt(Math.abs(n[2])));
+  // Bulge quadratic form: |p|²/R² + b·(n·p)², minimised along each ray.
+  const ba = 1 / (BULGE_R * BULGE_R);
+  const bb = 1 / (BULGE_R * BULGE_FLAT) ** 2 - ba;
+  const hit = { arms: 0, hot: 0 };
+  let cell = 0;
+  for (let row = 0; row < H; row++) {
+    for (let col = 0; col < W; col++, cell++) {
+      let body = 0; // bulge and disk, in the text colour
+      let hot = 0; // young star clusters, in the accent colour
+      for (let j = 0; j < SY; j++) {
+        const sy = -(row + (j + 0.5) / SY - H / 2) * ASPECT;
+        for (let i = 0; i < SX; i++) {
+          const sx = col + (i + 0.5) / SX - W / 2;
+          // Bulge, close enough to the centre to treat the rays as parallel.
+          const m = n[0] * sx + n[1] * sy;
+          const bz = (-bb * n[2] * m) / (ba + bb * n[2] * n[2]);
+          const q =
+            ba * (sx * sx + sy * sy + bz * bz) + bb * (m + n[2] * bz) ** 2;
+          let bulge = 1.5 * Math.exp(-q);
+          // Where the ray from the camera meets the disk plane.
+          const den = m + n[2] * FOCAL;
+          const lambda = den !== 0 ? (n[2] * FOCAL) / den : -1;
+          if (lambda > 0) {
+            const px = lambda * sx;
+            const py = lambda * sy;
+            const pz = FOCAL * (lambda - 1);
+            diskAt(
+              px * e1[0] + py * e1[1] + pz * e1[2],
+              px * e2[0] + py * e2[1] + pz * e2[2],
+              t,
+              hit
+            );
+            body += hit.arms * thick;
+            hot += hit.hot * thick;
+            // The near side of the disk hides the bulge behind it under a
+            // dark dust lane.
+            if (pz < bz) bulge *= 1 - DUST * Math.min(1, hit.arms * 4);
+          }
+          body += bulge;
+        }
+      }
+      body /= SAMPLES;
+      hot /= SAMPLES;
+      const val = body + hot;
+      if (val < 0.06) {
+        // Empty sky: a sparse field of stars, a few of them twinkling.
+        const h = hash(col, row);
+        if (h >= STARS) {
+          cellBuf[cell] = 0;
+        } else if (h < STARS * 0.3) {
+          const twinkle = Math.sin(t * 0.8 + h * 4000);
+          cellBuf[cell] = twinkle > 0.3 ? STAR_BRIGHT : STAR_DIM;
+        } else {
+          cellBuf[cell] = STAR_DIM;
+        }
+        continue;
+      }
+      const si = Math.round(Math.pow(val > 1 ? 1 : val, 0.6) * SHADE_MAX);
+      cellBuf[cell] = si > 0 && hot > 0.12 ? si | TINT : si;
+    }
+  }
+}
+
+// Render cellBuf directly onto a canvas context — zero string allocation per frame.
+// palette: precomputed fillStyle strings and glyphs per cell value (shade | TINT).
+function renderFrame(ctx, cellBuf, W, H, cw, lh, palette) {
+  ctx.clearRect(0, 0, W * cw, H * lh);
+  let current = -1;
+  for (let r = 0; r < H; r++) {
+    const rowOff = r * W;
+    const y = r * lh;
+    for (let c = 0; c < W; c++) {
+      const v = cellBuf[rowOff + c];
+      if (v === 0) continue;
+      if (v !== current) {
+        ctx.fillStyle = palette.colors[v];
+        current = v;
+      }
+      ctx.fillText(palette.chars[v], c * cw, y);
+    }
+  }
+}
+
+export const AsciiGalaxy = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const containerRef = useRef(null);
+  const canvasRef = useRef(null);
+  const ctxRef = useRef(null);
+  const metricsRef = useRef({ cw: 6.6, lh: 12 });
+  // Precomputed fillStyle strings for each cell value.
+  // Rebuilt once on init and whenever the CSS colors change (theme switch).
+  const paletteRef = useRef(null);
+  const timeRef = useRef(0);
+  // Extra rotation speed fed by mouse movement, and the distance the mouse
+  // travelled since the last frame (in viewport widths).
+  const boostRef = useRef(0);
+  const mouseTravelRef = useRef(0);
+  const rafRef = useRef(null);
+  // Live click bursts (see ascii-click-shatter.js).
+  const burstsRef = useRef([]);
+  // When the entrance started (see ascii-assemble.js): null until the canvas
+  // first scrolls into view, 0 once it has played.
+  const introRef = useRef(null);
+  // Phases of the disk's tilt cycle and of the swing of its tilt axis.
+  const tiltRef = useRef(0);
+  const axisRef = useRef(0);
+  // Mirror of `reducedMotion` for the native listeners, whose closures are
+  // created once and would otherwise capture a stale value.
+  const reducedMotionRef = useRef(false);
+  reducedMotionRef.current = reducedMotion;
+  // Set once `drawFrame` is defined below; lets the theme observer (declared
+  // earlier) repaint the static frame without depending on declaration order.
+  const drawFrameRef = useRef(null);
+
+  // The canvas spans the full content width; the drawing keeps its size.
+  const W = useFillColumns(containerRef, MIN_COLS);
+  const H = ROWS;
+  const cellBufRef = useRef(null);
+  const distBufRef = useRef(null);
+  if (cellBufRef.current?.length !== W * H) {
+    cellBufRef.current = new Uint8Array(W * H);
+    distBufRef.current = new Uint8Array(W * H);
+  }
+
+  // Respect prefers-reduced-motion: the galaxy is a permanent rAF loop, so a
+  // reader who asked for less motion gets a single static frame instead.
+  // Tracked reactively so toggling the OS setting takes effect without a reload.
+  useEffect(() => {
+    const mq = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+    if (!mq) return;
+    setReducedMotion(mq.matches);
+    const onChange = (e) => setReducedMotion(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      // threshold: 0 = animate as long as even 1px is visible.
+      // A higher threshold like 0.1 stops the animation when DevTools opens
+      // and shrinks the viewport, pushing the canvas partially off-screen.
+      { threshold: 0 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Accumulate how far the mouse moves; the animation loop turns it into
+  // extra rotation speed.
+  useEffect(() => {
+    let lastX = null;
+    let lastY = null;
+    const onMouseMove = (e) => {
+      if (lastX !== null) {
+        mouseTravelRef.current +=
+          Math.hypot(e.clientX - lastX, e.clientY - lastY) / window.innerWidth;
+      }
+      lastX = e.clientX;
+      lastY = e.clientY;
+    };
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    return () => window.removeEventListener('mousemove', onMouseMove);
+  }, []);
+
+  // Use native mousedown instead of React onClick so the burst starts on
+  // press, before the next animation frame is drawn.
+  useEffect(() => {
+    const div = containerRef.current;
+    if (!div) return;
+    const onMouseDown = (e) => {
+      const canvas = canvasRef.current;
+      if (!canvas || reducedMotionRef.current) return;
+      const rect = canvas.getBoundingClientRect();
+      const gx = ((e.clientX - rect.left) / rect.width) * W;
+      const gy = ((e.clientY - rect.top) / rect.height) * H;
+      burstsRef.current.push({
+        gx,
+        gy,
+        startTime: Date.now(),
+        seed: Math.floor(Math.random() * 1e6),
+      });
+    };
+    div.addEventListener('mousedown', onMouseDown);
+    return () => div.removeEventListener('mousedown', onMouseDown);
+  }, [W, H]);
+
+  // Build precomputed fillStyle strings from the --text-primary (bulge, disk)
+  // and --accent-color (arm crests) CSS variables. Reading the variables directly
+  // is more reliable than getComputedStyle(canvas).color because
+  // document.fonts.ready can fire before the stylesheet is parsed, which would
+  // yield rgb(0,0,0) (invisible on dark background).
+  const buildPalette = useCallback(() => {
+    const style = getComputedStyle(document.documentElement);
+    // Note: black (rgb(0,0,0)) is the legitimate light-theme color, so it must
+    // NOT be rejected. The "not yet resolved" case is handled by the empty
+    // string check (getPropertyValue returns '' before CSS parses).
+    const base = parseCssColor(style.getPropertyValue('--text-primary').trim());
+    if (!base) return false;
+    const accent =
+      parseCssColor(style.getPropertyValue('--accent-color').trim()) || base;
+    const colors = new Array(TINT * 2);
+    const chars = new Array(TINT * 2);
+    SHADE_OPACITY_VALUES.forEach((a, i) => {
+      const alpha = a.toFixed(3);
+      colors[i] = `rgba(${base[0]},${base[1]},${base[2]},${alpha})`;
+      colors[i | TINT] =
+        `rgba(${accent[0]},${accent[1]},${accent[2]},${alpha})`;
+      chars[i] = chars[i | TINT] = SHADE[i];
+    });
+    paletteRef.current = { colors, chars };
+    return true;
+  }, []);
+
+  // Initialise canvas: measure font metrics, set DPR-scaled dimensions.
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const init = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const fs = 11;
+      const lh = 13;
+      const ctx = canvas.getContext('2d');
+      ctxRef.current = ctx;
+      // Use Fira Code only if already in the font cache. Setting ctx.font to an
+      // uncached web font triggers a synchronous download + parse on the main thread
+      // which tanks the framerate when the canvas first enters the viewport.
+      // Fall back to system monospace immediately; re-init after fonts.ready to
+      // upgrade metrics once Fira Code finishes loading (off the scroll hot-path).
+      const font = document.fonts.check(`${fs}px "Fira Code"`)
+        ? `${fs}px "Fira Code", "Courier New", Courier, monospace`
+        : `${fs}px "Courier New", Courier, monospace`;
+      ctx.font = font;
+      ctx.textBaseline = 'top';
+      const cw = ctx.measureText('M').width;
+      metricsRef.current = { cw, lh };
+      canvas.width = Math.round(W * cw * dpr);
+      canvas.height = Math.round(H * lh * dpr);
+      // Only the width is set: the height follows the canvas aspect ratio, so
+      // the drawing scales down uniformly on narrow screens.
+      canvas.style.width = `${Math.round(W * cw)}px`;
+      ctx.scale(dpr, dpr);
+      ctx.font = font;
+      ctx.textBaseline = 'top';
+      buildPalette();
+      // Resizing the canvas cleared it; repaint the static frame if no loop runs.
+      if (reducedMotionRef.current) drawFrameRef.current?.();
+    };
+    // Init immediately with the best font available right now — no blocking wait.
+    init();
+    // Once all fonts have settled, re-init to upgrade to Fira Code metrics if it
+    // wasn't available above. This runs off the scroll hot-path.
+    document.fonts.ready.then(() => {
+      if (canvasRef.current) init();
+    });
+    // Also try after full page load in case fonts.ready fires before CSS is parsed.
+    window.addEventListener('load', () => buildPalette(), { once: true });
+
+    // Update the palette when the theme (CSS colors) changes. Under reduced
+    // motion there is no rAF loop to repaint, so redraw the static frame here
+    // or the galaxy would keep the previous theme's colors.
+    const themeObserver = new MutationObserver(() => {
+      buildPalette();
+      if (reducedMotionRef.current) drawFrameRef.current?.();
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class', 'data-theme'],
+    });
+    return () => themeObserver.disconnect();
+  }, [W, H, buildPalette]);
+
+  // Draw exactly one frame at the current time, without advancing
+  // them or scheduling another. Shared by the animation loop and the
+  // reduced-motion path.
+  const drawFrame = useCallback(() => {
+    const tilt = TILT_MID + TILT_SWING * Math.sin(tiltRef.current);
+    buildFrame(
+      W,
+      H,
+      timeRef.current,
+      tilt,
+      AXIS_SWING * Math.sin(axisRef.current),
+      cellBufRef.current
+    );
+
+    // On first appearance the characters gather from random spots.
+    if (introRef.current) {
+      const live = applyAssemble(
+        cellBufRef.current,
+        distBufRef.current,
+        W,
+        H,
+        (Date.now() - introRef.current) / 1000
+      );
+      if (!live) introRef.current = 0;
+    }
+
+    // Clicks burst the characters around them apart; several bursts stack.
+    burstsRef.current = applyClickShatter(
+      cellBufRef.current,
+      distBufRef.current,
+      W,
+      H,
+      burstsRef.current,
+      Date.now()
+    );
+
+    const ctx = ctxRef.current;
+    // Lazy fallback: if the palette wasn't built yet (CSS loaded after
+    // fonts.ready), try again now that the page is fully rendered.
+    if (ctx && !paletteRef.current) buildPalette();
+    if (ctx && paletteRef.current) {
+      const { cw, lh } = metricsRef.current;
+      renderFrame(ctx, cellBufRef.current, W, H, cw, lh, paletteRef.current);
+    }
+  }, [W, H, buildPalette]);
+
+  drawFrameRef.current = drawFrame;
+
+  const animate = useCallback(() => {
+    // Mouse movement spins and tumbles the galaxy faster; the extra speed
+    // then winds down smoothly.
+    boostRef.current = Math.min(
+      2,
+      boostRef.current * 0.97 + mouseTravelRef.current * 3
+    );
+    mouseTravelRef.current = 0;
+    drawFrame();
+    timeRef.current += 0.012 * (1 + boostRef.current);
+    tiltRef.current += 0.012 * TILT_SPEED * (1 + boostRef.current);
+    axisRef.current += 0.012 * AXIS_SPEED * (1 + boostRef.current);
+    rafRef.current = requestAnimationFrame(animate);
+  }, [drawFrame]);
+
+  useEffect(() => {
+    if (reducedMotion) {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      // One static frame, redrawn on visibility so it survives a theme change.
+      if (isVisible) drawFrame();
+      return undefined;
+    }
+    if (isVisible) {
+      if (introRef.current === null) introRef.current = Date.now();
+      rafRef.current = requestAnimationFrame(animate);
+    } else if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [isVisible, animate, reducedMotion, drawFrame]);
+
+  return (
+    <div ref={containerRef} style={containerStyle} aria-hidden="true">
+      <canvas
+        ref={canvasRef}
+        style={reducedMotion ? canvasStyleStatic : canvasStyle}
+      />
+    </div>
+  );
+};
+
+const containerStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  minHeight: '160px',
+  overflow: 'hidden',
+  userSelect: 'none',
+  maxWidth: '100%',
+  // No blue tap rectangle on mobile when the canvas is tapped.
+  WebkitTapHighlightColor: 'transparent',
+};
+
+const canvasStyle = {
+  display: 'block',
+  color: 'var(--text-primary)',
+  maxWidth: '100%',
+  height: 'auto',
+  cursor: 'pointer',
+};
+
+// Reduced motion: the click burst is disabled, so don't advertise it.
+const canvasStyleStatic = { ...canvasStyle, cursor: 'default' };

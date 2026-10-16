@@ -20,7 +20,7 @@ const DELAY_PER_COL = 0.012; // the burst spreads out from the click
 const DURATION = 4.8; // seconds until a burst has settled
 
 // Stable pseudo-random value in [0, 1) per cell and burst.
-function hash(c, r, seed) {
+export function hash(c, r, seed) {
   let h = (c * 374761393 + r * 668265263 + seed * 2147483647) | 0;
   h = Math.imul(h ^ (h >>> 13), 1274126177);
   return ((h ^ (h >>> 16)) >>> 0) / 4294967296;

@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { applyAssemble } from './ascii-assemble';
+import { useFillColumns } from './use-fill-columns';
 import { applyClickShatter } from './ascii-click-shatter';
 
 // Shading ramp from dark to bright
@@ -91,6 +93,11 @@ const smoothstep = (a, b, x) => {
   const k = clamp((x - a) / (b - a), 0, 1);
   return k * k * (3 - 2 * k);
 };
+
+// Canvas size: the same height for every footer animation, and at least
+// this many columns (it widens to fill the content column).
+const ROWS = 22;
+const MIN_COLS = 42; // the globe and its atmosphere
 
 function parseCssColor(raw) {
   if (!raw) return null;
@@ -303,6 +310,9 @@ export const AsciiGlobe = () => {
   const rafRef = useRef(null);
   // Live click bursts (see ascii-click-shatter.js).
   const burstsRef = useRef([]);
+  // When the entrance started (see ascii-assemble.js): null until the canvas
+  // first scrolls into view, 0 once it has played.
+  const introRef = useRef(null);
   // Mirror of `reducedMotion` for the native listeners, whose closures are
   // created once and would otherwise capture a stale value.
   const reducedMotionRef = useRef(false);
@@ -311,12 +321,17 @@ export const AsciiGlobe = () => {
   // earlier) repaint the static frame without depending on declaration order.
   const drawFrameRef = useRef(null);
 
-  const W = 48;
-  const H = 24;
+  // The canvas spans the full content width; the drawing keeps its size.
+  const W = useFillColumns(containerRef, MIN_COLS);
+  const H = ROWS;
   const geometryRef = useRef(null);
-  if (!geometryRef.current) geometryRef.current = createGeometry(W, H);
-  const cellBufRef = useRef(new Uint8Array(W * H));
-  const distBufRef = useRef(new Uint8Array(W * H));
+  const cellBufRef = useRef(null);
+  const distBufRef = useRef(null);
+  if (cellBufRef.current?.length !== W * H) {
+    geometryRef.current = createGeometry(W, H);
+    cellBufRef.current = new Uint8Array(W * H);
+    distBufRef.current = new Uint8Array(W * H);
+  }
 
   // Respect prefers-reduced-motion: the globe is a permanent rAF loop, so a
   // reader who asked for less motion gets a single static frame instead.
@@ -509,6 +524,18 @@ export const AsciiGlobe = () => {
     const tilt = tiltRef.current;
     buildFrame(geo, W, H, lon0, tilt, cellBufRef.current);
 
+    // On first appearance the characters gather from random spots.
+    if (introRef.current) {
+      const live = applyAssemble(
+        cellBufRef.current,
+        distBufRef.current,
+        W,
+        H,
+        (Date.now() - introRef.current) / 1000
+      );
+      if (!live) introRef.current = 0;
+    }
+
     // Clicks burst the characters around them apart; several bursts stack.
     burstsRef.current = applyClickShatter(
       cellBufRef.current,
@@ -573,6 +600,7 @@ export const AsciiGlobe = () => {
       return undefined;
     }
     if (isVisible) {
+      if (introRef.current === null) introRef.current = Date.now();
       lastTimeRef.current = null;
       rafRef.current = requestAnimationFrame(animate);
     } else if (rafRef.current) {
@@ -602,6 +630,8 @@ const containerStyle = {
   overflow: 'hidden',
   userSelect: 'none',
   maxWidth: '100%',
+  // No blue tap rectangle on mobile when the canvas is tapped.
+  WebkitTapHighlightColor: 'transparent',
 };
 
 const canvasStyle = {
