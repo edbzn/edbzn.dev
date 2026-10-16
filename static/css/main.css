@@ -207,10 +207,16 @@ body {
    side so its edges never show while it drifts. */
 #gatsby-focus-wrapper {
   position: relative;
-  /* Contain the layout's bottom margin (overflow: clip alone doesn't), so
-     the wash reaches the very bottom of the page. */
-  display: flow-root;
+  /* A flex column, so the layout (layout.js) can stretch to the full height
+     and keep the footer at the bottom of short pages. It also contains the
+     layout's bottom margin (overflow: clip alone doesn't), so the wash
+     reaches the very bottom of the page. */
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
+  /* The small viewport height on mobile, so the footer of a short page
+     isn't hidden under the browser's address bar */
+  min-height: 100svh;
   overflow: clip;
 }
 

@@ -17,6 +17,12 @@ class Layout extends React.Component {
     return (
       <div
         style={{
+          // A column filling the page height: on short pages the content
+          // grows, which keeps the footer at the bottom of the window.
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 1,
+          width: '100%',
           marginLeft: `auto`,
           marginRight: `auto`,
           marginTop: 0,
@@ -170,12 +176,18 @@ class Layout extends React.Component {
             <ThemeToggle />
           </div>
         </header>
-        <main style={{ marginTop: rhythm(2) }}>{children}</main>
-        <div style={{ marginTop: rhythm(2) }}>
-          <LazyAscii
-            scene={onBlog ? 'black-hole' : onUses ? 'galaxy' : 'globe'}
-          />
+        {/* Grows on short pages. `main` stays in block flow inside it, so its
+            margins still collapse with its first and last children's as
+            they did before, and the space above the animation is unchanged;
+            a flex item of its own, it would add them up instead. */}
+        <div style={{ flexGrow: 1 }}>
+          <main style={{ marginTop: rhythm(2), marginBottom: rhythm(2) }}>
+            {children}
+          </main>
         </div>
+        <LazyAscii
+          scene={onBlog ? 'black-hole' : onUses ? 'galaxy' : 'globe'}
+        />
         {/* Full-bleed band mirroring the header, closing the page. */}
         <footer
           role="contentinfo"
