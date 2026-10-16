@@ -30,7 +30,7 @@ export const GitHubRepo = ({ name, description, url, img }) => {
   return (
     <a
       href={url || `https://github.com/${name}`}
-      className="box"
+      className="box github-repo"
       style={{
         color: 'var(--text-primary)',
         fontWeight: 400,
