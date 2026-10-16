@@ -31,9 +31,10 @@ export const ThemeToggle = () => {
     applyTheme(newTheme);
   };
 
-  // Prevent flash during SSR
+  // Prevent flash during SSR. Same size as the button, so the header doesn't
+  // move when it mounts.
   if (!mounted) {
-    return <div style={{ width: 32, height: 32 }} />;
+    return <div style={{ width: 28, height: 28 }} />;
   }
 
   return (

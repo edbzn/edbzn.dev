@@ -1,0 +1,116 @@
+/* Font stacks. Each web font is followed by a local fallback resized to the
+   same metrics, so text takes the same room before and after the web font
+   swaps in (font-display: swap) and the page doesn't shift when it loads. */
+:root {
+  --font-sans: 'Public Sans', 'Public Sans Fallback', sans-serif;
+  --font-serif: Merriweather, 'Merriweather Fallback', Georgia, serif;
+}
+
+/* Metric-adjusted fallbacks. size-adjust is the width of English body text in
+   the web font over its width in the fallback, measured per weight; the
+   overrides are the web font's ascent and descent divided by size-adjust.
+   Arial, Times New Roman and their metric-compatible Liberation and
+   Arimo/Tinos clones share their metrics, so one set of numbers fits all. */
+
+@font-face {
+  font-family: 'Public Sans Fallback';
+  font-weight: 100;
+  src:
+    local('Arial'), local('ArialMT'), local('Liberation Sans'), local('Arimo');
+  size-adjust: 102.02%;
+  ascent-override: 93.12%;
+  descent-override: 22.05%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Public Sans Fallback';
+  font-weight: 200;
+  src:
+    local('Arial'), local('ArialMT'), local('Liberation Sans'), local('Arimo');
+  size-adjust: 102.79%;
+  ascent-override: 92.42%;
+  descent-override: 21.89%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Public Sans Fallback';
+  font-weight: 300;
+  src:
+    local('Arial'), local('ArialMT'), local('Liberation Sans'), local('Arimo');
+  size-adjust: 103.59%;
+  ascent-override: 91.71%;
+  descent-override: 21.72%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Public Sans Fallback';
+  font-weight: 400;
+  src:
+    local('Arial'), local('ArialMT'), local('Liberation Sans'), local('Arimo');
+  size-adjust: 104.52%;
+  ascent-override: 90.89%;
+  descent-override: 21.53%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Public Sans Fallback';
+  font-weight: 500;
+  src:
+    local('Arial'), local('ArialMT'), local('Liberation Sans'), local('Arimo');
+  size-adjust: 105.09%;
+  ascent-override: 90.4%;
+  descent-override: 21.41%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Public Sans Fallback';
+  font-weight: 600 900;
+  src:
+    local('Arial Bold'), local('Arial-BoldMT'), local('Liberation Sans Bold'),
+    local('Arimo Bold');
+  size-adjust: 101.6%;
+  ascent-override: 93.5%;
+  descent-override: 22.15%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Merriweather Fallback';
+  font-weight: 100 300;
+  src:
+    local('Times New Roman'), local('TimesNewRomanPSMT'),
+    local('Liberation Serif'), local('Tinos');
+  size-adjust: 116.74%;
+  ascent-override: 84.29%;
+  descent-override: 23.39%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Merriweather Fallback';
+  font-weight: 400 500;
+  src:
+    local('Times New Roman'), local('TimesNewRomanPSMT'),
+    local('Liberation Serif'), local('Tinos');
+  size-adjust: 118.78%;
+  ascent-override: 82.84%;
+  descent-override: 22.98%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Merriweather Fallback';
+  font-weight: 600 900;
+  src:
+    local('Times New Roman Bold'), local('TimesNewRomanPS-BoldMT'),
+    local('Liberation Serif Bold'), local('Tinos Bold');
+  size-adjust: 116.81%;
+  ascent-override: 84.24%;
+  descent-override: 23.37%;
+  line-gap-override: 0%;
+}

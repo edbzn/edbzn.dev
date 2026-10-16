@@ -39,7 +39,7 @@
 
 /* Same type scale as the latest posts list (post-title-list.module.css) */
 .content h3 {
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 1rem;
   line-height: inherit;
@@ -47,7 +47,7 @@
 }
 
 .period {
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.8rem;
   font-weight: 400;
   font-variant-numeric: tabular-nums;
@@ -167,7 +167,7 @@
 }
 
 .position {
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.8rem;
   font-weight: 400;
   color: var(--text-secondary);
@@ -212,7 +212,7 @@
   border: none;
   padding: 4px 0;
   font-size: 0.85rem;
-  font-family: '"Public Sans"', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   color: var(--text-muted);
 }

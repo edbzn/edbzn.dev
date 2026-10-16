@@ -14,7 +14,7 @@
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 400;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   text-decoration: none;
   box-shadow: var(--tag-shadow);
 }

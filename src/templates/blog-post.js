@@ -180,7 +180,7 @@ const BlogPostTemplate = (props) => {
         <section
           style={{
             margin: rhythm(2.4) + ' auto',
-            fontFamily: '"Public Sans", sans-serif',
+            fontFamily: 'var(--font-sans)',
           }}
         >
           <div

@@ -159,7 +159,7 @@
     border-radius: 0;
     background: transparent;
     box-shadow: none;
-    font-family: 'Public Sans', sans-serif;
+    font-family: var(--font-sans);
     hyphens: manual;
   }
 

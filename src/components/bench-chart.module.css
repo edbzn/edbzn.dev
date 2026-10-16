@@ -7,7 +7,7 @@
 }
 
 .title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   margin: 0 0 0.6rem 0;
   color: var(--text-secondary, var(--text-primary));
 }
@@ -16,7 +16,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.9rem;
 }
 

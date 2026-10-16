@@ -32,7 +32,7 @@ class BlogIndex extends React.Component {
               <div
                 style={{
                   marginBottom: rhythm(1.4),
-                  fontFamily: '"Public Sans", sans-serif',
+                  fontFamily: 'var(--font-sans)',
                   textTransform: 'uppercase',
                   fontWeight: '300',
                 }}
@@ -41,7 +41,7 @@ class BlogIndex extends React.Component {
               </div>
               <p
                 style={{
-                  fontFamily: '"Public Sans", sans-serif',
+                  fontFamily: 'var(--font-sans)',
                   marginBottom: rhythm(0.8),
                   color: 'var(--text-primary)',
                 }}
@@ -55,7 +55,7 @@ class BlogIndex extends React.Component {
             <div
               style={{
                 marginBottom: rhythm(1.4),
-                fontFamily: '"Public Sans", sans-serif',
+                fontFamily: 'var(--font-sans)',
                 textTransform: 'uppercase',
                 fontWeight: '300',
               }}

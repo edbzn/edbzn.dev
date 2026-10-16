@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useCallback,
+} from 'react';
 import { applyAssemble } from './ascii-assemble';
 import { useFillColumns } from './use-fill-columns';
 import { applyClickShatter } from './ascii-click-shatter';
@@ -371,7 +377,8 @@ export const AsciiGalaxy = () => {
   }, []);
 
   // Initialise canvas: measure font metrics, set DPR-scaled dimensions.
-  useEffect(() => {
+  // Before paint, so the canvas never shows at its default 300x150 size.
+  useLayoutEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const init = () => {

@@ -117,7 +117,7 @@ export const NavLinks = ({ pathname, breadcrumb }) => {
               onMouseEnter={() => handleMouseEnter(to)}
               style={{
                 boxShadow: 'none',
-                fontFamily: '"Public Sans", sans-serif',
+                fontFamily: 'var(--font-sans)',
                 fontSize: '13px',
                 color: 'var(--text-primary)',
                 textDecoration: 'none',

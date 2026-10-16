@@ -65,7 +65,7 @@ export const GitHubRepo = ({ name, description, url, img }) => {
           alignItems: 'center',
           gap: '0.4rem',
           marginBottom: rhythm(0.2),
-          fontFamily: '"Public Sans", sans-serif',
+          fontFamily: 'var(--font-sans)',
         }}
       >
         <svg
@@ -99,7 +99,7 @@ export const GitHubRepo = ({ name, description, url, img }) => {
           marginTop: rhythm(0.3),
           fontSize: '0.8rem',
           color: repo ? 'var(--text-secondary)' : 'var(--text-muted)',
-          fontFamily: '"Public Sans", sans-serif',
+          fontFamily: 'var(--font-sans)',
         }}
       >
         {language && (

@@ -29,7 +29,7 @@
   font-size: 1.2em;
   font-weight: bold;
   margin-bottom: 10px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: var(--font-sans);
   margin-bottom: 0.6rem;
   color: var(--text-primary);
 }

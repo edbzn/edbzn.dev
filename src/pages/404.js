@@ -13,7 +13,10 @@ class NotFoundPage extends React.Component {
       <Layout location={this.props.location} author={author} github={github}>
         <h1>Not Found</h1>
         <img
-          style={{ diplay: 'block', width: '100%' }}
+          style={{ display: 'block', width: '100%', height: 'auto' }}
+          // Intrinsic size, so the text below doesn't jump when it loads
+          width={480}
+          height={270}
           src={notFoundVideo}
           alt="Not Found"
         />
