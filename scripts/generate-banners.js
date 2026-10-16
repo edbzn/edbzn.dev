@@ -139,19 +139,6 @@ const dotted = (x1, y1, x2, y2, extra = '') =>
 const bond = (x1, y1, x2, y2, width = 6) =>
   `<line x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}" stroke="${ORBIT}" stroke-width="${width}" stroke-linecap="round"/>`;
 
-// Planet with a tilted ring: back half behind the planet, front half over it.
-const ringedPlanet = (
-  cx,
-  cy,
-  r,
-  fill,
-  { rx, ry, rot, color = ORBIT, width = 10 }
-) => {
-  const half = (sweep) =>
-    `<path d="M ${cx - rx} ${cy} A ${rx} ${ry} 0 0 ${sweep} ${cx + rx} ${cy}" transform="rotate(${rot} ${cx} ${cy})" fill="none" stroke="${color}" stroke-width="${width}" stroke-linecap="round"/>`;
-  return [half(1), circle(cx, cy, r, fill), half(0)];
-};
-
 // Four-pointed star.
 const sparkle = (x, y, s, fill) =>
   `<path d="M ${x} ${y - s} Q ${x} ${y} ${x + s} ${y} Q ${x} ${y} ${x} ${y + s} Q ${x} ${y} ${x - s} ${y} Q ${x} ${y} ${x} ${y - s} Z" fill="${fill}"/>`;
@@ -202,29 +189,83 @@ function socialFeed() {
   return svg(body);
 }
 
-// Memory leak: a black hole swallowing forgotten subscriptions.
+// An observable feeding its subscribers: values travel down each
+// subscription. The bottom one was unsubscribed: it stops at a teardown bar,
+// and nothing flows past it to its (now empty) subscriber.
 function subscriptions() {
-  const [cx, cy, rot] = [600, 250, -10];
+  const [sx, sy] = [340, 250];
+  const subscribers = [
+    [860, 130, true],
+    [890, 250, true],
+    [860, 370, false],
+  ];
+  const r = 22;
+  // Quadratic Bezier from the source to (bx, by): the three fan out right
+  // away, then ease into their subscriber.
+  const curve = (bx, by) => {
+    const [p0, c, p1] = [
+      [sx, sy],
+      [sx + (bx - sx) * 0.45, sy + (by - sy) * 0.35],
+      [bx - r - 6, by],
+    ];
+    const at = (t) =>
+      [0, 1].map(
+        (k) => (1 - t) ** 2 * p0[k] + 2 * (1 - t) * t * c[k] + t * t * p1[k]
+      );
+    const tangent = (t) =>
+      [0, 1].map((k) => 2 * (1 - t) * (c[k] - p0[k]) + 2 * t * (p1[k] - c[k]));
+    // Control points of the [0, t] and [t, 1] halves (de Casteljau).
+    const split = (t) => [
+      [0, 1].map((k) => p0[k] + t * (c[k] - p0[k])),
+      [0, 1].map((k) => c[k] + t * (p1[k] - c[k])),
+    ];
+    return { p0, c, p1, at, tangent, split };
+  };
+  const path = (from, ctrl, to, extra) =>
+    `<path d="M ${f(from[0])} ${f(from[1])} Q ${f(ctrl[0])} ${f(ctrl[1])} ${f(to[0])} ${f(to[1])}" fill="none" ${extra}/>`;
+
   const body = [];
-  const disk = { rx: 220, ry: 44, rot, color: C.amber, width: 8 };
-  // One spiral arm of subscriptions falling in.
-  for (let i = 0; i < 26; i++) {
-    const t = 150 + i * 13;
-    const d = 330 - i * 9.5;
-    const [x, y] = onOrbit(cx, cy, d, d * 0.42, rot, t);
+  subscribers.forEach(([bx, by, live], i) => {
+    const k = curve(bx, by);
+    const cut = 0.5;
+    if (live) {
+      body.push(path(k.p0, k.c, k.p1, `stroke="${C.line}" stroke-width="3"`));
+    } else {
+      // Teardown: the line ends at a bar across it, then only a faint
+      // dashed trace remains.
+      const mid = k.at(cut);
+      const [c0, c1] = k.split(cut);
+      body.push(path(k.p0, c0, mid, `stroke="${C.line}" stroke-width="3"`));
+      body.push(
+        path(
+          mid,
+          c1,
+          k.p1,
+          `stroke="${C.dim}" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round"`
+        )
+      );
+      const [tx, ty] = k.tangent(cut);
+      const len = Math.hypot(tx, ty);
+      const [nx, ny] = [(-ty / len) * 28, (tx / len) * 28];
+      body.push(
+        `<line x1="${f(mid[0] + nx)}" y1="${f(mid[1] + ny)}" x2="${f(mid[0] - nx)}" y2="${f(mid[1] - ny)}" stroke="${C.amber}" stroke-width="6" stroke-linecap="round"/>`
+      );
+    }
+    // Values in flight, only up to the teardown on the cut subscription.
+    const stops = live ? [0.3, 0.5, 0.7, 0.88] : [0.24, 0.4];
+    stops.forEach((t, j) => {
+      const [x, y] = k.at(t + i * 0.03);
+      body.push(circle(x, y, 9, j % 2 ? C.blue : C.amber));
+    });
     body.push(
-      circle(x, y, f(9 - i * 0.24), C.blue, `opacity="${f(0.3 + i * 0.027)}"`)
+      live
+        ? circle(bx, by, r, C.blue)
+        : circle(bx, by, r, 'none', `stroke="${C.line}" stroke-width="3"`)
     );
-  }
-  body.push(...ringedPlanet(cx, cy, 72, '#000000', disk));
+  });
   body.push(
-    circle(
-      cx,
-      cy,
-      72,
-      'none',
-      `stroke="${C.amber}" stroke-width="3" opacity="0.6"`
-    )
+    circle(sx, sy, 56, 'none', `stroke="${ORBIT}" stroke-width="3"`),
+    circle(sx, sy, 36, C.amber)
   );
   return svg(body);
 }
