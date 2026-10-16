@@ -13,6 +13,8 @@ concurrency:
 
 jobs:
   build:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -32,6 +34,9 @@ jobs:
           GATSBY_REACTIONS_API: ${{ vars.GATSBY_REACTIONS_API }}
           GATSBY_TURNSTILE_SITE_KEY: ${{ vars.GATSBY_TURNSTILE_SITE_KEY }}
           COMMIT_SHA: ${{ github.sha }}
+          # Authenticates the build-time GitHub API calls (repo cards in
+          # gatsby-node.js): 1,000 requests/hour instead of 60 per runner IP.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload build artifacts
         uses: actions/upload-artifact@v7
         with:

@@ -1,3 +1,4 @@
+const fs = require(`fs/promises`);
 const path = require(`path`);
 const { createFilePath } = require(`gatsby-source-filesystem`);
 const { generateOgImages } = require(`./scripts/generate-og-images`);
@@ -141,6 +142,118 @@ exports.createPages = async ({ graphql, actions }) => {
   });
 };
 
+const GITHUB_REPO_TTL = 24 * 60 * 60 * 1000;
+
+/**
+ * Collects every repository rendered with `<GitHubRepo>`: the OSS projects
+ * from the site metadata, plus literal `name="owner/repo"` props found in
+ * posts and pages.
+ */
+async function collectGitHubRepoNames(rootDir, siteMetadata) {
+  const names = new Set(
+    (siteMetadata.ossProjects || []).map((project) => project.name)
+  );
+  const pattern = /<GitHubRepo\b[^>]*?\bname=["']([^"']+)["']/g;
+
+  for (const dir of ['content', 'src']) {
+    const files = await fs.readdir(path.join(rootDir, dir), {
+      recursive: true,
+    });
+    for (const file of files.filter((f) => /\.(md|mdx|js|jsx)$/.test(f))) {
+      const source = await fs.readFile(path.join(rootDir, dir, file), 'utf8');
+      for (const match of source.matchAll(pattern)) {
+        names.add(match[1]);
+      }
+    }
+  }
+
+  return [...names];
+}
+
+async function fetchGitHubRepo(name) {
+  const headers = { Accept: 'application/vnd.github+json' };
+  if (process.env.GITHUB_TOKEN) {
+    headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  }
+
+  const res = await fetch(`https://api.github.com/repos/${name}`, {
+    headers,
+    signal: AbortSignal.timeout(10000),
+  });
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}`);
+  }
+
+  const repo = await res.json();
+  const license = repo.license?.spdx_id;
+  return {
+    description: repo.description,
+    language: repo.language,
+    stargazersCount: repo.stargazers_count,
+    forksCount: repo.forks_count,
+    licenseSpdxId: license && license !== 'NOASSERTION' ? license : null,
+    url: repo.html_url,
+  };
+}
+
+/**
+ * Fetches the GitHub stats shown on repo cards at build time, so they ship in
+ * the HTML instead of being requested by every visitor. Responses are cached
+ * for a day; when GitHub is unreachable or rate-limited the stale copy is
+ * used, and a repo with no data at all is skipped (the card shows
+ * placeholders). Set `GITHUB_TOKEN` to raise the rate limit.
+ *
+ * @type {import('gatsby').GatsbyNode['sourceNodes']}
+ */
+exports.sourceNodes = async ({
+  actions,
+  cache,
+  store,
+  reporter,
+  createNodeId,
+  createContentDigest,
+}) => {
+  const { program, config } = store.getState();
+  const names = await collectGitHubRepoNames(
+    program.directory,
+    (config && config.siteMetadata) || {}
+  );
+
+  await Promise.all(
+    names.map(async (name) => {
+      const cacheKey = `github-repo-${name}`;
+      const cached = await cache.get(cacheKey);
+      let data = cached?.data;
+
+      if (!cached || Date.now() - cached.fetchedAt > GITHUB_REPO_TTL) {
+        try {
+          data = await fetchGitHubRepo(name);
+          await cache.set(cacheKey, { fetchedAt: Date.now(), data });
+        } catch (error) {
+          reporter.warn(
+            `Could not fetch GitHub repo ${name} (${error.message}), ` +
+              (data ? 'using cached data' : 'showing placeholders')
+          );
+        }
+      }
+
+      if (!data) {
+        return;
+      }
+
+      const node = { name, ...data };
+      actions.createNode({
+        ...node,
+        id: createNodeId(`GitHubRepo-${name}`),
+        internal: {
+          type: 'GitHubRepo',
+          contentDigest: createContentDigest(node),
+        },
+      });
+    })
+  );
+};
+
 /**
  * @type {import('gatsby').GatsbyNode['onCreateNode']}
  */
@@ -225,6 +338,18 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
       draft: Boolean
       lang: String
       cover: File @fileByRelativePath
+    }
+    `,
+    // Declared up front so the query still works when every fetch failed.
+    `
+    type GitHubRepo implements Node @dontInfer {
+      name: String!
+      description: String
+      language: String
+      stargazersCount: Int
+      forksCount: Int
+      licenseSpdxId: String
+      url: String
     }
     `,
   ];

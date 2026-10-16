@@ -1,31 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { graphql, useStaticQuery } from 'gatsby';
 import { rhythm } from '../utils/typography';
 
 export const GitHubRepo = ({ name, description, url, img }) => {
-  const [repo, setRepo] = useState(null);
-  const [failed, setFailed] = useState(false);
+  // Stats are fetched at build time (see `sourceNodes` in gatsby-node.js).
+  const { allGitHubRepo } = useStaticQuery(graphql`
+    {
+      allGitHubRepo {
+        nodes {
+          name
+          description
+          language
+          stargazersCount
+          forksCount
+          licenseSpdxId
+        }
+      }
+    }
+  `);
+  const repo = allGitHubRepo.nodes.find((node) => node.name === name);
 
-  useEffect(() => {
-    if (!name) return;
-    fetch(`https://api.github.com/repos/${name}`)
-      .then((res) => {
-        if (!res.ok) throw new Error(String(res.status));
-        return res.json();
-      })
-      .then((data) => setRepo(data))
-      .catch(() => setFailed(true));
-  }, [name]);
-
-  // Until the API answers (or when it fails), show placeholders so the card
+  // When the build could not get the stats, show placeholders so the card
   // keeps its stats row instead of collapsing.
   const placeholder = '—';
   const language = repo ? repo.language : placeholder;
-  const stars = repo ? repo.stargazers_count.toLocaleString() : placeholder;
-  const forks = repo ? repo.forks_count : null;
-  const license =
-    repo?.license?.spdx_id && repo.license.spdx_id !== 'NOASSERTION'
-      ? repo.license.spdx_id
-      : null;
+  const stars = repo
+    ? repo.stargazersCount.toLocaleString('en-US')
+    : placeholder;
+  const forks = repo ? repo.forksCount : null;
+  const license = repo?.licenseSpdxId;
 
   return (
     <a
@@ -88,7 +91,7 @@ export const GitHubRepo = ({ name, description, url, img }) => {
         {repo?.description || description}
       </p>
       <div
-        title={failed ? 'GitHub stats unavailable' : undefined}
+        title={repo ? undefined : 'GitHub stats unavailable'}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -146,7 +149,7 @@ export const GitHubRepo = ({ name, description, url, img }) => {
             >
               <path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z" />
             </svg>
-            {repo ? forks.toLocaleString() : placeholder}
+            {repo ? forks.toLocaleString('en-US') : placeholder}
           </span>
         )}
         {license && <span>{license}</span>}
