@@ -469,6 +469,11 @@ details {
   border-radius: 4px;
 }
 
+.github-repo {
+  /* Ends on the stats row rather than a paragraph margin: match the top. */
+  padding-bottom: 1.5rem;
+}
+
 .github-repo-grid > .box {
   margin: 0 !important;
 }
