@@ -68,6 +68,10 @@
      viewport, i.e. --bg-primary blended with the body::before noise layer
      (and, in abyss, the #gatsby-focus-wrapper::after gradient). */
   --header-bg: #f1f0f0;
+  /* The footer band (see layout.js) scrolls with the page instead of covering
+     it, so it can let a background wash show through; elsewhere it matches the
+     top bar. */
+  --footer-bg: var(--header-bg);
 
   /* Nav pill */
   --nav-pill-bg: rgba(0, 0, 0, 0.04);
@@ -165,6 +169,8 @@
   /* --bg-primary is translucent here: the visible colour comes from the
      gradient on #gatsby-focus-wrapper::after under the noise layer. */
   --header-bg: #09141d;
+  /* A light shade over the drifting glows rather than a flat block. */
+  --footer-bg: rgba(4, 10, 16, 0.3);
 
   /* Nav pill */
   --nav-pill-bg: rgba(102, 158, 192, 0.08);

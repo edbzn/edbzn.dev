@@ -20,7 +20,7 @@ class Layout extends React.Component {
           marginLeft: `auto`,
           marginRight: `auto`,
           marginTop: 0,
-          marginBottom: rhythm(1.4),
+          marginBottom: 0,
           maxWidth: '698px',
           hyphens: 'auto',
           hyphenateLimitChars: '6 3 3',
@@ -176,9 +176,23 @@ class Layout extends React.Component {
             scene={onBlog ? 'black-hole' : onUses ? 'galaxy' : 'globe'}
           />
         </div>
+        {/* Full-bleed band mirroring the header, closing the page. */}
         <footer
           role="contentinfo"
-          style={{ marginTop: rhythm(2), fontSize: '0.85rem', fontWeight: 100 }}
+          style={{
+            marginTop: rhythm(2),
+            fontSize: '0.85rem',
+            fontWeight: 100,
+            backgroundColor: 'var(--footer-bg)',
+            borderTop: '1px solid var(--border-color)',
+            paddingTop: rhythm(0.9),
+            paddingBottom: rhythm(0.9),
+            paddingLeft: 'clamp(1.25rem, 3vw, 2rem)',
+            paddingRight: 'clamp(1.25rem, 3vw, 2rem)',
+            marginLeft: 'calc(-50vw + 50%)',
+            marginRight: 'calc(-50vw + 50%)',
+            width: '100vw',
+          }}
         >
           <div
             style={{
