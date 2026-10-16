@@ -131,14 +131,20 @@
   border-radius: 2px;
 }
 
-/* Section currently being read */
+/* Section currently being read. Only coloured here: bold is wider and can
+   wrap the link onto another line, and above the content that pushes the
+   whole post down as the reader scrolls (bold is added in the side block). */
 .toc-link-active {
   color: var(--accent-color);
-  font-weight: 600;
 }
 
 /* Sticky side block in the right margin */
 @media screen and (min-width: 1240px) {
+  /* Out of the flow here, so the bolder link can't move the post */
+  .toc-link-active {
+    font-weight: 600;
+  }
+
   .toc-rail {
     position: absolute;
     top: 0;
