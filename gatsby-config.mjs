@@ -30,6 +30,12 @@ export default {
     github: {
       sponsorUrl: 'https://github.com/sponsors/edbzn',
       repositoryUrl: 'https://github.com/edbzn/edbzn.github.io',
+      // The latest commits to public repositories I don't own are fetched
+      // for this user at build time (see `sourceNodes` in gatsby-node.js).
+      username: 'edbzn',
+      reposUrl: 'https://github.com/edbzn?tab=repositories&type=source',
+      contributionsUrl:
+        'https://github.com/search?q=author%3Aedbzn+is%3Apr+is%3Amerged+is%3Apublic+-user%3Aedbzn&type=pullrequests&s=created&o=desc',
       commitSha,
     },
     social: {
@@ -71,6 +77,20 @@ export default {
         url: 'https://github.com/jscutlery/nx-completion',
         img: 'https://avatars.githubusercontent.com/u/55789006?s=200&v=4',
       },
+      {
+        name: 'marblejs/marble',
+        description:
+          'Functional reactive Node.js framework based on TypeScript and RxJS.',
+        url: 'https://github.com/marblejs/marble',
+        img: 'https://avatars.githubusercontent.com/u/39135797?s=200&v=4',
+      },
+    ],
+    // Smaller personal projects, listed under the cards with their stars.
+    // Description and stars are fetched from GitHub at build time.
+    sideProjects: [
+      'edbzn/package-manager-benchmarks',
+      'edbzn/ng-rspack',
+      'edbzn/rx-angular-todo-mvc',
     ],
     experiences: [
       {

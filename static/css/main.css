@@ -828,7 +828,7 @@ p > img {
   filter: invert(1) brightness(1.1);
 }
 
-.projects ul {
+.projects-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
@@ -995,7 +995,7 @@ p > img {
     margin: 0;
   }
 
-  .projects ul {
+  .projects-grid {
     margin: 0;
     grid-template-columns: repeat(1, 1fr);
   }

@@ -4,6 +4,7 @@ import { GitHubRepo } from './github-repo';
 
 export const Projects = ({ ossProjects }) => (
   <ul
+    className="projects-grid"
     style={{
       margin: 0,
       padding: 0,

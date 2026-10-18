@@ -6,13 +6,24 @@ import { Seo } from '../components/seo';
 import { Projects } from '../components/oss-projects';
 import { PostTitleList } from '../components/post-title-list';
 import { Resume } from '../components/resume';
+import { ContributionList } from '../components/contribution-list';
+import { SideProjectList } from '../components/repo-list';
 import { rhythm } from '../utils/typography';
+
+// "All …" link under a list
+const moreLinkStyle = {
+  display: 'inline-block',
+  marginTop: rhythm(0.8),
+  fontFamily: 'var(--font-sans)',
+  fontSize: '0.85rem',
+};
 
 class AboutMe extends React.Component {
   render() {
     const { data } = this.props;
     const { siteMetadata } = data.site;
-    const { author, ossProjects, experiences, github } = siteMetadata;
+    const { author, ossProjects, sideProjects, experiences, github } =
+      siteMetadata;
     const blogPosts = data.allMdx.nodes;
 
     return (
@@ -77,11 +88,41 @@ class AboutMe extends React.Component {
                 fontWeight: '300',
               }}
             >
-              Open source projects
+              Open source
             </span>{' '}
           </div>
+          <p
+            style={{
+              marginTop: rhythm(-0.9),
+              marginBottom: rhythm(1),
+              fontFamily: 'var(--font-sans)',
+              fontSize: '0.9rem',
+              color: 'var(--text-secondary)',
+            }}
+          >
+            Projects I've created or contributed to, as an external contributor
+            or core maintainer.
+          </p>
 
           <Projects ossProjects={ossProjects} sponsorUrl={github.sponsorUrl} />
+
+          <ContributionList />
+          <a
+            href={github.contributionsUrl}
+            className="text-link text-link--muted"
+            style={moreLinkStyle}
+          >
+            All contributions →
+          </a>
+
+          <SideProjectList projects={sideProjects} />
+          <a
+            href={github.reposUrl}
+            className="text-link text-link--muted"
+            style={moreLinkStyle}
+          >
+            All repositories →
+          </a>
         </section>
       </Layout>
     );
@@ -102,6 +143,8 @@ export const pageQuery = graphql`
         github {
           repositoryUrl
           sponsorUrl
+          reposUrl
+          contributionsUrl
           commitSha
         }
         ossProjects {
@@ -110,6 +153,7 @@ export const pageQuery = graphql`
           img
           url
         }
+        sideProjects
         experiences {
           company
           position
