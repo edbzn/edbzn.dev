@@ -1,0 +1,72 @@
+/* Sub-section heading: sentence case and medium weight (500 is the
+   heaviest Public Sans below 900 loaded in gatsby-browser.js), under the
+   light uppercase section heading */
+.title {
+  margin-top: 2.6rem;
+  margin-bottom: 0.9rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+}
+
+/* Doubled class: wins over the larger .box padding from main.css */
+.card.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  height: 100%;
+  padding: 0.85rem 1rem;
+  color: var(--text-primary);
+  box-shadow: none;
+  text-decoration: none;
+}
+
+/* One line; the full name is in the tooltip */
+.name {
+  overflow: hidden;
+  font-size: 0.95rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card:hover .name {
+  color: var(--accent-color);
+}
+
+/* Two lines; the full text is in the tooltip */
+.text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  font-size: 0.8rem;
+  font-weight: 300;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  /* No auto hyphens: they split package and tool names */
+  hyphens: manual;
+}
+
+/* Pinned to the bottom so the meta rows line up across a grid row */
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: auto;
+  padding-top: 0.15rem;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}

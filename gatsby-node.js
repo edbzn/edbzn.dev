@@ -145,14 +145,15 @@ exports.createPages = async ({ graphql, actions }) => {
 const GITHUB_REPO_TTL = 24 * 60 * 60 * 1000;
 
 /**
- * Collects every repository rendered with `<GitHubRepo>`: the OSS projects
- * from the site metadata, plus literal `name="owner/repo"` props found in
- * posts and pages.
+ * Collects every repository shown with GitHub stats: the OSS projects and
+ * side projects from the site metadata, plus literal `name="owner/repo"`
+ * props of `<GitHubRepo>` found in posts and pages.
  */
 async function collectGitHubRepoNames(rootDir, siteMetadata) {
-  const names = new Set(
-    (siteMetadata.ossProjects || []).map((project) => project.name)
-  );
+  const names = new Set([
+    ...(siteMetadata.ossProjects || []).map((project) => project.name),
+    ...(siteMetadata.sideProjects || []),
+  ]);
   const pattern = /<GitHubRepo\b[^>]*?\bname=["']([^"']+)["']/g;
 
   for (const dir of ['content', 'src']) {
@@ -170,14 +171,17 @@ async function collectGitHubRepoNames(rootDir, siteMetadata) {
   return [...names];
 }
 
-async function fetchGitHubRepo(name) {
+function githubHeaders() {
   const headers = { Accept: 'application/vnd.github+json' };
   if (process.env.GITHUB_TOKEN) {
     headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
   }
+  return headers;
+}
 
+async function fetchGitHubRepo(name) {
   const res = await fetch(`https://api.github.com/repos/${name}`, {
-    headers,
+    headers: githubHeaders(),
     signal: AbortSignal.timeout(10000),
   });
   if (!res.ok) {
@@ -197,11 +201,47 @@ async function fetchGitHubRepo(name) {
 }
 
 /**
+ * Fetches the latest commit `username` authored on each of the `count` public
+ * repositories they most recently contributed to, leaving out repositories
+ * they own and forks (which carry copies of the same commits).
+ */
+async function fetchGitHubCommits(username, count) {
+  const query = `author:${username} is:public -user:${username}`;
+  const res = await fetch(
+    `https://api.github.com/search/commits?q=${encodeURIComponent(query)}` +
+      `&sort=author-date&order=desc&per_page=100`,
+    { headers: githubHeaders(), signal: AbortSignal.timeout(10000) }
+  );
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}`);
+  }
+
+  const { items } = await res.json();
+  const latestPerRepo = new Map();
+  for (const item of items) {
+    const repo = item.repository.full_name;
+    if (!item.repository.fork && !latestPerRepo.has(repo)) {
+      latestPerRepo.set(repo, item);
+    }
+  }
+
+  return [...latestPerRepo.values()].slice(0, count).map((item) => ({
+    sha: item.sha,
+    repo: item.repository.full_name,
+    // First line only: the subject
+    message: item.commit.message.split('\n')[0],
+    date: item.commit.author.date,
+    url: item.html_url,
+  }));
+}
+
+/**
  * Fetches the GitHub stats shown on repo cards at build time, so they ship in
  * the HTML instead of being requested by every visitor. Responses are cached
  * for a day; when GitHub is unreachable or rate-limited the stale copy is
  * used, and a repo with no data at all is skipped (the card shows
- * placeholders). Set `GITHUB_TOKEN` to raise the rate limit.
+ * placeholders). The same goes for the latest contributions listed on the
+ * home page. Set `GITHUB_TOKEN` to raise the rate limit.
  *
  * @type {import('gatsby').GatsbyNode['sourceNodes']}
  */
@@ -214,10 +254,8 @@ exports.sourceNodes = async ({
   createContentDigest,
 }) => {
   const { program, config } = store.getState();
-  const names = await collectGitHubRepoNames(
-    program.directory,
-    (config && config.siteMetadata) || {}
-  );
+  const siteMetadata = (config && config.siteMetadata) || {};
+  const names = await collectGitHubRepoNames(program.directory, siteMetadata);
 
   await Promise.all(
     names.map(async (name) => {
@@ -252,6 +290,38 @@ exports.sourceNodes = async ({
       });
     })
   );
+
+  const username = siteMetadata.github?.username;
+  if (!username) {
+    return;
+  }
+
+  const cacheKey = `github-commits-per-repo-${username}`;
+  const cached = await cache.get(cacheKey);
+  let commits = cached?.data;
+
+  if (!cached || Date.now() - cached.fetchedAt > GITHUB_REPO_TTL) {
+    try {
+      commits = await fetchGitHubCommits(username, 5);
+      await cache.set(cacheKey, { fetchedAt: Date.now(), data: commits });
+    } catch (error) {
+      reporter.warn(
+        `Could not fetch GitHub commits of ${username} (${error.message}), ` +
+          (commits ? 'using cached data' : 'hiding the list')
+      );
+    }
+  }
+
+  for (const commit of commits || []) {
+    actions.createNode({
+      ...commit,
+      id: createNodeId(`GitHubCommit-${commit.sha}`),
+      internal: {
+        type: 'GitHubCommit',
+        contentDigest: createContentDigest(commit),
+      },
+    });
+  }
 };
 
 /**
@@ -350,6 +420,13 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
       forksCount: Int
       licenseSpdxId: String
       url: String
+    }
+    type GitHubCommit implements Node @dontInfer {
+      sha: String!
+      repo: String!
+      message: String!
+      date: Date! @dateformat
+      url: String!
     }
     `,
   ];

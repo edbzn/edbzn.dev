@@ -121,15 +121,7 @@ export const GitHubRepo = ({ name, description, url, img }) => {
           </span>
         )}
         <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-          <svg
-            viewBox="0 0 16 16"
-            width="14"
-            height="14"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z" />
-          </svg>
+          <StarIcon />
           {stars}
         </span>
         {(!repo || forks > 0) && (
@@ -157,6 +149,18 @@ export const GitHubRepo = ({ name, description, url, img }) => {
     </a>
   );
 };
+
+export const StarIcon = () => (
+  <svg
+    viewBox="0 0 16 16"
+    width="14"
+    height="14"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z" />
+  </svg>
+);
 
 function languageColor(language) {
   const colors = {
