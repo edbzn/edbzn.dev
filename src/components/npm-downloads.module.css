@@ -1,0 +1,176 @@
+.title {
+  composes: title from './repo-list.module.css';
+}
+
+/* Doubled class: wins over the larger .box padding from main.css */
+.card.card {
+  padding: 1.25rem 1.25rem 1rem;
+  font-family: var(--font-sans);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Headline number: proportional figures read tighter at this size */
+.figure {
+  font-size: 2.25rem;
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--text-primary);
+}
+
+.caption {
+  margin-top: 0.3rem;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+}
+
+.profile {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+}
+
+.chartLabel {
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* The plot is the hover target; children use percent positions */
+.plot {
+  position: relative;
+  height: 160px;
+  margin-top: 1rem;
+  cursor: crosshair;
+  touch-action: pan-y;
+}
+
+.plot:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 6px;
+  border-radius: 2px;
+}
+
+.gridline {
+  position: absolute;
+  right: 0;
+  left: 0;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Tick values sit just above their gridline, on the left */
+.tick {
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--text-muted);
+}
+
+.svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.area {
+  fill: var(--accent-color);
+  fill-opacity: 0.1;
+}
+
+.line {
+  fill: none;
+  stroke: var(--accent-color);
+  stroke-width: 2px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* 8px marker with a 2px surface ring */
+.dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  /* Ring in the card's surface color (.box background) */
+  box-shadow: 0 0 0 2px var(--bg-primary);
+  pointer-events: none;
+}
+
+.crosshair {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 1px solid var(--text-muted);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.tooltip {
+  position: absolute;
+  top: -0.75rem;
+  display: flex;
+  flex-direction: column;
+  margin: 0 0.6rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-secondary);
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.tooltip strong {
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.xAxis {
+  position: relative;
+  height: 1rem;
+  margin-top: 0.4rem;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.xAxis span {
+  position: absolute;
+  transform: translateX(-50%);
+}
+
+.xAxis span:first-child {
+  transform: none;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media screen and (max-width: 640px) {
+  .header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

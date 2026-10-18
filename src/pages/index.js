@@ -7,6 +7,7 @@ import { Projects } from '../components/oss-projects';
 import { PostTitleList } from '../components/post-title-list';
 import { Resume } from '../components/resume';
 import { ContributionList } from '../components/contribution-list';
+import { NpmDownloads } from '../components/npm-downloads';
 import { NxChampion } from '../components/nx-champion';
 import { SideProjectList } from '../components/repo-list';
 import { rhythm } from '../utils/typography';
@@ -23,7 +24,7 @@ class AboutMe extends React.Component {
   render() {
     const { data } = this.props;
     const { siteMetadata } = data.site;
-    const { author, ossProjects, sideProjects, experiences, github } =
+    const { author, ossProjects, sideProjects, experiences, github, npm } =
       siteMetadata;
     const blogPosts = data.allMdx.nodes;
 
@@ -107,6 +108,8 @@ class AboutMe extends React.Component {
 
           <Projects ossProjects={ossProjects} sponsorUrl={github.sponsorUrl} />
 
+          <NpmDownloads profileUrl={npm.profileUrl} />
+
           <NxChampion />
 
           <ContributionList />
@@ -143,6 +146,9 @@ export const pageQuery = graphql`
     site {
       siteMetadata {
         author
+        npm {
+          profileUrl
+        }
         github {
           repositoryUrl
           sponsorUrl

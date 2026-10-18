@@ -38,6 +38,12 @@ export default {
         'https://github.com/search?q=author%3Aedbzn+is%3Apr+is%3Amerged+is%3Apublic+-user%3Aedbzn&type=pullrequests&s=created&o=desc',
       commitSha,
     },
+    // Downloads of this user's npm packages are shown on the home page
+    // (see scripts/npm-downloads.js).
+    npm: {
+      username: 'koalaa',
+      profileUrl: 'https://www.npmjs.com/~koalaa',
+    },
     social: {
       twitter: `https://twitter.com/edbzn`,
       github: `https://github.com/edbzn`,

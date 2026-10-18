@@ -2,6 +2,13 @@ const fs = require(`fs/promises`);
 const path = require(`path`);
 const { createFilePath } = require(`gatsby-source-filesystem`);
 const { generateOgImages } = require(`./scripts/generate-og-images`);
+const {
+  DAY,
+  isoDay,
+  fetchNpmPackages,
+  fetchMonthlyDownloads,
+  readSnapshot,
+} = require(`./scripts/npm-downloads`);
 
 // Former tag slugs and the category each one was merged into.
 const retiredTags = {
@@ -143,6 +150,7 @@ exports.createPages = async ({ graphql, actions }) => {
 };
 
 const GITHUB_REPO_TTL = 24 * 60 * 60 * 1000;
+const NPM_DOWNLOADS_TTL = 24 * 60 * 60 * 1000;
 
 /**
  * Collects every repository shown with GitHub stats: the OSS projects and
@@ -242,17 +250,15 @@ async function fetchGitHubCommits(username, count) {
  * used, and a repo with no data at all is skipped (the card shows
  * placeholders). The same goes for the latest contributions listed on the
  * home page. Set `GITHUB_TOKEN` to raise the rate limit.
- *
- * @type {import('gatsby').GatsbyNode['sourceNodes']}
  */
-exports.sourceNodes = async ({
+async function sourceGitHub({
   actions,
   cache,
   store,
   reporter,
   createNodeId,
   createContentDigest,
-}) => {
+}) {
   const { program, config } = store.getState();
   const siteMetadata = (config && config.siteMetadata) || {};
   const names = await collectGitHubRepoNames(program.directory, siteMetadata);
@@ -322,6 +328,90 @@ exports.sourceNodes = async ({
       },
     });
   }
+}
+
+/**
+ * Downloads of the npm packages shown on the home page: the committed
+ * monthly history (src/data/npm-downloads.json) plus the days since,
+ * fetched at build time and cached for a day. When npm is unreachable the
+ * history alone is used. Only complete months are charted; the total also
+ * counts the current one.
+ */
+async function sourceNpmDownloads({
+  actions,
+  cache,
+  store,
+  reporter,
+  createNodeId,
+  createContentDigest,
+}) {
+  const { config } = store.getState();
+  const username = config?.siteMetadata?.npm?.username;
+  const snapshot = await readSnapshot();
+  if (!username || !snapshot) {
+    return;
+  }
+
+  const cacheKey = `npm-downloads-${username}-${snapshot.until}`;
+  const cached = await cache.get(cacheKey);
+  let recent = cached?.data;
+
+  if (!cached || Date.now() - cached.fetchedAt > NPM_DOWNLOADS_TTL) {
+    try {
+      const since = isoDay(new Date(new Date(snapshot.until).getTime() + DAY));
+      const until = isoDay(new Date(Date.now() - DAY));
+      const packages = await fetchNpmPackages(username);
+      const months = await fetchMonthlyDownloads(packages, { since, until });
+      recent = { until, packages, months };
+      await cache.set(cacheKey, { fetchedAt: Date.now(), data: recent });
+    } catch (error) {
+      reporter.warn(
+        `Could not fetch recent npm downloads of ${username} ` +
+          `(${error.message}), ` +
+          (recent
+            ? 'using cached data'
+            : `showing downloads up to ${snapshot.until}`)
+      );
+    }
+  }
+
+  const months = { ...snapshot.months };
+  for (const [month, count] of Object.entries(recent?.months || {})) {
+    months[month] = (months[month] || 0) + count;
+  }
+  const until = recent?.until || snapshot.until;
+  const nextDay = isoDay(new Date(new Date(until).getTime() + DAY));
+  const partialMonth =
+    nextDay.slice(0, 7) === until.slice(0, 7) ? until.slice(0, 7) : null;
+
+  const node = {
+    username,
+    until,
+    packageCount: new Set([...snapshot.packages, ...(recent?.packages || [])])
+      .size,
+    total: Object.values(months).reduce((sum, count) => sum + count, 0),
+    months: Object.entries(months)
+      .filter(([month]) => month !== partialMonth)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([month, downloads]) => ({ month, downloads })),
+  };
+  actions.createNode({
+    ...node,
+    id: createNodeId(`NpmDownloads-${username}`),
+    internal: {
+      type: 'NpmDownloads',
+      contentDigest: createContentDigest(node),
+    },
+  });
+}
+
+/**
+ * Fetches the GitHub and npm data shown on the home page at build time.
+ *
+ * @type {import('gatsby').GatsbyNode['sourceNodes']}
+ */
+exports.sourceNodes = async (args) => {
+  await Promise.all([sourceGitHub(args), sourceNpmDownloads(args)]);
 };
 
 /**
@@ -427,6 +517,17 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
       message: String!
       date: Date! @dateformat
       url: String!
+    }
+    type NpmDownloads implements Node @dontInfer {
+      username: String!
+      until: String!
+      packageCount: Int!
+      total: Float!
+      months: [NpmDownloadsMonth!]!
+    }
+    type NpmDownloadsMonth {
+      month: String!
+      downloads: Int!
     }
     `,
   ];
