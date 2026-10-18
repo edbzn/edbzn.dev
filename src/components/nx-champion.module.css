@@ -1,0 +1,55 @@
+.title {
+  composes: title from './repo-list.module.css';
+}
+
+/* Doubled class: wins over the larger .box padding from main.css */
+.card.card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  box-shadow: none;
+  text-decoration: none;
+}
+
+.badge {
+  flex-shrink: 0;
+  width: 55px;
+  height: 64px;
+  margin: 0;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.text {
+  font-size: 0.85rem;
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  hyphens: manual;
+}
+
+.card:hover .text {
+  color: var(--text-primary);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.tag {
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}

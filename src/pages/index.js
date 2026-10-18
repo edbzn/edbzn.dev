@@ -7,6 +7,7 @@ import { Projects } from '../components/oss-projects';
 import { PostTitleList } from '../components/post-title-list';
 import { Resume } from '../components/resume';
 import { ContributionList } from '../components/contribution-list';
+import { NxChampion } from '../components/nx-champion';
 import { SideProjectList } from '../components/repo-list';
 import { rhythm } from '../utils/typography';
 
@@ -105,6 +106,8 @@ class AboutMe extends React.Component {
           </p>
 
           <Projects ossProjects={ossProjects} sponsorUrl={github.sponsorUrl} />
+
+          <NxChampion />
 
           <ContributionList />
           <a
