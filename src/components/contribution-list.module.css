@@ -2,61 +2,77 @@
   composes: title from './repo-list.module.css';
 }
 
-.list {
-  list-style: none;
+.table {
+  width: 100%;
   margin: 0;
-  padding: 0;
+  border-collapse: collapse;
   font-family: var(--font-sans);
+  font-size: 0.85rem;
 }
 
-.item {
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-  min-width: 0;
-  margin: 0;
-  padding: 0.6rem 0;
+.table th,
+.table td {
+  padding: 0.55rem 1rem 0.55rem 0;
   border-bottom: 1px solid var(--border-color);
-}
-
-.item:first-child {
-  padding-top: 0;
-}
-
-/* One line; the full message is in the tooltip */
-.message {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  color: var(--text-primary);
-  box-shadow: none;
-  text-decoration: none;
-  text-overflow: ellipsis;
+  text-align: left;
+  vertical-align: baseline;
   white-space: nowrap;
 }
 
+.table th:last-child,
+.table td:last-child {
+  padding-right: 0;
+}
+
+.table th {
+  padding-top: 0;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.sha,
+.link,
 .repo {
-  flex-shrink: 0;
-  font-size: 0.8rem;
-  color: var(--text-secondary);
   box-shadow: none;
   text-decoration: none;
 }
 
-.message:hover,
+.sha:hover,
+.link:hover,
 .repo:hover {
   color: var(--accent-color);
 }
 
-.date {
-  flex-shrink: 0;
+.sha {
+  font-family: 'Fira Code', 'Fira Mono', monospace;
   font-size: 0.8rem;
-  font-variant-numeric: tabular-nums;
-  color: var(--text-muted);
-  white-space: nowrap;
+  color: var(--text-secondary);
 }
 
-/* Narrow screens: message and repository are enough */
+/* Takes the remaining width and ends with an ellipsis; the full message is
+   in the tooltip. max-width: 0 lets the cell shrink below its content. */
+.message {
+  width: 100%;
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.link {
+  color: var(--text-primary);
+}
+
+.repo {
+  color: var(--text-secondary);
+}
+
+.date {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+/* Narrow screens: commit, message and repository are enough */
 @media screen and (max-width: 640px) {
   .date {
     display: none;
