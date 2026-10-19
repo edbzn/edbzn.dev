@@ -1,0 +1,203 @@
+/*
+ * Charts for the "Five ways to compile Angular for Cypress Component Testing" post. The
+ * figure, controls and tooltip reuse the Nx benchmark charts' look; only the series colors are
+ * this post's. They are validated categorical steps (>= 3:1 on dark and abyss; the light
+ * orange is backed by direct labels and the tooltip), the ordinal pair is one blue ramp.
+ */
+.figure {
+  composes: figure from './nx-bench.module.css';
+  --cct-startup: #2a78d6;
+  --cct-tests: #eb6834;
+  --cct-rest: #c4cad3;
+  --cct-small: #6da7ec;
+  --cct-big: #1c5cab;
+  --cct-memory: #2a78d6;
+  --cct-aot: #2a78d6;
+  --cct-jit: #eb6834;
+  /* Status: never themed, always paired with an icon and a label. */
+  --cct-good: #0ca30c;
+  --cct-critical: #d03b3b;
+}
+
+:global(:root[data-theme='dark']) .figure,
+:global(:root[data-theme='abyss']) .figure {
+  --cct-startup: #3987e5;
+  --cct-tests: #d95926;
+  --cct-rest: #4b525e;
+  --cct-small: #256abf;
+  --cct-big: #86b6ef;
+  --cct-memory: #3987e5;
+  --cct-aot: #3987e5;
+  --cct-jit: #d95926;
+}
+
+.head {
+  composes: head from './nx-bench.module.css';
+}
+
+.title {
+  composes: title from './nx-bench.module.css';
+}
+
+.caption {
+  composes: caption from './nx-bench.module.css';
+}
+
+.controls {
+  composes: controls from './nx-bench.module.css';
+}
+
+.toggle {
+  composes: toggle from './nx-bench.module.css';
+}
+
+.toggleLabel {
+  composes: toggleLabel from './nx-bench.module.css';
+}
+
+.sizeSwitch {
+  composes: sizeSwitch from './nx-bench.module.css';
+}
+
+.legend {
+  composes: legend from './nx-bench.module.css';
+}
+
+.swatch {
+  composes: swatch from './nx-bench.module.css';
+}
+
+.scroll {
+  composes: scroll from './nx-bench.module.css';
+}
+
+/* Keeps readable text on phones: the chart scrolls sideways instead of shrinking. */
+.svg {
+  composes: svg from './nx-bench.module.css';
+  min-width: 34rem;
+}
+
+.muted {
+  composes: muted from './nx-bench.module.css';
+}
+
+.hit {
+  composes: hit from './nx-bench.module.css';
+}
+
+.gridline {
+  stroke: var(--border-color);
+  stroke-width: 1;
+}
+
+.bracket {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+  opacity: 0.6;
+}
+
+.connector {
+  stroke: var(--text-muted);
+  stroke-width: 2;
+  opacity: 0.5;
+}
+
+.tooltip {
+  composes: tooltip from './nx-bench.module.css';
+}
+
+.tooltipTitle {
+  composes: tooltipTitle from './nx-bench.module.css';
+}
+
+.tooltipRow {
+  composes: tooltipRow from './nx-bench.module.css';
+}
+
+.tooltipLabel {
+  composes: tooltipLabel from './nx-bench.module.css';
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.matrix {
+  width: 100%;
+  min-width: 36rem;
+  margin: 0;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+}
+
+.matrix th,
+.matrix td {
+  height: 2.5rem;
+  padding: 0 1rem 0 0;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.matrix th:last-child,
+.matrix td:last-child {
+  padding-right: 0;
+}
+
+/* The site lets inline code break anywhere; a header must stay on one line. */
+.matrix code {
+  white-space: nowrap;
+  word-break: normal;
+}
+
+/* Gap columns share the rest of the width, so their icons line up. */
+.matrix .gap {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.matrix thead th {
+  height: auto;
+  padding-bottom: 0.45rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.matrix tbody th {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.mode {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.statusLabel {
+  color: var(--text-secondary);
+}
+
+.statusIcon {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+}
