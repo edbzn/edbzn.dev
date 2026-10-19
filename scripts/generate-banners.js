@@ -703,6 +703,21 @@ function rspackRevisited() {
   ]);
 }
 
+// Five toolchains, seven setups, one race: a bar per setup, its length the wall time with
+// 1000 components relative to webpack, the fastest in amber.
+function cctCompilers() {
+  const ratios = [0.4, 0.59, 0.61, 0.62, 0.73, 0.74, 1];
+  const [x0, maxW, h, gap] = [230, 740, 26, 18];
+  const y0 = 250 - (ratios.length * (h + gap) - gap) / 2;
+  return svg([
+    `<line x1="${x0 - 22}" y1="${f(y0 - 14)}" x2="${x0 - 22}" y2="${f(500 - y0 + 14)}" stroke="${C.line}" stroke-width="4" stroke-linecap="round"/>`,
+    ...ratios.map(
+      (r, i) =>
+        `<rect x="${x0}" y="${f(y0 + i * (h + gap))}" width="${f(r * maxW)}" height="${h}" rx="${h / 2}" fill="${i === 0 ? C.amber : C.blue}"/>`
+    ),
+  ]);
+}
+
 // Partitions of the same square: whole, 3 strips (sharded), 4x4 (atomized).
 // The gaps are the startup overhead, and they grow with the piece count.
 function atomization() {
@@ -771,6 +786,7 @@ function sovereignty() {
 
 const dir = path.join(__dirname, '..', 'content', 'blog');
 const banners = {
+  'angular-cypress-component-testing-compilers': cctCompilers,
   'nx-atomization-vs-sharding': atomization,
   'nx-parallelism-pitfall': parallelism,
   'understanding-nx-affected-graph-vs-cache-hits': affected,
