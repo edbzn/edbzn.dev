@@ -14,6 +14,7 @@
   --cct-memory: #2a78d6;
   --cct-aot: #2a78d6;
   --cct-jit: #eb6834;
+  --cct-typecheck: #8b5cf6;
   /* Status: never themed, always paired with an icon and a label. */
   --cct-good: #0ca30c;
   --cct-critical: #d03b3b;
@@ -29,6 +30,7 @@
   --cct-memory: #3987e5;
   --cct-aot: #3987e5;
   --cct-jit: #d95926;
+  --cct-typecheck: #a07cf7;
 }
 
 .head {
@@ -200,4 +202,43 @@
   flex-shrink: 0;
   width: 1rem;
   height: 1rem;
+}
+
+/* Toolchain flow: opaque steps, so stacked copies hide behind each other; the template
+   compile is tinted with its mode on top. */
+.step {
+  fill: var(--bg-primary);
+  stroke: var(--text-muted);
+  stroke-opacity: 0.55;
+}
+
+.tinted {
+  fill-opacity: 0.18;
+  stroke-width: 1.5;
+}
+
+.svg .strong {
+  fill: var(--text-primary);
+  font-weight: 600;
+}
+
+.arrow line {
+  stroke: var(--text-muted);
+  stroke-width: 1.5;
+}
+
+.arrow path {
+  fill: var(--text-muted);
+}
+
+.divider {
+  stroke: var(--border-color);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.border {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+  stroke-opacity: 0.6;
 }

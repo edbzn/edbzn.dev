@@ -875,3 +875,308 @@ export const JitCostChart = ({ data, pass: initial = 'scale1000' }) => {
     </Figure>
   );
 };
+
+/* ---------------------------------------------------------------- how each toolchain works */
+
+// The bands a spec goes through, top to bottom.
+const LANES = [
+  ['startup', 'Dev server', 'at startup'],
+  ['request', 'Dev server', 'per file'],
+  ['browser', 'Browser', 'on mount'],
+];
+const JIT_COMPILE = {
+  lane: 'browser',
+  text: 'Compile\ntemplates',
+  kind: 'jit',
+  tip: "Angular's JIT compiler compiles each template when its component first mounts.",
+};
+const RUN = { lane: 'browser', text: 'Run the test' };
+const SERVE = {
+  lane: 'request',
+  text: 'Serve the file',
+  tip: 'Serves what the startup compiled.',
+};
+const PROGRAM = {
+  lane: 'startup',
+  text: 'TypeScript\nprogram',
+  all: true,
+  tip: "Builds a TypeScript program of the whole project before serving the first file. Angular's compiler needs it; type errors are not reported (disableTypeChecking defaults to true).",
+};
+// One column per way of working, steps in order; all: the step covers the whole project.
+const FLOWS = [
+  {
+    names: ['webpack'],
+    mode: 'JIT',
+    steps: [
+      {
+        lane: 'request',
+        text: 'Type-check\nthe project',
+        kind: 'typecheck',
+        all: true,
+        tip: 'Builds a TypeScript program of the whole project and type-checks it, when the first spec is requested.',
+      },
+      {
+        lane: 'request',
+        text: 'Bundle the spec',
+        tip: 'Bundles the spec and everything it imports.',
+      },
+      JIT_COMPILE,
+      RUN,
+    ],
+  },
+  {
+    names: ['Analog', '@angular/build'],
+    mode: 'JIT',
+    steps: [PROGRAM, SERVE, JIT_COMPILE, RUN],
+  },
+  {
+    names: ['Analog', '@angular/build'],
+    mode: 'AOT',
+    steps: [
+      PROGRAM,
+      {
+        lane: 'startup',
+        text: 'Compile\ntemplates',
+        kind: 'aot',
+        all: true,
+        tip: "Angular's compiler compiles every template of the project before serving the first file.",
+      },
+      SERVE,
+      RUN,
+    ],
+  },
+  {
+    names: ['SWC'],
+    mode: 'JIT',
+    steps: [
+      {
+        lane: 'request',
+        text: 'Strip types',
+        tip: 'Strips the types of the requested file and inlines its template and styles, in Rust.',
+      },
+      JIT_COMPILE,
+      RUN,
+    ],
+  },
+  {
+    names: ['OXC'],
+    mode: 'AOT',
+    steps: [
+      {
+        lane: 'request',
+        text: 'Strip types',
+        tip: 'Strips the types of the requested file, in Rust.',
+      },
+      {
+        lane: 'request',
+        text: 'Compile\ntemplates',
+        kind: 'aot',
+        tip: "OXC's compiler compiles the templates of the requested file, in Rust.",
+      },
+      RUN,
+    ],
+  },
+];
+
+// Step labels break where they hold a newline.
+const lines = (text) => text.split('\n');
+const oneLine = (text) => text.replace('\n', ' ');
+
+/** Each toolchain's steps as a flow, across the dev server and the browser. */
+export const ToolchainFlow = () => {
+  const tooltip = useTooltip();
+  const [labelW, headH] = [84, 58];
+  const colW = (W - labelW) / FLOWS.length;
+  const [nodeW, nodeH, step] = [colW - 14, 34, 52];
+  const laneH = 2 * nodeH + (step - nodeH) + 24;
+  const laneTop = (i) => headH + i * laneH;
+  const H = headH + LANES.length * laneH;
+  const laneIndex = Object.fromEntries(LANES.map(([key], i) => [key, i]));
+
+  // Steps of one column with their y: one or two per lane, centered in it.
+  const place = (steps) =>
+    steps.map((s) => {
+      const inLane = steps.filter((o) => o.lane === s.lane);
+      const slot = inLane.indexOf(s);
+      const blockH = nodeH + (inLane.length - 1) * step;
+      const y = laneTop(laneIndex[s.lane]) + (laneH - blockH) / 2 + slot * step;
+      return { ...s, y };
+    });
+
+  const Arrow = ({ x, y1, y2 }) => (
+    <g className={styles.arrow}>
+      <line x1={x} x2={x} y1={y1} y2={y2 - 5} />
+      <path d={`M${x - 4},${y2 - 6} L${x},${y2} L${x + 4},${y2 - 6} Z`} />
+    </g>
+  );
+
+  return (
+    <Figure
+      title="How each toolchain gets a spec to run"
+      caption="Top to bottom, from the dev server to the browser. Stacked steps cover the whole project at once, the others one file at a time. Hover a step for details."
+      legend={[
+        ['Templates compiled by the dev server (AOT)', 'aot'],
+        ['Templates compiled in the browser (JIT)', 'jit'],
+        ['Type-checking', 'typecheck'],
+      ]}
+      tooltip={tooltip}
+    >
+      <svg {...svgProps(H, 'How each toolchain gets a spec to run')}>
+        {LANES.map(([key, where, when], i) => (
+          <g key={key}>
+            {i > 0 && (
+              <line
+                x1={0}
+                x2={W}
+                y1={laneTop(i)}
+                y2={laneTop(i)}
+                className={key === 'browser' ? styles.border : styles.divider}
+              />
+            )}
+            <text y={laneTop(i) + laneH / 2 - 8} dy="0.35em" fontWeight={600}>
+              {where}
+            </text>
+            <text
+              y={laneTop(i) + laneH / 2 + 8}
+              dy="0.35em"
+              fontSize={11}
+              className={styles.muted}
+            >
+              {when}
+            </text>
+          </g>
+        ))}
+        {FLOWS.map((flow, c) => {
+          const cx = labelW + c * colW + colW / 2;
+          const x = cx - nodeW / 2;
+          const nodes = place(flow.steps);
+          const name = flow.names.join(', ');
+          return (
+            <g key={`${name} ${flow.mode}`}>
+              {flow.names.map((line, l) => (
+                <text
+                  key={line}
+                  x={cx}
+                  y={8 + l * 15}
+                  dy="0.35em"
+                  textAnchor="middle"
+                  fontWeight={600}
+                >
+                  {line}
+                </text>
+              ))}
+              <text
+                x={cx}
+                y={8 + flow.names.length * 15}
+                dy="0.35em"
+                textAnchor="middle"
+                fontSize={11}
+                className={styles.muted}
+              >
+                {flow.mode}
+              </text>
+              <Arrow x={cx} y1={headH - 8} y2={nodes[0].y} />
+              {nodes.slice(1).map((n, i) => (
+                <Arrow
+                  key={`arrow ${i}`}
+                  x={cx}
+                  y1={nodes[i].y + nodeH}
+                  y2={n.y}
+                />
+              ))}
+              {nodes.map((n) => {
+                const tint = n.kind && color(n.kind);
+                const rect = { width: nodeW, height: nodeH, rx: 5 };
+                const box = (dx) => (
+                  <g key={dx}>
+                    <rect
+                      {...rect}
+                      x={x + dx}
+                      y={n.y + dx}
+                      className={styles.step}
+                    />
+                    {tint && (
+                      <rect
+                        {...rect}
+                        x={x + dx}
+                        y={n.y + dx}
+                        className={styles.tinted}
+                        fill={tint}
+                        stroke={tint}
+                      />
+                    )}
+                  </g>
+                );
+                return (
+                  <g
+                    key={n.text}
+                    className={n.tip ? styles.hit : undefined}
+                    {...(n.tip &&
+                      tooltip.bind({
+                        title: `${name} ${flow.mode} · ${oneLine(n.text)}`,
+                        rows: [{ label: n.tip, colorKey: n.kind }],
+                      }))}
+                  >
+                    {n.all && [6, 3].map(box)}
+                    {box(0)}
+                    <text
+                      x={cx}
+                      y={n.y + nodeH / 2}
+                      textAnchor="middle"
+                      fontSize={12}
+                      className={tint ? styles.strong : undefined}
+                    >
+                      {lines(n.text).map((line, l, all) => (
+                        <tspan
+                          key={line}
+                          x={cx}
+                          dy={
+                            l
+                              ? '1.15em'
+                              : `${0.35 - ((all.length - 1) * 1.15) / 2}em`
+                          }
+                        >
+                          {line}
+                        </tspan>
+                      ))}
+                    </text>
+                  </g>
+                );
+              })}
+            </g>
+          );
+        })}
+      </svg>
+      <table className={styles.visuallyHidden}>
+        <caption>How each toolchain gets a spec to run</caption>
+        <thead>
+          <tr>
+            <th scope="col">Toolchain</th>
+            {LANES.map(([key, where, when]) => (
+              <th key={key} scope="col">{`${where}, ${when}`}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {FLOWS.map((flow) => (
+            <tr key={`${flow.names} ${flow.mode}`}>
+              <th scope="row">{`${flow.names.join(', ')} ${flow.mode}`}</th>
+              {LANES.map(([key]) => (
+                <td key={key}>
+                  {flow.steps
+                    .filter((s) => s.lane === key)
+                    .map((s) =>
+                      s.all
+                        ? `${oneLine(s.text)} (whole project)`
+                        : oneLine(s.text)
+                    )
+                    .join(', ') || 'Nothing'}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </Figure>
+  );
+};

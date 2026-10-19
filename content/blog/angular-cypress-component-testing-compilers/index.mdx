@@ -1,6 +1,6 @@
 ---
 title: 'Five ways to compile Angular for Cypress Component Testing'
-date: '2026-10-19'
+date: '2026-10-20'
 description: "Cypress ships one toolchain to compile Angular component tests: webpack. Vite offers four more. I ran the same 41 tests through all five on Angular 22, in JIT and AOT where they support both, and compared speed, memory, and whether the tests still pass."
 tags: [angular, performance, tooling]
 cover: ./cover.svg
@@ -14,12 +14,13 @@ import {
   JitCostChart,
   MemoryChart,
   GapMatrix,
+  ToolchainFlow,
 } from '../../../src/components/cct-bench';
 import data from './data.json';
 
-Cypress Component Testing (CCT) mounts each Angular component in a real browser, and something has to compile those components first. For Angular, Cypress ships one way to do it: webpack, through `@angular-devkit/build-angular`.
+Angular deprecated its webpack builders in v22, yet webpack is still the only way Cypress compiles Angular component tests out of the box. Cypress also runs on Vite, though, and Vite has several Angular toolchains, including a new one I wanted to try: OXC's experimental Angular compiler, written in Rust.
 
-Cypress also runs on Vite, which opens four more ways: Analog, Angular's own `@angular/build` pipeline (through an Analog option), OXC and SWC. Two of them run in both JIT and AOT, which makes seven setups. I ran the same specs under all seven on Angular 22 and compared run time, memory, and whether the tests still pass.
+So I ran the same 41 component tests through every toolchain I could plug into Cypress: webpack, Analog, `@angular/build`, OXC, and SWC with the `@jscutlery/swc-angular` preset I maintain. With JIT and AOT where they support both, that makes seven setups on Angular 22, compared on run time, memory, and whether the tests still pass.
 
 <GitHubRepo name="edbzn/cct-compiler-sandbox" />
 
@@ -29,23 +30,31 @@ Same specs, same components. Only the toolchain that compiles them changes:
 
 <Scroll>
 
-| Toolchain          | Dev server | What compiles in the dev server                                                                                                                                                                                         | Modes    |
-| ------------------ | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| **webpack**        | webpack    | Angular's compiler, through Cypress's built-in handler and [@ngtools/webpack](https://github.com/angular/angular-cli/tree/main/packages/ngtools/webpack)                                                                | JIT      |
-| **Analog**         | Vite       | Angular's compiler, through [@analogjs/vite-plugin-angular](https://github.com/analogjs/analog/tree/beta/packages/vite-plugin-angular)                                                                                  | JIT, AOT |
-| **@angular/build** | Vite       | Angular's compiler, through the Angular CLI's pipeline ([@angular/build](https://github.com/angular/angular-cli/tree/main/packages/angular/build)), enabled by an Analog option                                         | JIT, AOT |
-| **OXC**            | Vite       | Its own Rust compiler, [@oxc-angular/vite](https://github.com/voidzero-dev/oxc-angular-compiler)                                                                                                                        | AOT      |
-| **SWC**            | Vite       | Nothing but the TypeScript: [unplugin-swc](https://github.com/unplugin/unplugin-swc) with the [@jscutlery/swc-angular](https://github.com/jscutlery/devkit/tree/main/packages/swc-angular) preset only strips the types | JIT      |
+| Toolchain          | Package                                                                                                                                                               | Dev server | Template compiler | Modes    |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ----------------- | -------- |
+| **webpack**        | [@ngtools/webpack](https://github.com/angular/angular-cli/tree/main/packages/ngtools/webpack), through Cypress's built-in handler                                     | webpack    | Angular's         | JIT      |
+| **Analog**         | [@analogjs/vite-plugin-angular](https://github.com/analogjs/analog/tree/beta/packages/vite-plugin-angular)                                                            | Vite       | Angular's         | JIT, AOT |
+| **@angular/build** | [@angular/build](https://github.com/angular/angular-cli/tree/main/packages/angular/build), through an Analog option                                                   | Vite       | Angular's         | JIT, AOT |
+| **OXC**            | [@oxc-angular/vite](https://github.com/voidzero-dev/oxc-angular-compiler)                                                                                             | Vite       | OXC's, in Rust    | AOT      |
+| **SWC**            | [unplugin-swc](https://github.com/unplugin/unplugin-swc) with the [@jscutlery/swc-angular](https://github.com/jscutlery/devkit/tree/main/packages/swc-angular) preset | Vite       | Angular's         | JIT      |
 
 </Scroll>
 
-AOT compiles templates in the dev server. JIT keeps the decorators, and Angular compiles each template in the browser, the first time the component mounts, whatever the toolchain. Analog and `@angular/build` run in both modes, so the charts show seven setups. Cypress forces JIT for webpack (`aot: false`).
-
-Only two of these are different template compilers: Angular's own, which webpack, Analog and `@angular/build` all drive in their own way and SWC leaves to the browser, and OXC's. webpack is only here as the baseline: it's what Cypress ships for Angular.
+That's only two template compilers: Angular's, driven four different ways, and OXC's. webpack is the baseline: it's what Cypress ships for Angular, and Cypress forces JIT for it (`aot: false`).
 
 <Note>
 Why no esbuild toolchain? Cypress has no esbuild dev server for Angular component testing ([cypress-io/cypress#30903](https://github.com/cypress-io/cypress/issues/30903)). The `@angular/build` setups are the closest stand-in: the CLI's compilation pipeline inside Cypress's Vite dev server. They measure Angular's compiler, not the CLI's bundler.
 </Note>
+
+## How each toolchain works
+
+Each toolchain spreads the work over three places: the dev server at startup, the dev server for each file the browser requests, and the browser itself. Where the templates get compiled depends on the mode. In AOT, the dev server compiles them. In JIT, the code keeps its decorators, and Angular compiles each template in the browser the first time its component mounts.
+
+<ToolchainFlow />
+
+Two kinds of steps cost time, and they grow with the project. A stacked step covers the whole project before the first test runs: Analog and `@angular/build` pay it at startup, webpack when the first spec is requested. A template compile in the browser runs inside the tests, once per component: every JIT setup pays it.
+
+OXC is the only toolchain with neither. SWC skips the stacked step but compiles in the browser. The next sections measure both costs.
 
 ## How I measured
 
