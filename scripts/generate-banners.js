@@ -683,6 +683,26 @@ function rspack() {
   ]);
 }
 
+// Rspack, revisited: the comet comes back around on its orbit, tail pointing
+// away from the planet it circles.
+function rspackRevisited() {
+  const [cx, cy, rx, ry] = [600, 250, 260, 120];
+  const px = cx - Math.sqrt(rx * rx - ry * ry);
+  const [hx, hy] = onOrbit(cx, cy, rx, ry, 0, -40);
+  const ang = Math.atan2(hy - cy, hx - px);
+  const [tx, ty] = [hx + Math.cos(ang) * 190, hy + Math.sin(ang) * 190];
+  const nx = -Math.sin(ang);
+  const ny = Math.cos(ang);
+  const w = 20;
+  return svg([
+    orbit(cx, cy, rx, ry, 0, `stroke-dasharray="6 10"`),
+    circle(px, cy, 56, C.blue),
+    `<linearGradient id="tail" gradientUnits="userSpaceOnUse" x1="${f(hx)}" y1="${f(hy)}" x2="${f(tx)}" y2="${f(ty)}"><stop offset="0" stop-color="${C.amber}" stop-opacity="0.8"/><stop offset="1" stop-color="${C.amber}" stop-opacity="0"/></linearGradient>`,
+    `<path d="M ${f(hx + nx * w)} ${f(hy + ny * w)} L ${f(tx)} ${f(ty)} L ${f(hx - nx * w)} ${f(hy - ny * w)} Z" fill="url(#tail)"/>`,
+    circle(hx, hy, 22, C.amber),
+  ]);
+}
+
 // Partitions of the same square: whole, 3 strips (sharded), 4x4 (atomized).
 // The gaps are the startup overhead, and they grow with the piece count.
 function atomization() {
@@ -777,6 +797,7 @@ const banners = {
   'reusable-layouts-in-angular': reusableLayouts,
   'souverainete-numerique-etat-des-lieux-technique': sovereignty,
   'state-of-rspack-in-angular': rspack,
+  'state-of-rspack-in-angular-2026': rspackRevisited,
 };
 for (const [slug, draw] of Object.entries(banners)) {
   fs.writeFileSync(path.join(dir, slug, 'cover.svg'), draw());

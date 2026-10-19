@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="1200" height="500">
+<ellipse cx="600" cy="250" rx="260" ry="120" transform="rotate(0 600 250)" fill="none" stroke="rgba(255, 255, 255, 0.3)" stroke-width="3" stroke-dasharray="6 10"/>
+<circle cx="369.3" cy="250.0" r="56" fill="#8f8f8f" />
+<linearGradient id="tail" gradientUnits="userSpaceOnUse" x1="799.2" y1="172.9" x2="986.2" y2="139.3"><stop offset="0" stop-color="#ffffff" stop-opacity="0.8"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+<path d="M 802.7 192.6 L 986.2 139.3 L 795.6 153.2 Z" fill="url(#tail)"/>
+<circle cx="799.2" cy="172.9" r="22" fill="#ffffff" />
+</svg>
