@@ -20,7 +20,7 @@ import data from './data.json';
 
 Angular deprecated its webpack builders in v22, yet webpack is still the only way Cypress compiles Angular component tests out of the box. Cypress also runs on Vite, though, and Vite has several Angular toolchains, including a new one I wanted to try: OXC's experimental Angular compiler, written in Rust.
 
-So I ran the same 41 component tests through every toolchain I could plug into Cypress: webpack, Analog, `@angular/build`, OXC, and SWC with the `@jscutlery/swc-angular` preset I maintain. With JIT and AOT where they support both, that makes seven setups on Angular 22, compared on run time, memory, and whether the tests still pass.
+So I ran the same 41 component tests through every toolchain I could plug into Cypress: webpack, Analog, `@angular/build`, OXC, and SWC with the `@jscutlery/swc-angular` preset I maintain. With JIT and AOT where they support both, plus Analog's new `fastCompile` mode, that makes eight setups on Angular 22, compared on run time, memory, and whether the tests still pass.
 
 <GitHubRepo name="edbzn/cct-compiler-sandbox" />
 
@@ -40,7 +40,9 @@ Same specs, same components. Only the toolchain that compiles them changes:
 
 </Scroll>
 
-That's only two template compilers: Angular's, driven four different ways, and OXC's. webpack is the baseline: it's what Cypress ships for Angular, and Cypress forces JIT for it (`aot: false`).
+Analog also has a `fastCompile` option, a single-pass compiler that skips the TypeScript program. I ran it in AOT as an eighth setup, **Analog fast** in the charts.
+
+That's only two template compilers: Angular's, driven five different ways, and OXC's. webpack is the baseline: it's what Cypress ships for Angular, and Cypress forces JIT for it (`aot: false`).
 
 <Note>
 Why no esbuild toolchain? Cypress has no esbuild dev server for Angular component testing ([cypress-io/cypress#30903](https://github.com/cypress-io/cypress/issues/30903)). The `@angular/build` setups are the closest stand-in: the CLI's compilation pipeline inside Cypress's Vite dev server. They measure Angular's compiler, not the CLI's bundler.
@@ -52,7 +54,7 @@ Each toolchain spreads the work over three places: the dev server at startup, th
 
 <ToolchainFlow />
 
-Two kinds of steps cost time, and they grow with the project. A stacked step covers the whole project before the first test runs: Analog and `@angular/build` pay it at startup, webpack when the first spec is requested. A template compile in the browser runs inside the tests, once per component: every JIT setup pays it.
+Two kinds of steps cost time, and they grow with the project. A stacked step covers the whole project before the first test runs: Analog and `@angular/build` pay it at startup, webpack when the first spec is requested. Analog fast swaps the TypeScript program for a lighter scan, but it still reads the whole project. A template compile in the browser runs inside the tests, once per component: every JIT setup pays it.
 
 OXC is the only toolchain with neither. SWC skips the stacked step but compiles in the browser. The next sections measure both costs.
 
@@ -80,6 +82,7 @@ Some setups have known issues. I kept them out of the timings, so every setup ru
 What each one means:
 
 - **`overrideComponent`** (Analog AOT, @angular/build AOT): a test can't swap a component's template or providers. Analog only keeps the metadata TestBed needs when it detects a test run, and it doesn't recognise Cypress as one. Running Cypress with `NODE_ENV=test` fixes it: both setups then pass.
+- **`overrideComponent`** (Analog fast): overriding providers or the template works, but the recompiled component loses its inputs. `fastCompile` drops the input metadata TestBed needs, even with `NODE_ENV=test` ([analogjs/analog#2666](https://github.com/analogjs/analog/issues/2666)).
 - **OXC [#585](https://github.com/voidzero-dev/oxc-angular-compiler/issues/585)**: an event handler that reads a `@for` item or an `@if … as` alias through `$safeNavigationMigration(…)` receives `null` instead of the value.
 - **OXC [#586](https://github.com/voidzero-dev/oxc-angular-compiler/issues/586)**: on Angular before 22.2.2, an image inside a library component never loads when its URL is a `SafeUrl`.
 
@@ -98,7 +101,7 @@ From spawning Cypress to its exit. Switch to Stress, 1000 to see the compilers p
 
 OXC is the fastest in every scenario, and its lead grows with the project: with 1000 components, it takes **60%** less time than webpack.
 
-Two setups change rank as the project grows. SWC keeps up with OXC on App + stress, then falls behind with 1000 components. Analog is no faster in AOT than in JIT on App + stress, then pulls ahead with 1000 components. The next two sections explain why.
+Setups change rank as the project grows. SWC keeps up with OXC on App + stress, then falls to third with 1000 components, behind Analog fast. Analog is no faster in AOT than in JIT on App + stress, then pulls ahead with 1000 components. The next two sections explain why.
 
 ## Time to the first test
 
@@ -106,7 +109,7 @@ The startup covers Cypress boot, the dev server, dependency pre-bundling and the
 
 <StartupChart data={data} />
 
-OXC and SWC transform files one at a time, on request, so their startup barely grows with the project. Analog builds a TypeScript program of the whole project before serving the first file: the bigger the project, the longer the wait, up to almost **3 s** more at 1000 components.
+OXC and SWC transform files one at a time, on request, so their startup grows the least: **0.9 s** and **1.3 s** more at 1000 components. Analog builds a TypeScript program of the whole project before serving the first file: the bigger the project, the longer the wait, up to **2.7 s** more. Analog fast skips the program but still scans the whole project, and grows almost as much (**2.4 s**).
 
 Split into phases, the gap is the dev server start:
 
@@ -120,9 +123,9 @@ JIT setups compile each template in the browser, the first time a component moun
 
 <JitCostChart data={data} />
 
-With 1000 components, the JIT test bodies take **150%** longer than the AOT ones. AOT setups did that work in the dev server, before any test ran.
+With 1000 components, the JIT test bodies take almost **150%** longer than the AOT ones. AOT setups did that work in the dev server, before any test ran.
 
-That's why SWC doesn't win at scale: it gives its fast startup back in the browser. It still comes second with 1000 components, ahead of the Analog and `@angular/build` AOT setups. OXC is the only setup with both a fast startup and AOT output.
+That's why SWC doesn't win at scale: it gives its fast startup back in the browser. With 1000 components, it still beats the regular Analog and `@angular/build` AOT setups. OXC is the only setup with both a fast startup and AOT output.
 
 ## Memory use
 
@@ -130,16 +133,18 @@ Peak PSS of the whole process tree: the CLI, Electron and the dev server. It's s
 
 <MemoryChart data={data} />
 
-webpack needs the most memory, up to **3.7 GB** at the peak. Among the Vite setups, SWC is the lightest and `@angular/build` the heaviest. On CI, that decides how many Cypress processes fit on one machine.
+webpack needs the most memory, up to **3.7 GB** at the peak. Among the Vite setups, Analog fast is the lightest, probably because it holds no TypeScript program in memory, followed by SWC. `@angular/build` is the heaviest. On CI, that decides how many Cypress processes fit on one machine.
 
 ## Conclusion
 
-Any Vite setup beats webpack. On App + stress they take 12 to 21% less time, and the gap grows with the project. webpack is also the heaviest, and Angular deprecated its webpack builders. The only reason to keep it is that it's what Cypress ships.
+Any Vite setup beats webpack. On App + stress they take 13 to 22% less time, and the gap grows with the project. webpack is also the heaviest, and Angular deprecated its webpack builders. The only reason to keep it is that it's what Cypress ships.
 
 OXC is the fastest in every scenario: with 1000 components, it takes **60%** less time than webpack. It's also the youngest: version 0.0.41, officially Vite 8 only, no type-checking, and it fails two of the three known issues. Try it on a branch, and keep another setup ready to switch back to.
 
 Analog AOT is the safe choice. It runs Angular's own compiler and passes every known issue once Cypress runs with `NODE_ENV=test`. Its startup grows with the project, but with 1000 components it still takes **39%** less time than webpack.
 
-SWC is the lightest, and it passes every known issue without any flag. It pays for JIT in the browser as the project grows, but it still comes second with 1000 components, taking **41%** less time than webpack.
+Analog fast is the one to watch. With 1000 components it comes second, taking **45%** less time than webpack, and it's the lightest setup of all. It keeps Angular's own compiler, so OXC's bugs don't apply. But it's new and opt-in, it still scans the whole project at startup, and `overrideComponent` loses inputs ([analogjs/analog#2666](https://github.com/analogjs/analog/issues/2666)).
+
+SWC passes every known issue without any flag. It pays for JIT in the browser as the project grows, but with 1000 components it still takes **42%** less time than webpack, third behind OXC and Analog fast.
 
 Every run, spec and memory sample is in the [sandbox repository](https://github.com/edbzn/cct-compiler-sandbox), with the [full results](https://github.com/edbzn/cct-compiler-sandbox/blob/master/results/RESULTS.md). If your specs are bigger, run the bench on your own components and tell me what you get.

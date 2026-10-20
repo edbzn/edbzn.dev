@@ -13,6 +13,7 @@ const SETUPS = {
   regular: { name: 'webpack', mode: 'JIT' },
   analog: { name: 'Analog', mode: 'JIT' },
   'analog-aot': { name: 'Analog', mode: 'AOT' },
+  'analog-fast': { name: 'Analog fast', mode: 'AOT' },
   'angular-build': { name: '@angular/build', mode: 'AOT' },
   'angular-build-jit': { name: '@angular/build', mode: 'JIT' },
   oxc: { name: 'OXC', mode: 'AOT' },
@@ -716,8 +717,9 @@ export const GapMatrix = ({ data }) => {
 
 /* ---------------------------------------------------------------- in-browser JIT */
 
-// Column labels: long names break after the slash.
-const nameLines = (name) => name.replace('/', '/\n').split('\n');
+// Column labels: long names break after the slash or at the space.
+const nameLines = (name) =>
+  name.replace('/', '/\n').replace(' ', '\n').split('\n');
 
 /** Test bodies per setup as columns, AOT then JIT: JIT setups compile the templates here. */
 export const JitCostChart = ({ data, pass: initial = 'scale1000' }) => {
@@ -893,7 +895,7 @@ const JIT_COMPILE = {
 const RUN = { lane: 'browser', text: 'Run the test' };
 const SERVE = {
   lane: 'request',
-  text: 'Serve the file',
+  text: 'Serve\nthe file',
   tip: 'Serves what the startup compiled.',
 };
 const PROGRAM = {
@@ -917,7 +919,7 @@ const FLOWS = [
       },
       {
         lane: 'request',
-        text: 'Bundle the spec',
+        text: 'Bundle\nthe spec',
         tip: 'Bundles the spec and everything it imports.',
       },
       JIT_COMPILE,
@@ -942,6 +944,25 @@ const FLOWS = [
         tip: "Angular's compiler compiles every template of the project before serving the first file.",
       },
       SERVE,
+      RUN,
+    ],
+  },
+  {
+    names: ['Analog', 'fastCompile'],
+    mode: 'AOT',
+    steps: [
+      {
+        lane: 'startup',
+        text: 'Scan\nthe project',
+        all: true,
+        tip: 'Scans every file of the project, and the packages it imports, for components and directives before serving the first file. No TypeScript program.',
+      },
+      {
+        lane: 'request',
+        text: 'Compile\ntemplates',
+        kind: 'aot',
+        tip: "Angular's compiler compiles the requested file, templates included, in a single pass.",
+      },
       RUN,
     ],
   },
@@ -985,9 +1006,9 @@ const oneLine = (text) => text.replace('\n', ' ');
 /** Each toolchain's steps as a flow, across the dev server and the browser. */
 export const ToolchainFlow = () => {
   const tooltip = useTooltip();
-  const [labelW, headH] = [84, 58];
+  const [labelW, headH] = [80, 58];
   const colW = (W - labelW) / FLOWS.length;
-  const [nodeW, nodeH, step] = [colW - 14, 34, 52];
+  const [nodeW, nodeH, step] = [colW - 12, 34, 52];
   const laneH = 2 * nodeH + (step - nodeH) + 24;
   const laneTop = (i) => headH + i * laneH;
   const H = headH + LANES.length * laneH;
@@ -1060,6 +1081,7 @@ export const ToolchainFlow = () => {
                   y={8 + l * 15}
                   dy="0.35em"
                   textAnchor="middle"
+                  fontSize={12}
                   fontWeight={600}
                 >
                   {line}
