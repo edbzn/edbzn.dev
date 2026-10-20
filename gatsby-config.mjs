@@ -208,6 +208,7 @@ export default {
               },
             }),
           },
+          `gatsby-remark-github-links`,
           `gatsby-plugin-remark-shiki`,
           `gatsby-remark-copy-linked-files`,
           `gatsby-remark-smartypants`,

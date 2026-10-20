@@ -1,0 +1,9 @@
+{
+  "name": "gatsby-remark-github-links",
+  "version": "0.0.0",
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {
+    "unist-util-visit": "^5.0.0"
+  }
+}

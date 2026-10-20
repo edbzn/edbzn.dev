@@ -755,6 +755,393 @@ a.tweet-author:hover .tweet-author-name {
   height: 1.05em;
 }
 
+/* Rich GitHub links rendered at build time by the gatsby-remark-github-links
+   plugin: a tinted pill with an icon telling what the link points to, and a
+   card with its details nested in the link, shown on hover and keyboard
+   focus without any script. Issue and pull request states use GitHub's
+   colors. */
+:root {
+  --gh-open: #1a7f37;
+  --gh-open-emphasis: #1f883d;
+  --gh-done: #8250df;
+  --gh-done-emphasis: #8250df;
+  --gh-closed: #cf222e;
+  --gh-closed-emphasis: #cf222e;
+  --gh-neutral: #59636e;
+  --gh-neutral-emphasis: #6e7781;
+}
+
+:root[data-theme='dark'],
+:root[data-theme='abyss'] {
+  --gh-open: #3fb950;
+  --gh-open-emphasis: #238636;
+  --gh-done: #a371f7;
+  --gh-done-emphasis: #8957e5;
+  --gh-closed: #f85149;
+  --gh-closed-emphasis: #da3633;
+  --gh-neutral: #9198a1;
+  --gh-neutral-emphasis: #6e7681;
+}
+
+a.gh-link {
+  position: relative;
+  padding: 0.05em 0.35em 0.05em 0.3em;
+  border-radius: 0.4em;
+  color: var(--link-color);
+  text-decoration: none;
+  text-underline-offset: 0.2em;
+  background-color: color-mix(in srgb, var(--link-color) 8%, transparent);
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--link-color) 22%, transparent);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-color 0.15s ease;
+}
+
+a.gh-link:hover,
+a.gh-link:focus-visible {
+  color: var(--link-color);
+  text-decoration: underline;
+  background-color: color-mix(in srgb, var(--link-color) 15%, transparent);
+}
+
+/* Single-word labels (package names, owner/repo#123) never break, not even
+   at a hyphen; longer ones wrap between words, the icon kept with the
+   first one. */
+.gh-link--nowrap,
+.gh-link-lead {
+  white-space: nowrap;
+}
+
+.gh-link-icon {
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  margin-right: 0.3em;
+  vertical-align: -0.1em;
+}
+
+.gh-link-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.gh-link--issue-open .gh-link-icon,
+.gh-link--pr-open .gh-link-icon {
+  color: var(--gh-open);
+}
+
+.gh-link--issue-closed .gh-link-icon,
+.gh-link--pr-merged .gh-link-icon {
+  color: var(--gh-done);
+}
+
+.gh-link--pr-closed .gh-link-icon {
+  color: var(--gh-closed);
+}
+
+.gh-link--issue-not-planned .gh-link-icon,
+.gh-link--pr-draft .gh-link-icon {
+  color: var(--gh-neutral);
+}
+
+/* Hidden cards are display: none so they never widen the page; they fade in
+   after a short delay, so sweeping the pointer over a paragraph doesn't
+   flash cards, and fade out right away. */
+.gh-card {
+  position: absolute;
+  z-index: 10;
+  top: 100%;
+  left: 0;
+  display: none;
+  flex-direction: column;
+  gap: 0.55rem;
+  width: min(23rem, calc(100vw - 2rem));
+  margin-top: 0.5rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  box-shadow:
+    var(--box-shadow-dark) 0px 6px 20px,
+    var(--box-shadow-dark) 0px 12px 36px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.45;
+  text-align: left;
+  white-space: normal;
+  hyphens: manual;
+  opacity: 0;
+  transition:
+    opacity 0.1s ease,
+    display 0.1s allow-discrete;
+}
+
+/* Keeps the card open while the pointer crosses the gap to it, whichever
+   side of the link it opens on. */
+.gh-card::before,
+.gh-card::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0.6rem;
+}
+
+.gh-card::before {
+  bottom: 100%;
+}
+
+.gh-card::after {
+  top: 100%;
+}
+
+.gh-link:focus-visible .gh-card {
+  display: flex;
+  opacity: 1;
+  transition-delay: 0.3s;
+}
+
+@media (hover: hover) {
+  .gh-link:hover .gh-card {
+    display: flex;
+    opacity: 1;
+    transition-delay: 0.3s;
+  }
+}
+
+@starting-style {
+  .gh-link:hover .gh-card,
+  .gh-link:focus-visible .gh-card {
+    opacity: 0;
+  }
+}
+
+/* Where supported, the card is anchored to its link instead, so it flips
+   to the other side when it would overflow the viewport. */
+@supports (anchor-scope: --gh-link) {
+  a.gh-link {
+    position: static;
+    anchor-name: --gh-link;
+    anchor-scope: --gh-link;
+  }
+
+  .gh-card {
+    position-anchor: --gh-link;
+    top: anchor(bottom);
+    left: anchor(left);
+    position-try-fallbacks:
+      flip-inline,
+      flip-block,
+      flip-block flip-inline;
+  }
+}
+
+/* Otherwise a card in a scrolling table would grow the table's scroll box
+   instead of overlaying the page. */
+@supports not (anchor-scope: --gh-link) {
+  table .gh-card {
+    display: none !important;
+  }
+}
+
+.gh-card strong {
+  font-weight: 500;
+}
+
+.gh-card .gh-icon {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.gh-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  color: var(--text-secondary);
+}
+
+.gh-card-repo {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gh-card-repo strong {
+  color: var(--text-primary);
+}
+
+.gh-card-avatar {
+  display: block;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border-radius: 50%;
+}
+
+.gh-card-avatar--large {
+  width: 40px;
+  height: 40px;
+}
+
+.gh-card-avatar--square {
+  border-radius: 5px;
+}
+
+.gh-card-footer .gh-card-avatar {
+  width: 16px;
+  height: 16px;
+}
+
+.gh-card-identity {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.gh-card-identity strong {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.gh-card-muted {
+  color: var(--text-muted);
+}
+
+.gh-card-badge {
+  margin-left: auto;
+  padding: 0 0.45rem;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+.gh-card-sha {
+  font-size: 0.75rem;
+}
+
+.gh-card-title {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.35;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.gh-card-title code {
+  font-size: 0.85em;
+}
+
+.gh-card-body {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--text-secondary);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+.gh-card-context {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.gh-card-context-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gh-card-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.gh-card-label {
+  --label-color: var(--text-muted);
+  padding: 0 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--label-color) 55%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--label-color) 18%, transparent);
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+.gh-card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.9rem;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.gh-card-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.gh-card-language {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.gh-card-state {
+  --gh-state: var(--gh-neutral-emphasis);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  background: var(--gh-state);
+  color: #fff;
+  font-weight: 500;
+}
+
+.gh-card--issue-open .gh-card-state,
+.gh-card--pr-open .gh-card-state {
+  --gh-state: var(--gh-open-emphasis);
+}
+
+.gh-card--issue-closed .gh-card-state,
+.gh-card--pr-merged .gh-card-state {
+  --gh-state: var(--gh-done-emphasis);
+}
+
+.gh-card--pr-closed .gh-card-state {
+  --gh-state: var(--gh-closed-emphasis);
+}
+
+.gh-card-additions {
+  color: var(--gh-open);
+}
+
+.gh-card-deletions {
+  margin-left: 0.35rem;
+  color: var(--gh-closed);
+}
+
 p > img {
   display: block;
   margin: 0 auto;
