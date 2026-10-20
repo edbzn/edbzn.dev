@@ -703,10 +703,10 @@ function rspackRevisited() {
   ]);
 }
 
-// Five toolchains, seven setups, one race: a bar per setup, its length the wall time with
+// Five toolchains, eight setups, one race: a bar per setup, its length the wall time with
 // 1000 components relative to webpack, the fastest in amber.
 function cctCompilers() {
-  const ratios = [0.4, 0.59, 0.61, 0.62, 0.73, 0.74, 1];
+  const ratios = [0.4, 0.55, 0.58, 0.61, 0.62, 0.72, 0.73, 1];
   const [x0, maxW, h, gap] = [230, 740, 26, 18];
   const y0 = 250 - (ratios.length * (h + gap) - gap) / 2;
   return svg([

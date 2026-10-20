@@ -1,322 +1,367 @@
 {
   "all": {
     "regular": {
-      "wall": [33.97, 33.943, 34.6],
-      "startup": 7.317,
-      "tests": 5.512,
-      "load": 24.838,
-      "pss": [3705, 3578, 3723],
+      "wall": [34.14, 33.951, 34.473],
+      "startup": 7.346,
+      "tests": 5.549,
+      "load": 24.976,
+      "pss": [3699, 3482, 3700],
       "tests_count": 41,
       "failed": 0,
       "phases": {
-        "boot": 0.765,
-        "server": 2.837,
-        "browser": 1.01,
-        "spec": 2.717
+        "boot": 0.778,
+        "server": 2.802,
+        "browser": 0.781,
+        "spec": 3.032
       }
     },
     "analog": {
-      "wall": [29.701, 29.624, 29.797],
-      "startup": 5.777,
-      "tests": 5.481,
-      "load": 19.57,
-      "pss": [2111, 2076, 2129],
-      "tests_count": 41,
-      "failed": 0,
-      "phases": {
-        "boot": 0.77,
-        "server": 3.821,
-        "browser": 0.787,
-        "spec": 0.403
-      }
-    },
-    "analog-aot": {
-      "wall": [29.932, 29.848, 30.003],
-      "startup": 6.355,
-      "tests": 4.71,
-      "load": 19.615,
-      "pss": [2199, 2194, 2217],
-      "tests_count": 41,
-      "failed": 0,
-      "phases": {
-        "boot": 0.767,
-        "server": 4.424,
-        "browser": 0.764,
-        "spec": 0.386
-      }
-    },
-    "angular-build": {
-      "wall": [30.046, 29.973, 30.074],
-      "startup": 6.578,
-      "tests": 4.715,
-      "load": 19.502,
-      "pss": [2367, 2341, 2375],
-      "tests_count": 41,
-      "failed": 0,
-      "phases": {
-        "boot": 0.772,
-        "server": 4.649,
-        "browser": 0.772,
-        "spec": 0.385
-      }
-    },
-    "angular-build-jit": {
-      "wall": [29.866, 29.744, 29.881],
-      "startup": 5.908,
-      "tests": 5.468,
-      "load": 19.616,
-      "pss": [2305, 2276, 2382],
-      "tests_count": 41,
-      "failed": 0,
-      "phases": {
-        "boot": 0.771,
-        "server": 3.942,
-        "browser": 0.774,
-        "spec": 0.391
-      }
-    },
-    "oxc": {
-      "wall": [27.003, 26.959, 27.01],
-      "startup": 3.445,
-      "tests": 4.704,
-      "load": 19.665,
-      "pss": [2202, 2156, 2203],
+      "wall": [29.368, 29.258, 29.729],
+      "startup": 5.751,
+      "tests": 5.461,
+      "load": 19.201,
+      "pss": [2142, 2111, 2144],
       "tests_count": 41,
       "failed": 0,
       "phases": {
         "boot": 0.76,
-        "server": 1.508,
-        "browser": 0.774,
-        "spec": 0.412
+        "server": 3.877,
+        "browser": 0.706,
+        "spec": 0.396
       }
     },
-    "swc": {
-      "wall": [27.463, 27.389, 27.589],
-      "startup": 3.531,
-      "tests": 5.365,
-      "load": 19.719,
-      "pss": [1986, 1923, 2073],
+    "analog-aot": {
+      "wall": [29.607, 29.567, 29.626],
+      "startup": 6.316,
+      "tests": 4.71,
+      "load": 19.297,
+      "pss": [2179, 2167, 2186],
       "tests_count": 41,
       "failed": 0,
       "phases": {
-        "boot": 0.763,
-        "server": 1.548,
-        "browser": 0.794,
-        "spec": 0.416
+        "boot": 0.77,
+        "server": 4.434,
+        "browser": 0.693,
+        "spec": 0.399
+      }
+    },
+    "analog-fast": {
+      "wall": [28.47, 28.446, 28.69],
+      "startup": 5.24,
+      "tests": 4.718,
+      "load": 19.243,
+      "pss": [1745, 1742, 1753],
+      "tests_count": 41,
+      "failed": 0,
+      "phases": {
+        "boot": 0.776,
+        "server": 3.39,
+        "browser": 0.716,
+        "spec": 0.396
+      }
+    },
+    "angular-build": {
+      "wall": [29.677, 29.569, 29.719],
+      "startup": 6.471,
+      "tests": 4.73,
+      "load": 19.188,
+      "pss": [2381, 2365, 2492],
+      "tests_count": 41,
+      "failed": 0,
+      "phases": {
+        "boot": 0.759,
+        "server": 4.636,
+        "browser": 0.688,
+        "spec": 0.381
+      }
+    },
+    "angular-build-jit": {
+      "wall": [29.497, 29.468, 29.591],
+      "startup": 5.856,
+      "tests": 5.476,
+      "load": 19.199,
+      "pss": [2291, 2282, 2310],
+      "tests_count": 41,
+      "failed": 0,
+      "phases": {
+        "boot": 0.769,
+        "server": 4.002,
+        "browser": 0.708,
+        "spec": 0.39
+      }
+    },
+    "oxc": {
+      "wall": [26.754, 26.74, 26.941],
+      "startup": 3.448,
+      "tests": 4.741,
+      "load": 19.364,
+      "pss": [2182, 2146, 2213],
+      "tests_count": 41,
+      "failed": 0,
+      "phases": {
+        "boot": 0.776,
+        "server": 1.559,
+        "browser": 0.689,
+        "spec": 0.418
+      }
+    },
+    "swc": {
+      "wall": [27.236, 27.199, 27.326],
+      "startup": 3.447,
+      "tests": 5.375,
+      "load": 19.511,
+      "pss": [2004, 1965, 2023],
+      "tests_count": 41,
+      "failed": 0,
+      "phases": {
+        "boot": 0.761,
+        "server": 1.543,
+        "browser": 0.703,
+        "spec": 0.417
       }
     }
   },
   "scale": {
     "regular": {
-      "wall": [13.579, 13.392, 13.622],
-      "startup": 8.115,
-      "tests": 1.199,
-      "load": 9.132,
-      "pss": [3052, 2869, 3059],
+      "wall": [13.39, 13.269, 13.49],
+      "startup": 7.957,
+      "tests": 1.193,
+      "load": 8.671,
+      "pss": [3006, 2866, 3046],
+      "tests_count": 6,
+      "failed": 0,
+      "phases": {
+        "boot": 0.758,
+        "server": 2.739,
+        "browser": 0.687,
+        "spec": 3.87
+      }
+    },
+    "analog": {
+      "wall": [9.866, 9.799, 9.866],
+      "startup": 5.993,
+      "tests": 1.176,
+      "load": 4.23,
+      "pss": [2116, 2077, 2129],
+      "tests_count": 6,
+      "failed": 0,
+      "phases": {
+        "boot": 0.772,
+        "server": 3.616,
+        "browser": 0.714,
+        "spec": 0.88
+      }
+    },
+    "analog-aot": {
+      "wall": [9.798, 9.776, 9.798],
+      "startup": 6.214,
+      "tests": 0.588,
+      "load": 3.906,
+      "pss": [2175, 2168, 2180],
       "tests_count": 6,
       "failed": 0,
       "phases": {
         "boot": 0.761,
-        "server": 2.3,
-        "browser": 0.795,
-        "spec": 4.262
+        "server": 4.159,
+        "browser": 0.677,
+        "spec": 0.582
       }
     },
-    "analog": {
-      "wall": [9.919, 9.838, 9.962],
-      "startup": 6.006,
-      "tests": 1.173,
-      "load": 4.258,
-      "pss": [2088, 2066, 2096],
+    "analog-fast": {
+      "wall": [8.859, 8.821, 8.872],
+      "startup": 5.273,
+      "tests": 0.596,
+      "load": 3.866,
+      "pss": [1709, 1695, 1722],
       "tests_count": 6,
       "failed": 0,
       "phases": {
-        "boot": 0.762,
-        "server": 3.612,
-        "browser": 0.746,
-        "spec": 0.882
-      }
-    },
-    "analog-aot": {
-      "wall": [9.984, 9.962, 10.028],
-      "startup": 6.343,
-      "tests": 0.599,
-      "load": 4.01,
-      "pss": [2205, 2204, 2213],
-      "tests_count": 6,
-      "failed": 0,
-      "phases": {
-        "boot": 0.764,
-        "server": 4.23,
-        "browser": 0.745,
-        "spec": 0.603
+        "boot": 0.766,
+        "server": 3.235,
+        "browser": 0.652,
+        "spec": 0.589
       }
     },
     "angular-build": {
-      "wall": [10.358, 10.351, 10.378],
-      "startup": 6.724,
-      "tests": 0.586,
-      "load": 4.048,
-      "pss": [2358, 2336, 2364],
+      "wall": [10.182, 10.127, 10.184],
+      "startup": 6.611,
+      "tests": 0.587,
+      "load": 3.865,
+      "pss": [2358, 2329, 2359],
       "tests_count": 6,
       "failed": 0,
       "phases": {
-        "boot": 0.767,
-        "server": 4.583,
-        "browser": 0.778,
-        "spec": 0.59
+        "boot": 0.752,
+        "server": 4.572,
+        "browser": 0.685,
+        "spec": 0.584
       }
     },
     "angular-build-jit": {
-      "wall": [10.243, 10.224, 10.311],
-      "startup": 6.35,
-      "tests": 1.189,
-      "load": 4.307,
-      "pss": [2354, 2341, 2388],
+      "wall": [10.064, 10.048, 10.108],
+      "startup": 6.221,
+      "tests": 1.171,
+      "load": 4.192,
+      "pss": [2409, 2387, 2449],
       "tests_count": 6,
       "failed": 0,
       "phases": {
-        "boot": 0.768,
-        "server": 3.893,
-        "browser": 0.794,
-        "spec": 0.9
+        "boot": 0.758,
+        "server": 3.888,
+        "browser": 0.687,
+        "spec": 0.884
       }
     },
     "oxc": {
-      "wall": [7.226, 7.213, 7.31],
-      "startup": 3.61,
-      "tests": 0.593,
-      "load": 4.04,
-      "pss": [2095, 2073, 2184],
+      "wall": [7.061, 7.012, 7.108],
+      "startup": 3.511,
+      "tests": 0.605,
+      "load": 3.878,
+      "pss": [2112, 2071, 2142],
       "tests_count": 6,
       "failed": 0,
       "phases": {
-        "boot": 0.777,
-        "server": 1.462,
-        "browser": 0.78,
-        "spec": 0.613
+        "boot": 0.765,
+        "server": 1.453,
+        "browser": 0.674,
+        "spec": 0.612
       }
     },
     "swc": {
-      "wall": [7.843, 7.829, 7.911],
-      "startup": 3.917,
-      "tests": 1.167,
-      "load": 4.369,
-      "pss": [1959, 1901, 1983],
+      "wall": [7.759, 7.688, 7.788],
+      "startup": 3.843,
+      "tests": 1.158,
+      "load": 4.268,
+      "pss": [1894, 1884, 1934],
       "tests_count": 6,
       "failed": 0,
       "phases": {
-        "boot": 0.773,
-        "server": 1.464,
-        "browser": 0.757,
-        "spec": 0.927
+        "boot": 0.76,
+        "server": 1.487,
+        "browser": 0.704,
+        "spec": 0.904
       }
     }
   },
   "scale1000": {
     "regular": {
-      "wall": [20.908, 20.805, 20.998],
-      "startup": 10.599,
-      "tests": 2.539,
-      "load": 14.313,
-      "pss": [3489, 3313, 3489],
+      "wall": [20.831, 20.763, 20.958],
+      "startup": 10.558,
+      "tests": 2.501,
+      "load": 14.216,
+      "pss": [3430, 3291, 3527],
       "tests_count": 6,
       "failed": 0,
       "phases": {
         "boot": 0.766,
-        "server": 3.216,
-        "browser": 0.759,
-        "spec": 5.808
+        "server": 3.293,
+        "browser": 0.699,
+        "spec": 5.822
       }
     },
     "analog": {
-      "wall": [15.267, 15.249, 15.498],
-      "startup": 8.376,
-      "tests": 2.403,
-      "load": 7.087,
-      "pss": [2245, 2203, 2254],
+      "wall": [15.115, 15.067, 15.238],
+      "startup": 8.303,
+      "tests": 2.373,
+      "load": 6.943,
+      "pss": [2253, 2221, 2266],
       "tests_count": 6,
       "failed": 0,
       "phases": {
-        "boot": 0.767,
-        "server": 4.949,
-        "browser": 0.776,
-        "spec": 1.899
+        "boot": 0.758,
+        "server": 4.959,
+        "browser": 0.68,
+        "spec": 1.914
       }
     },
     "analog-aot": {
-      "wall": [12.83, 12.814, 12.932],
-      "startup": 9.039,
-      "tests": 0.964,
-      "load": 4.509,
-      "pss": [2332, 2314, 2337],
+      "wall": [12.705, 12.66, 12.808],
+      "startup": 8.923,
+      "tests": 0.966,
+      "load": 4.439,
+      "pss": [2336, 2331, 2338],
       "tests_count": 6,
       "failed": 0,
       "phases": {
         "boot": 0.761,
-        "server": 6.529,
-        "browser": 0.755,
-        "spec": 0.98
-      }
-    },
-    "angular-build": {
-      "wall": [13.057, 13, 13.154],
-      "startup": 9.242,
-      "tests": 0.934,
-      "load": 4.56,
-      "pss": [2692, 2679, 2794],
-      "tests_count": 6,
-      "failed": 0,
-      "phases": {
-        "boot": 0.767,
-        "server": 6.725,
-        "browser": 0.781,
+        "server": 6.487,
+        "browser": 0.681,
         "spec": 0.986
       }
     },
-    "angular-build-jit": {
-      "wall": [15.462, 15.444, 15.547],
-      "startup": 8.412,
-      "tests": 2.416,
-      "load": 7.262,
-      "pss": [2402, 2389, 2407],
+    "analog-fast": {
+      "wall": [11.478, 11.366, 11.565],
+      "startup": 7.641,
+      "tests": 0.955,
+      "load": 4.485,
+      "pss": [1881, 1821, 1943],
       "tests_count": 6,
       "failed": 0,
       "phases": {
-        "boot": 0.769,
-        "server": 4.961,
-        "browser": 0.775,
-        "spec": 1.932
+        "boot": 0.763,
+        "server": 5.222,
+        "browser": 0.705,
+        "spec": 0.979
+      }
+    },
+    "angular-build": {
+      "wall": [12.886, 12.855, 12.999],
+      "startup": 9.115,
+      "tests": 0.942,
+      "load": 4.431,
+      "pss": [2678, 2645, 2724],
+      "tests_count": 6,
+      "failed": 0,
+      "phases": {
+        "boot": 0.776,
+        "server": 6.667,
+        "browser": 0.699,
+        "spec": 0.979
+      }
+    },
+    "angular-build-jit": {
+      "wall": [15.081, 14.924, 15.541],
+      "startup": 8.3,
+      "tests": 2.358,
+      "load": 6.953,
+      "pss": [2412, 2400, 2475],
+      "tests_count": 6,
+      "failed": 0,
+      "phases": {
+        "boot": 0.775,
+        "server": 4.928,
+        "browser": 0.679,
+        "spec": 1.918
       }
     },
     "oxc": {
-      "wall": [8.429, 8.389, 8.442],
-      "startup": 4.483,
-      "tests": 0.991,
-      "load": 4.636,
-      "pss": [2315, 2306, 2354],
+      "wall": [8.252, 8.247, 8.259],
+      "startup": 4.381,
+      "tests": 0.986,
+      "load": 4.466,
+      "pss": [2288, 2280, 2313],
       "tests_count": 6,
       "failed": 0,
       "phases": {
-        "boot": 0.778,
-        "server": 1.925,
-        "browser": 0.767,
-        "spec": 1.022
+        "boot": 0.774,
+        "server": 1.947,
+        "browser": 0.674,
+        "spec": 1.006
       }
     },
     "swc": {
-      "wall": [12.346, 12.26, 12.367],
-      "startup": 5.244,
-      "tests": 2.4,
-      "load": 7.33,
-      "pss": [2006, 2002, 2033],
+      "wall": [12.109, 12.1, 12.21],
+      "startup": 5.168,
+      "tests": 2.36,
+      "load": 7.169,
+      "pss": [2021, 1979, 2041],
       "tests_count": 6,
       "failed": 0,
       "phases": {
-        "boot": 0.773,
-        "server": 1.765,
-        "browser": 0.755,
-        "spec": 1.947
+        "boot": 0.763,
+        "server": 1.77,
+        "browser": 0.692,
+        "spec": 1.938
       }
     }
   },
@@ -357,6 +402,20 @@
       "override-component": {
         "tests": 2,
         "failed": 2
+      },
+      "safe-navigation-event": {
+        "tests": 2,
+        "failed": 0
+      }
+    },
+    "analog-fast": {
+      "library-safe-url": {
+        "tests": 1,
+        "failed": 0
+      },
+      "override-component": {
+        "tests": 2,
+        "failed": 1
       },
       "safe-navigation-event": {
         "tests": 2,
