@@ -1,106 +1,84 @@
 import React from 'react';
 import { Link } from 'gatsby';
-import { GatsbyImage, getImage } from 'gatsby-plugin-image';
-import { rhythm } from '../utils/typography';
 import { LanguageIndicator } from './language-indicator';
+import { slugifyTag } from './tags';
 import * as styles from './post-preview.module.css';
 
-// `isCover`: the image was drawn as a banner, so it fills the frame. Images
-// taken from the post body may be diagrams that must not be cropped.
-const Banner = ({ image, slug, isCover }) => {
-  const imageData = getImage(image);
-  if (!imageData && !image?.publicURL) {
-    return null;
-  }
-  // Decorative: the title already links to the post
-  return (
-    <Link className={styles.banner} to={slug} tabIndex={-1} aria-hidden>
-      {imageData ? (
-        <GatsbyImage image={imageData} alt="" />
-      ) : (
-        <img
-          className={isCover ? styles.fill : styles.vector}
-          src={image.publicURL}
-          alt=""
-          loading="lazy"
-        />
-      )}
-    </Link>
-  );
-};
-
+/** One post of a list: title, description, then date and tags. */
 export const PostPreview = ({ node }) => {
   return (
     <article className={styles.article}>
-      {node.previewImage && (
-        <Banner
-          image={node.previewImage}
-          slug={node.fields.slug}
-          isCover={Boolean(node.frontmatter.cover)}
-        />
-      )}
-      <div className={styles.content}>
-        <header>
-          <h3
-            className={styles.title}
-            style={{
-              marginTop: 0,
-              marginBottom: 0,
-              fontFamily: 'var(--font-sans)',
-            }}
-          >
-            <Link
-              className="text-link text-link--underline"
-              to={node.fields.slug}
-              title={node.frontmatter.title}
-            >
-              {node.frontmatter.title}
-            </Link>
-          </h3>
-        </header>
-        <section
+      <header>
+        <h3
+          className={styles.title}
           style={{
-            marginTop: rhythm(1 / 4),
+            marginTop: 0,
             marginBottom: 0,
+            fontFamily: 'var(--font-sans)',
           }}
         >
-          <p
-            className={styles.description}
-            style={{ marginBottom: 0 }}
-            dangerouslySetInnerHTML={{
-              __html: node.frontmatter.description ?? node.excerpt,
-            }}
-          />
-        </section>
-        <footer
-          style={{
-            fontSize: '14px',
-            fontWeight: '300',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              gap: '0.5rem',
-              marginTop: rhythm(1 / 4),
-            }}
+          <Link
+            className={styles.titleLink}
+            to={node.fields.slug}
+            title={node.frontmatter.title}
           >
-            {node.frontmatter.draft ? (
-              <span>
-                <span role="img" aria-label="emoji" alt="wip">
-                  🚧
-                </span>{' '}
-                Draft
-              </span>
-            ) : (
-              node.frontmatter.date
-            )}
-            <LanguageIndicator lang={node.frontmatter.lang} />
-          </div>
-        </footer>
-      </div>
+            {node.frontmatter.title}
+          </Link>
+        </h3>
+      </header>
+      <p
+        className={styles.description}
+        dangerouslySetInnerHTML={{
+          __html: node.frontmatter.description ?? node.excerpt,
+        }}
+      />
+      <footer className={styles.meta}>
+        {node.frontmatter.draft ? (
+          <span>
+            <span role="img" aria-label="emoji" alt="wip">
+              🚧
+            </span>{' '}
+            Draft
+          </span>
+        ) : (
+          <span>{node.frontmatter.date}</span>
+        )}
+        {(node.frontmatter.tags ?? []).map((tag) => (
+          <Link
+            key={tag}
+            className={styles.tagLink}
+            to={`/blog/tags/${slugifyTag(tag)}`}
+          >
+            #{slugifyTag(tag)}
+          </Link>
+        ))}
+        <LanguageIndicator lang={node.frontmatter.lang} plain />
+      </footer>
     </article>
   );
+};
+
+/**
+ * Posts grouped by year, newest first, with the year as a small label above
+ * each group. Expects `frontmatter.year` and nodes sorted by date.
+ */
+export const PostList = ({ nodes }) => {
+  const groups = [];
+  for (const node of nodes) {
+    const { year } = node.frontmatter;
+    const last = groups[groups.length - 1];
+    if (last?.year === year) {
+      last.posts.push(node);
+    } else {
+      groups.push({ year, posts: [node] });
+    }
+  }
+  return groups.map(({ year, posts }) => (
+    <section key={year} className={styles.yearGroup}>
+      <h2 className={styles.year}>{year}</h2>
+      {posts.map((node) => (
+        <PostPreview key={node.id} node={node} />
+      ))}
+    </section>
+  ));
 };

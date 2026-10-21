@@ -3,7 +3,6 @@ title: Understanding Nx's Affected Graph vs. Cache Hits
 date: '2025-11-09'
 description: A deep dive into Nx's affected graph and computation caching, explaining their differences and how they optimize monorepo workflows.
 tags: [monorepo]
-cover: ./cover.svg
 ---
 
 **Nx** provides powerful mechanisms to avoid redundant work in a monorepo. Two core concepts often mentioned are the **affected graph** and **cache hits**. While both improve efficiency, they address different stages of the build/test process.

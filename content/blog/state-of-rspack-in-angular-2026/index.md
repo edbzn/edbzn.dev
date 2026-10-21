@@ -3,7 +3,6 @@ title: 'State of Rspack in Angular: 2026 Update'
 date: '2026-10-19'
 description: Twenty months after the first article, a look at where Rspack in Angular stands today, what the Nx team shipped, what Angular changed on its side, and whether it is worth the switch.
 tags: [angular, tooling]
-cover: ./cover.svg
 ---
 
 ![Rspack and Angular logo](./logo.png)

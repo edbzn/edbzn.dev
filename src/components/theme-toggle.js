@@ -1,20 +1,56 @@
 import React, { useState, useEffect } from 'react';
 
+const DARK_QUERY = '(prefers-color-scheme: dark)';
+// Only written when a theme is picked with the toggle. The former 'theme' key
+// was written on every visit (always 'abyss'), so it isn't read any more.
+const STORAGE_KEY = 'theme-choice';
+
+/** Light or dark, from the system setting. */
+const systemTheme = () =>
+  window.matchMedia?.(DARK_QUERY).matches ? 'dark' : 'light';
+
+/** The theme picked with the toggle, if any. */
+const savedTheme = () => {
+  try {
+    return localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
+  }
+};
+
+/**
+ * Cycles light → dark → abyss. Until a theme is picked here (and saved), the
+ * site follows the system setting, also when it changes while the page is
+ * open; gatsby-ssr.js applies the same default before the first paint.
+ */
 export const ThemeToggle = () => {
-  const [theme, setTheme] = useState('abyss');
+  const [theme, setTheme] = useState('light');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const savedTheme = localStorage.getItem('theme') || 'abyss';
-    setTheme(savedTheme);
-    applyTheme(savedTheme);
+    try {
+      localStorage.removeItem('theme');
+    } catch {}
+    const initialTheme = savedTheme() || systemTheme();
+    setTheme(initialTheme);
+    document.documentElement.setAttribute('data-theme', initialTheme);
+
+    const mediaQuery = window.matchMedia?.(DARK_QUERY);
+    const followSystem = () => {
+      if (savedTheme()) return;
+      const nextTheme = systemTheme();
+      setTheme(nextTheme);
+      document.documentElement.setAttribute('data-theme', nextTheme);
+    };
+    mediaQuery?.addEventListener('change', followSystem);
+    return () => mediaQuery?.removeEventListener('change', followSystem);
   }, []);
 
   const applyTheme = (newTheme) => {
     const root = document.documentElement;
     root.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
+    localStorage.setItem(STORAGE_KEY, newTheme);
   };
 
   const toggleTheme = () => {

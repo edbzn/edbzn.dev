@@ -4,7 +4,7 @@ import { Link } from 'gatsby';
 const links = [
   { to: '/', label: 'About' },
   { to: '/blog', label: 'Blog' },
-  { to: '/uses', label: 'Uses' },
+  { to: '/open-source', label: 'Open source' },
 ];
 
 function isActive(to, pathname) {

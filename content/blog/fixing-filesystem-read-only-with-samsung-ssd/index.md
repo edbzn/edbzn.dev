@@ -3,7 +3,6 @@ title: Fixing filesystem suddenly read-only on Linux with a Samsung SSD
 date: '2025-10-29T00:00:00.000Z'
 tags: [linux]
 description: What to do when your Linux filesystem becomes read-only due to I/O errors from a Samsung SSD and how to update the firmware safely.
-cover: ./cover.svg
 ---
 
 Sometimes your Linux system suddenly behaves oddly — apps crash, files can’t be saved, and `dmesg` shows I/O errors.

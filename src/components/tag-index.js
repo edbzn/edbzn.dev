@@ -4,6 +4,22 @@ import { slugifyTag } from './tags';
 import * as styles from './tag-index.module.css';
 
 /**
+ * [slug, post count] of every tag used by the given posts, most used first.
+ */
+export const countTags = (posts) => {
+  const counts = new Map();
+  for (const post of posts) {
+    for (const tag of post.frontmatter.tags ?? []) {
+      const slug = slugifyTag(tag);
+      counts.set(slug, (counts.get(slug) ?? 0) + 1);
+    }
+  }
+  return [...counts].sort(
+    ([a, countA], [b, countB]) => countB - countA || a.localeCompare(b)
+  );
+};
+
+/**
  * Every tag used by the given posts with its post count, most used first.
  * The tag of the current page (if any) is highlighted.
  *
@@ -12,17 +28,7 @@ import * as styles from './tag-index.module.css';
  * sticky side block, like the post table of contents (pure CSS).
  */
 export const TagIndex = ({ posts, activeTag, children }) => {
-  const counts = new Map();
-  for (const post of posts) {
-    for (const tag of post.frontmatter.tags ?? []) {
-      const slug = slugifyTag(tag);
-      counts.set(slug, (counts.get(slug) ?? 0) + 1);
-    }
-  }
-
-  const tags = [...counts].sort(
-    ([a, countA], [b, countB]) => countB - countA || a.localeCompare(b)
-  );
+  const tags = countTags(posts);
   if (tags.length === 0) return <>{children}</>;
 
   const activeSlug = activeTag ? slugifyTag(activeTag) : null;
@@ -48,7 +54,7 @@ export const TagIndex = ({ posts, activeTag, children }) => {
               return (
                 <li key={slug}>
                   <Link
-                    to={`/tags/${slug}`}
+                    to={`/blog/tags/${slug}`}
                     className={`${styles.tag} ${isActive ? styles.active : ''}`}
                     aria-current={isActive ? 'page' : undefined}
                   >

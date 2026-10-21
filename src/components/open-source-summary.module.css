@@ -1,0 +1,106 @@
+/* Doubled class: wins over the larger .box padding from main.css */
+.card.card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-inline: calc(-1 * var(--card-bleed));
+  padding: 1rem;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  text-decoration: none;
+  box-shadow: none;
+}
+
+/* Overlapping logos, each ringed in the card surface */
+.logos {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--bg-secondary);
+  box-shadow: 0 0 0 2px var(--bg-primary);
+}
+
+.logo + .logo {
+  margin-left: -8px;
+}
+
+.text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+/* The card's title: accent colour on hover, like the other link cards */
+.names {
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.4;
+  transition: color 0.15s ease;
+}
+
+/* Names wrap between each other, never inside one ("nx-completion") */
+.name {
+  white-space: nowrap;
+}
+
+.facts {
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+}
+
+.arrow {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition:
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.card:hover .names,
+.card:hover .arrow {
+  color: var(--accent-color);
+}
+
+.card:hover .arrow {
+  transform: translateX(2px);
+}
+
+/* Phones: the logos above, the text and the arrow side by side under them */
+@media screen and (max-width: 480px) {
+  .card.card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'logos logos'
+      'text arrow';
+    gap: 0.75rem 1rem;
+  }
+
+  .logos {
+    grid-area: logos;
+  }
+
+  .text {
+    grid-area: text;
+  }
+
+  .arrow {
+    grid-area: arrow;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:hover .arrow {
+    transform: none;
+  }
+}

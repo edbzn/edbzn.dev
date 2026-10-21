@@ -33,7 +33,8 @@ export const onRenderBody = ({
     )),
   ]);
 
-  // Prevent flash of wrong theme on page load
+  // Prevent flash of wrong theme on page load. Without a saved choice, follow
+  // the system setting (see ThemeToggle).
   setPreBodyComponents([
     <script
       key="theme-init"
@@ -41,8 +42,12 @@ export const onRenderBody = ({
         __html: `
           (function() {
             try {
-              const savedTheme = localStorage.getItem('theme') || 'abyss';
-              document.documentElement.setAttribute('data-theme', savedTheme);
+              const systemTheme = window.matchMedia &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+              const theme = localStorage.getItem('theme-choice') || systemTheme;
+              document.documentElement.setAttribute('data-theme', theme);
             } catch (e) {
               console.error('Error loading theme:', e);
             }

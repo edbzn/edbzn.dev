@@ -128,22 +128,35 @@ exports.createPages = async ({ graphql, actions }) => {
     });
   });
 
+  // Tag pages live under the blog; their former /tags/<tag> URLs redirect.
   tags.forEach((tag) => {
     const slugifiedTag = tag.fieldValue.toLowerCase().replace(/\s+/g, '-');
     createPage({
-      path: `/tags/${slugifiedTag}`,
+      path: `/blog/tags/${slugifiedTag}`,
       component: blogList,
       context: {
         tag: tag.fieldValue,
       },
     });
+    createRedirect({
+      fromPath: `/tags/${slugifiedTag}`,
+      toPath: `/blog/tags/${slugifiedTag}`,
+      isPermanent: true,
+    });
+  });
+
+  // The Uses page was replaced by Open source.
+  createRedirect({
+    fromPath: '/uses',
+    toPath: '/open-source',
+    isPermanent: true,
   });
 
   // Tags merged into broader categories: keep the old tag pages working.
   Object.entries(retiredTags).forEach(([oldTag, category]) => {
     createRedirect({
       fromPath: `/tags/${oldTag}`,
-      toPath: `/tags/${category}`,
+      toPath: `/blog/tags/${category}`,
       isPermanent: true,
     });
   });
@@ -430,24 +443,6 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
   }
 };
 
-const IMAGE_EXTENSIONS = /\.(png|jpe?g|gif|webp|avif|svg)$/i;
-
-/**
- * Returns the path of the first image in a Markdown/MDX body that points to a
- * file next to the post (remote URLs are ignored), or null.
- */
-function findFirstLocalImage(body = '') {
-  const pattern =
-    /!\[[^\]]*\]\(\s*<?([^)\s>]+)>?[^)]*\)|<img[^>]*\bsrc=["']([^"']+)["']/g;
-  for (const match of body.matchAll(pattern)) {
-    const src = match[1] ?? match[2];
-    if (!/^([a-z]+:)?\/\//i.test(src) && IMAGE_EXTENSIONS.test(src)) {
-      return src;
-    }
-  }
-  return null;
-}
-
 /**
  * @type {import('gatsby').GatsbyNode['createSchemaCustomization']}
  */
@@ -467,26 +462,6 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
             return !frontmatter.draft;
           },
         },
-        // Thumbnail for post lists: the `cover` frontmatter if set, otherwise
-        // the first local image referenced in the post body.
-        previewImage: {
-          type: 'File',
-          resolve: async (source, args, context) => {
-            const src =
-              source.frontmatter?.cover ?? findFirstLocalImage(source.body);
-            if (!src) {
-              return null;
-            }
-            const absolutePath = path.resolve(
-              path.dirname(source.internal.contentFilePath),
-              src
-            );
-            return context.nodeModel.findOne({
-              type: 'File',
-              query: { filter: { absolutePath: { eq: absolutePath } } },
-            });
-          },
-        },
       },
       interfaces: ['Node'],
     }),
@@ -497,7 +472,6 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
       tags: [String]
       draft: Boolean
       lang: String
-      cover: File @fileByRelativePath
     }
     `,
     // Declared up front so the query still works when every fetch failed.
@@ -586,7 +560,7 @@ exports.onPostBuild = async ({ graphql, store, reporter }) => {
   const tagPages = result.data.allMdx.group.map((g) => {
     const slugifiedTag = g.fieldValue.toLowerCase().replace(/\s+/g, '-');
     return {
-      pathname: `/tags/${slugifiedTag}`,
+      pathname: `/blog/tags/${slugifiedTag}`,
       title: `${g.fieldValue} posts`,
       description: siteMetadata.description,
       tags: [g.fieldValue],
@@ -604,6 +578,12 @@ exports.onPostBuild = async ({ graphql, store, reporter }) => {
     {
       pathname: '/blog',
       title: 'All posts',
+      description: siteMetadata.description,
+      kind: 'page',
+    },
+    {
+      pathname: '/open-source',
+      title: 'Open source',
       description: siteMetadata.description,
       kind: 'page',
     },
