@@ -20,7 +20,16 @@ export const PostTitleList = ({ nodes }) => (
             {isFirstOfYear ? year : ''}
           </span>
           <div className={styles.row}>
-            <span className={styles.date}>{draft ? 'Draft' : date}</span>
+            <span className={styles.date}>
+              {draft ? (
+                'Draft'
+              ) : (
+                <>
+                  {date}
+                  <span className={styles.dateYear}>, {year}</span>
+                </>
+              )}
+            </span>
             <Link className={styles.link} to={node.fields.slug} title={title}>
               {title}
             </Link>

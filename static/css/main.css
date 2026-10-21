@@ -83,7 +83,20 @@
      anchor targets and the sticky table of contents. */
   --site-header-height: 53px;
 
+  /* How far cards reach into the side padding: with a 1rem side padding of
+     their own, their text lines up with the text column, like code blocks. */
+  --card-bleed: 1rem;
+  /* Border of a link card under the pointer */
+  --card-border-hover: color-mix(in srgb, var(--text-primary) 25%, transparent);
+
   color-scheme: light;
+}
+
+/* No side padding left to reach into on phones */
+@media screen and (max-width: 700px) {
+  :root {
+    --card-bleed: 0rem;
+  }
 }
 
 /* Dark theme */
@@ -458,7 +471,7 @@ details {
 }
 
 .box {
-  padding: 1.5rem 1.5rem 0.6rem;
+  padding: 1.5rem 1rem 0.6rem;
   position: relative;
   border-radius: 4px;
   background: var(--bg-primary);
@@ -480,18 +493,39 @@ details {
 }
 
 .github-repo {
-  /* Ends on the stats row rather than a paragraph margin: match the top. */
-  padding-bottom: 1.5rem;
+  /* Ends on the stats row rather than a paragraph margin: same padding all
+     round. */
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
-.github-repo-grid > .box {
+.bio,
+.github-repo {
+  margin-inline: calc(-1 * var(--card-bleed));
+}
+
+/* In a grid, the grid bleeds instead */
+.github-repo-grid > .box,
+.projects-grid .box {
   margin: 0 !important;
 }
 
-.box:hover:not(.bio):not(.service-card):after {
-  box-shadow:
-    var(--box-shadow-dark) 0px 6px 20px,
-    var(--box-shadow-dark) 0px 12px 36px;
+/* Link cards: the border darkens and the card's title turns to the accent
+   colour on hover (each card's stylesheet colours its own title) */
+a.box {
+  transition: border-color 0.15s ease;
+}
+
+a.box:hover {
+  border-color: var(--card-border-hover);
+}
+
+.github-repo-name {
+  transition: color 0.15s ease;
+}
+
+.github-repo:hover .github-repo-name {
+  color: var(--accent-color);
 }
 
 .iframe {
@@ -527,8 +561,8 @@ h6[id] {
 /* Static tweet cards rendered at build time by the gatsby-remark-static-tweet
    plugin. Built on .box so they follow the site theme like the other cards. */
 .tweet {
-  margin: 2.25em 0;
-  padding: 1rem 1.25rem;
+  margin: 2.25em calc(-1 * var(--card-bleed));
+  padding: 1rem;
   font-family: var(--font-sans);
   font-size: 0.95rem;
   line-height: 1.45;
@@ -1192,40 +1226,17 @@ p > img {
   padding: 0 1rem;
 }
 
-.socials {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 26%;
-}
-
-.socials img {
-  width: 26px;
-  max-width: 26px;
-  max-height: 26px;
-  margin: 0;
-  transition: filter 0.3s ease;
-}
-
-/* Invert only GitHub and Twitter icons in dark mode (not LinkedIn and Bluesky) */
-:root[data-theme='dark'] .social-icon-github,
-:root[data-theme='dark'] .social-icon-twitter,
-:root[data-theme='abyss'] .social-icon-github,
-:root[data-theme='abyss'] .social-icon-twitter {
-  filter: invert(1) brightness(1.1);
-}
-
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
 
 /*
- * Site header (see layout.js). Below the wide breakpoint: logo on the left,
- * nav pill + theme toggle on the right. From the wide breakpoint: a 3-column
- * grid whose middle column is the centred content column, so the nav pill
- * starts at the same x as the page content; the logo and the toggle sit in
- * the side gutters.
+ * Site header (see layout.js). Below the wide breakpoint: logo and nav pill
+ * together on the left, theme toggle alone on the right. From the wide
+ * breakpoint: a 3-column grid whose middle column is the centred content
+ * column, so the nav pill starts at the same x as the page content; the logo
+ * and the toggle sit in the side gutters.
  */
 .site-header {
   display: flex;
@@ -1240,41 +1251,120 @@ p > img {
 
 .site-nav {
   display: flex;
+  align-items: center;
   min-width: 0;
-  margin-left: auto;
+  margin-left: 8px;
+}
+
+/* Plain text links, the first one starting at the content edge. Fixed line
+   height so the theme toggle can match the nav's height (--nav-height). */
+.site-header {
+  --nav-link-line: 20px;
+  --nav-link-pad-y: 8px;
+  --nav-link-gap: 1.5rem;
+  --nav-height: calc(var(--nav-link-line) + 2 * var(--nav-link-pad-y));
 }
 
 .site-nav-links {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--nav-link-gap);
   min-width: 0;
 }
 
+/* Underline under the current link; slides to the hovered one */
+.site-nav-indicator {
+  position: absolute;
+  bottom: 3px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--text-primary);
+  transition:
+    left 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .site-nav-link {
+  position: relative;
+  z-index: 1;
   flex-shrink: 0;
+  padding: var(--nav-link-pad-y) 0;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: var(--nav-link-line);
+  color: var(--text-secondary);
+  text-decoration: none;
   white-space: nowrap;
+  box-shadow: none;
+  transition: color 0.15s ease;
+}
+
+.site-nav-link:hover,
+.site-nav-link[data-active] {
+  color: var(--text-primary);
+}
+
+.site-nav-link[data-active] {
+  font-weight: 500;
+}
+
+.site-nav-link:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }
 
 .site-header-actions {
   display: flex;
   flex-shrink: 0;
   align-items: center;
-  gap: 4px;
-  margin-left: -12px;
+  margin-left: auto;
 }
 
-.site-header-separator {
-  flex-shrink: 0;
-  width: 1px;
-  height: 16px;
-  margin: 0 8px;
-  background: var(--border-color);
+/* Round button matching the nav pill */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--nav-height);
+  height: var(--nav-height);
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--nav-pill-bg);
+  color: var(--text-secondary);
+  line-height: 0;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
 }
 
-/* Article breadcrumb: Blog › <post title> */
+.theme-toggle--placeholder {
+  background: none;
+}
+
+.theme-toggle:hover {
+  background: var(--nav-active-bg);
+  color: var(--text-primary);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.theme-toggle svg {
+  display: block;
+}
+
+/* Article breadcrumb after the pill: / <post title> */
 .site-nav-crumb-separator {
   flex-shrink: 0;
-  padding: 0 2px 0 5px;
+  padding: 0 8px 0 12px;
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1;
   color: var(--text-muted);
   user-select: none;
@@ -1284,7 +1374,6 @@ p > img {
   flex: 0 1 auto;
   min-width: 0;
   max-width: 280px;
-  padding: 5px 12px 5px 4px;
   overflow: hidden;
   font-family: var(--font-sans);
   font-size: 13px;
@@ -1293,6 +1382,91 @@ p > img {
   white-space: nowrap;
   text-overflow: ellipsis;
   cursor: default;
+}
+
+/*
+ * Site footer (see layout.js): a full-bleed band mirroring the header, its
+ * content in the text column, so it lines up with the page above.
+ */
+.site-footer {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  padding: 1.25rem 1rem;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--footer-bg);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  hyphens: manual;
+}
+
+.site-footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  max-width: calc(698px - 2rem);
+  margin: 0 auto;
+}
+
+.site-footer-meta {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.site-footer-meta .text-link {
+  color: inherit;
+}
+
+.site-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer-links li {
+  margin: 0;
+}
+
+/* Icon + text links, muted until hovered */
+.site-footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-secondary);
+  box-shadow: none;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.site-footer-link:hover {
+  color: var(--text-primary);
+}
+
+.site-footer-link:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.site-footer-link svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+}
+
+/* GitHub Sponsors pink */
+.site-footer-link--sponsor:hover svg {
+  fill: #db61a2;
+}
+
+.site-footer-sha {
+  font-family: 'Fira Code', 'Fira Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
 }
 
 @media screen and (min-width: 1000px) {
@@ -1316,15 +1490,11 @@ p > img {
     justify-self: end;
     margin-left: 0;
   }
-
-  .site-header-separator {
-    display: none;
-  }
 }
 
 @media screen and (max-width: 640px) {
   :root {
-    --site-header-height: 61px;
+    --site-header-height: 55px;
   }
 
   html {
@@ -1337,23 +1507,23 @@ p > img {
   }
 
   .site-logo-link svg {
-    width: 36px !important;
-    height: 36px !important;
+    width: 28px !important;
+    height: 28px !important;
   }
 
   .site-logo-text {
     margin-left: 8px !important;
-    font-size: 1.3rem;
+    font-size: 1rem;
   }
 
-  .site-nav-links {
-    gap: 1px !important;
-    padding: 2px !important;
+  .site-header {
+    --nav-link-line: 18px;
+    --nav-link-pad-y: 6px;
+    --nav-link-gap: 1rem;
   }
 
   .site-nav-link {
-    font-size: 12px !important;
-    padding: 4px 8px !important;
+    font-size: 12px;
   }
 
   /* No room for the post title: keep only the highlighted Blog section */
@@ -1374,10 +1544,6 @@ p > img {
     padding: 1rem;
   }
 
-  .bio {
-    flex-direction: column;
-  }
-
   .post-nav ul {
     margin: 0;
   }
@@ -1385,17 +1551,6 @@ p > img {
   .projects-grid {
     margin: 0;
     grid-template-columns: repeat(1, 1fr);
-  }
-
-  .socials {
-    margin-top: 12px;
-    justify-content: space-around;
-    width: 100%;
-  }
-
-  .avatar {
-    margin: 0 auto;
-    margin-bottom: 12px;
   }
 
   blockquote {

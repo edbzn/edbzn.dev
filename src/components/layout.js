@@ -39,10 +39,14 @@ class Layout extends React.Component {
         <header
           className="site-header"
           style={{
-            backgroundColor: 'var(--header-bg)',
+            // See-through, blurring the page as it scrolls underneath
+            backgroundColor:
+              'color-mix(in srgb, var(--header-bg) 80%, transparent)',
+            backdropFilter: 'saturate(180%) blur(12px)',
+            WebkitBackdropFilter: 'saturate(180%) blur(12px)',
             borderBottom: '1px solid var(--border-color)',
-            paddingBottom: 10,
-            paddingTop: 10,
+            paddingBottom: 8,
+            paddingTop: 8,
             paddingLeft: 'clamp(1.25rem, 3vw, 2rem)',
             paddingRight: 'clamp(1.25rem, 3vw, 2rem)',
             position: 'sticky',
@@ -168,11 +172,6 @@ class Layout extends React.Component {
             />
           </nav>
           <div className="site-header-actions">
-            <div
-              className="site-header-separator"
-              role="separator"
-              aria-hidden="true"
-            />
             <ThemeToggle />
           </div>
         </header>
@@ -191,62 +190,61 @@ class Layout extends React.Component {
         {/* Full-bleed band mirroring the header, closing the page. */}
         <footer
           role="contentinfo"
-          style={{
-            marginTop: rhythm(2),
-            fontSize: '0.85rem',
-            fontWeight: 100,
-            backgroundColor: 'var(--footer-bg)',
-            borderTop: '1px solid var(--border-color)',
-            paddingTop: rhythm(0.9),
-            paddingBottom: rhythm(0.9),
-            paddingLeft: 'clamp(1.25rem, 3vw, 2rem)',
-            paddingRight: 'clamp(1.25rem, 3vw, 2rem)',
-            marginLeft: 'calc(-50vw + 50%)',
-            marginRight: 'calc(-50vw + 50%)',
-            width: '100vw',
-          }}
+          className="site-footer"
+          style={{ marginTop: rhythm(2) }}
         >
-          <div
-            style={{
-              textAlign: 'center',
-              fontFamily: 'var(--font-sans)',
-            }}
-          >
-            <a
-              href="https://creativecommons.org/licenses/by-sa/4.0"
-              className="text-link"
-            >
-              CC BY-SA 4.0
-            </a>
-            &nbsp;
-            {new Date().getFullYear()}&nbsp;&copy;&nbsp;{author} ·{' '}
-            <a
-              href={github.repositoryUrl}
-              className="text-link"
-              title="Source code on GitHub"
-            >
-              SHA {github.commitSha ? github.commitSha.slice(0, 16) : 'source'}
-            </a>{' '}
-            ·{' '}
-            <a href={github.sponsorUrl} className="text-link">
-              Sponsor Me on GitHub
-            </a>{' '}
-            ·{' '}
-            <a href="/rss.xml" className="text-link">
-              <svg
-                viewBox="0 0 16 16"
-                width="12"
-                height="12"
-                fill="currentColor"
-                aria-hidden="true"
-                style={{ marginBottom: -1, marginRight: 2, marginLeft: 2 }}
+          <div className="site-footer-inner">
+            <p className="site-footer-meta">
+              &copy;&nbsp;{new Date().getFullYear()} {author}
+              <span aria-hidden="true"> · </span>
+              <a
+                href="https://creativecommons.org/licenses/by-sa/4.0"
+                className="text-link"
               >
-                <circle cx="2.5" cy="13.5" r="2" />
-                <path d="M1 6.5a.75.75 0 0 1 .75-.75 8.5 8.5 0 0 1 8.5 8.5.75.75 0 0 1-1.5 0 7 7 0 0 0-7-7A.75.75 0 0 1 1 6.5Z" />
-                <path d="M1 1.75A.75.75 0 0 1 1.75 1 13.25 13.25 0 0 1 15 14.25a.75.75 0 0 1-1.5 0A11.75 11.75 0 0 0 1.75 2.5.75.75 0 0 1 1 1.75Z" />
-              </svg>{' '}
-              RSS
-            </a>{' '}
+                CC BY-SA 4.0
+              </a>
+            </p>
+            <ul className="site-footer-links">
+              <li>
+                <a
+                  href={github.sponsorUrl}
+                  className="site-footer-link site-footer-link--sponsor"
+                >
+                  <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="m8 14.25.345.666a.75.75 0 0 1-.69 0l-.008-.004-.018-.01a7.152 7.152 0 0 1-.31-.17 22.055 22.055 0 0 1-3.434-2.414C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.045 5.231-3.885 6.818a22.066 22.066 0 0 1-3.744 2.584l-.018.01-.006.003h-.002ZM4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.58 20.58 0 0 0 8 13.393a20.58 20.58 0 0 0 3.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.749.749 0 0 1-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5Z" />
+                  </svg>
+                  Sponsor
+                </a>
+              </li>
+              <li>
+                <a href="/rss.xml" className="site-footer-link">
+                  <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <circle cx="2.5" cy="13.5" r="2" />
+                    <path d="M1 6.5a.75.75 0 0 1 .75-.75 8.5 8.5 0 0 1 8.5 8.5.75.75 0 0 1-1.5 0 7 7 0 0 0-7-7A.75.75 0 0 1 1 6.5Z" />
+                    <path d="M1 1.75A.75.75 0 0 1 1.75 1 13.25 13.25 0 0 1 15 14.25a.75.75 0 0 1-1.5 0A11.75 11.75 0 0 0 1.75 2.5.75.75 0 0 1 1 1.75Z" />
+                  </svg>
+                  RSS
+                </a>
+              </li>
+              <li>
+                <a
+                  href={github.repositoryUrl}
+                  className="site-footer-link"
+                  title="Source code on GitHub"
+                >
+                  <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M11.93 8.5a4.002 4.002 0 0 1-7.86 0H.75a.75.75 0 0 1 0-1.5h3.32a4.002 4.002 0 0 1 7.86 0h3.32a.75.75 0 0 1 0 1.5Zm-1.43-.75a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z" />
+                  </svg>
+                  {github.commitSha ? (
+                    <span className="site-footer-sha">
+                      {github.commitSha.slice(0, 7)}
+                    </span>
+                  ) : (
+                    'Source'
+                  )}
+                </a>
+              </li>
+            </ul>
           </div>
         </footer>
       </div>

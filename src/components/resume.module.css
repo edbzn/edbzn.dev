@@ -229,41 +229,57 @@
   transform: rotate(180deg);
 }
 
-/* Narrow screens: rail on the left, period, company and position stacked */
+/* Narrow screens: rail on the left, then company and period on one line
+   and the position under them */
 @media (max-width: 640px) {
+  .container {
+    /* Height of the company line: the dot is centred on it */
+    --first-line: 1.75rem;
+  }
+
   .container::after {
     left: calc(var(--rail-width) + var(--gap));
   }
 
   .content {
-    grid-template-columns: var(--rail-width) minmax(0, 1fr);
-    row-gap: 0.25rem;
+    grid-template-columns: var(--rail-width) minmax(0, 1fr) auto;
+    grid-template-areas:
+      'rail company period'
+      'rail position position';
+    align-items: center;
+    row-gap: 0.1rem;
   }
 
   .marker {
-    grid-column: 1;
-    grid-row: 1 / span 3;
+    grid-area: rail;
   }
 
-  .period,
-  .companyHeader,
+  .companyHeader {
+    grid-area: company;
+    min-height: var(--first-line);
+  }
+
+  .period {
+    grid-area: period;
+    text-align: right;
+  }
+
   .position {
-    grid-column: 2;
+    grid-area: position;
     text-align: left;
   }
 
-  /* Dot next to the period rather than the middle of the stacked row */
   .marker::after {
-    top: calc(var(--row-padding) + 0.35rem);
+    top: calc(var(--row-padding) + var(--first-line) / 2 - 5px);
   }
 
   .container:first-child .marker::before {
-    top: calc(var(--row-padding) + 0.35rem);
+    top: calc(var(--row-padding) + var(--first-line) / 2);
   }
 
   .container:last-child .marker::before {
     bottom: auto;
-    height: calc(var(--row-padding) + 0.35rem);
+    height: calc(var(--row-padding) + var(--first-line) / 2);
   }
 }
 

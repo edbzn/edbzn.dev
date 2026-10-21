@@ -34,7 +34,7 @@ export const ThemeToggle = () => {
   // Prevent flash during SSR. Same size as the button, so the header doesn't
   // move when it mounts.
   if (!mounted) {
-    return <div style={{ width: 28, height: 28 }} />;
+    return <div className="theme-toggle theme-toggle--placeholder" />;
   }
 
   return (
@@ -42,40 +42,18 @@ export const ThemeToggle = () => {
       onClick={toggleTheme}
       aria-label={`Switch to ${theme === 'light' ? 'dark' : theme === 'dark' ? 'abyss' : 'light'} mode`}
       title={`Current: ${theme} theme (click to switch)`}
-      style={{
-        background: 'transparent',
-        border: 'none',
-        cursor: 'pointer',
-        padding: 0,
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: '4px',
-        color: 'var(--text-primary)',
-        lineHeight: 0,
-        height: '28px',
-        width: '28px',
-        margin: 0,
-        verticalAlign: 'middle',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = 'var(--border-color)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = 'transparent';
-      }}
+      className="theme-toggle"
     >
       {theme === 'light' ? (
         <svg
-          width="20"
-          height="20"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          style={{ display: 'block' }}
         >
           <circle cx="12" cy="12" r="5"></circle>
           <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -89,29 +67,27 @@ export const ThemeToggle = () => {
         </svg>
       ) : theme === 'dark' ? (
         <svg
-          width="20"
-          height="20"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          style={{ display: 'block' }}
         >
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
         </svg>
       ) : (
         <svg
-          width="20"
-          height="20"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          style={{ display: 'block' }}
         >
           <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
         </svg>

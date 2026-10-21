@@ -35,29 +35,29 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 0.75rem;
-  margin: 0;
+  margin: 0 calc(-1 * var(--card-bleed));
   padding: 0;
   list-style: none;
 }
 
 /*
- * Card: monogram and name on top, description below, link pinned to the
- * bottom. The link's ::after covers the card so the whole card is clickable.
+ * Card (.box, like the other cards): monogram and name on top, description
+ * below, link pinned to the bottom. The link's ::after covers the card so the
+ * whole card is clickable.
  */
-.card {
-  position: relative;
+/* Doubled class: wins over the larger .box padding from main.css */
+.card.card {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   margin: 0;
-  padding: 0.85rem 0.9rem 0.75rem;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background-color: var(--bg-primary);
+  padding: 0.85rem 1rem;
+  transition: border-color 0.15s ease;
 }
 
+/* Same hover as the link cards (a.box in main.css) */
 .card:has(.link):hover {
-  border-color: var(--tint-border);
+  border-color: var(--card-border-hover);
 }
 
 .header {
@@ -92,6 +92,7 @@
   line-height: 1.3;
   color: var(--text-primary);
   overflow-wrap: anywhere;
+  transition: color 0.15s ease;
 }
 
 .description {
@@ -117,12 +118,8 @@
   border-radius: inherit;
 }
 
-.card:has(.link):hover .link {
-  color: var(--text-secondary);
-}
-
 .card:has(.link):hover .name {
-  color: var(--tint-fg);
+  color: var(--accent-color);
 }
 
 /* Long paths are cut, the arrow stays visible */

@@ -12,10 +12,11 @@
 .toc-wrapper {
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 1rem;
+  /* Plus the toggle's own 0.5rem: its text lines up with the text column */
+  padding: 1rem 0.5rem;
   background-color: var(--bg-secondary);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin: 2.25em 0;
+  margin: 2.25em calc(-1 * var(--card-bleed));
 }
 
 /* Toggle button */

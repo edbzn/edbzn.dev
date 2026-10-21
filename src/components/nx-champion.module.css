@@ -7,6 +7,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  margin-inline: calc(-1 * var(--card-bleed));
   padding: 1rem;
   font-family: var(--font-sans);
   color: var(--text-primary);
@@ -34,10 +35,6 @@
   line-height: 1.5;
   color: var(--text-secondary);
   hyphens: manual;
-}
-
-.card:hover .text {
-  color: var(--text-primary);
 }
 
 .tags {

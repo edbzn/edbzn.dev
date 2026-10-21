@@ -33,7 +33,7 @@ export const PostNav = ({ previous, next, relatedPosts }) => {
 
   return (
     <nav role="navigation" style={style.nav} className="post-nav">
-      <div style={style.title}>More from Edouard Bozon</div>
+      <div style={style.title}>Keep reading</div>
       <ul style={style.ul}>
         {posts.map((post, index) => (
           <li key={post.id || post.fields.slug}>

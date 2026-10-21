@@ -58,10 +58,34 @@
   white-space: nowrap;
 }
 
-/* Narrow screens: allow two lines so titles stay readable */
+/* Only shown on narrow screens, where the year column is gone */
+.dateYear {
+  display: none;
+}
+
+/* Narrow screens: no year column; the title gets the full width, with the
+   full date under it */
 @media screen and (max-width: 640px) {
   .item {
-    grid-template-columns: 2.75rem minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .year {
+    display: none;
+  }
+
+  .row {
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .date {
+    order: 1;
+    width: auto;
+  }
+
+  .dateYear {
+    display: inline;
   }
 
   .link {

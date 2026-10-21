@@ -36,7 +36,7 @@ export const UsesTools = ({ categories = [] }) => (
         <h3 className={styles.groupTitle}>{category.title}</h3>
         <ul className={styles.grid}>
           {category.items.map((item) => (
-            <li key={item.name} className={styles.card}>
+            <li key={item.name} className={`box ${styles.card}`}>
               <span className={styles.header}>
                 <span className={styles.monogram} aria-hidden="true">
                   {monogramFor(item)}

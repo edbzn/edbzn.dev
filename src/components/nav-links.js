@@ -14,7 +14,7 @@ function isActive(to, pathname) {
 
 /**
  * Section links shown in the header pill. When `breadcrumb` is given (the
- * current post title on article pages), it is rendered after "Blog" as the
+ * current post title on article pages), it is rendered after the pill as the
  * current sub page: Blog stays highlighted as the active section, the title is
  * plain text marked as the current page and truncated with an ellipsis.
  */
@@ -69,84 +69,55 @@ export const NavLinks = ({ pathname, breadcrumb }) => {
     setHoveredTo(null);
   };
 
+  const crumb = breadcrumb && isActive('/blog', pathname);
+
   return (
-    <div
-      ref={containerRef}
-      className="site-nav-links"
-      onMouseLeave={handleMouseLeave}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '2px',
-        background: 'var(--nav-pill-bg)',
-        borderRadius: '8px',
-        padding: '3px',
-        position: 'relative',
-      }}
-    >
-      {indicator && (
-        <div
-          aria-hidden="true"
-          className="nav-indicator"
-          style={{
-            position: 'absolute',
-            top: '3px',
-            bottom: '3px',
-            left: indicator.left,
-            width: indicator.width,
-            background: 'var(--nav-active-bg)',
-            borderRadius: '6px',
-            transition:
-              'left 0.2s cubic-bezier(0.4, 0, 0.2, 1), width 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
-            zIndex: 0,
-          }}
-        />
-      )}
-      {links.map(({ to, label }) => {
-        const active = isActive(to, pathname);
-        const crumb = to === '/blog' && active && breadcrumb;
-        return (
-          <React.Fragment key={to}>
+    <>
+      <div
+        ref={containerRef}
+        className="site-nav-links"
+        onMouseLeave={handleMouseLeave}
+      >
+        {indicator && (
+          <div
+            aria-hidden="true"
+            className="site-nav-indicator"
+            style={{ left: indicator.left, width: indicator.width }}
+          />
+        )}
+        {links.map(({ to, label }) => {
+          const active = isActive(to, pathname);
+          return (
             <Link
+              key={to}
               to={to}
               ref={(el) => {
                 linkRefs.current[to] = el;
               }}
               className="site-nav-link"
+              data-active={active || undefined}
               aria-current={active && !crumb ? 'page' : undefined}
               onMouseEnter={() => handleMouseEnter(to)}
-              style={{
-                boxShadow: 'none',
-                fontFamily: 'var(--font-sans)',
-                fontSize: '13px',
-                color: 'var(--text-primary)',
-                textDecoration: 'none',
-                padding: '5px 12px',
-                borderRadius: '6px',
-                lineHeight: '1.2',
-                position: 'relative',
-                zIndex: 1,
-              }}
             >
               {label}
             </Link>
-            {crumb && (
-              <>
-                <span className="site-nav-crumb-separator" aria-hidden="true">
-                  ›
-                </span>
-                <span
-                  className="site-nav-crumb"
-                  aria-current="page"
-                  title={breadcrumb}
-                >
-                  {breadcrumb}
-                </span>
-              </>
-            )}
-          </React.Fragment>
-        );
-      })}
-    </div>
+          );
+        })}
+      </div>
+      {crumb && (
+        <>
+          <span className="site-nav-crumb-separator" aria-hidden="true">
+            /
+          </span>
+          <span
+            className="site-nav-crumb"
+            aria-current="page"
+            title={breadcrumb}
+          >
+            {breadcrumb}
+          </span>
+        </>
+      )}
+    </>
   );
 };

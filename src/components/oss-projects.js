@@ -6,7 +6,7 @@ export const Projects = ({ ossProjects }) => (
   <ul
     className="projects-grid"
     style={{
-      margin: 0,
+      margin: '0 calc(-1 * var(--card-bleed))',
       padding: 0,
       listStyle: 'none',
       display: 'grid',

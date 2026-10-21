@@ -1,49 +1,64 @@
 import React from 'react';
 
-import github from '../../static/icons/github.svg';
-import linkedin from '../../static/icons/linkedin.svg';
-import twitter from '../../static/icons/twitter.svg';
-import bluesky from '../../static/icons/bluesky.svg';
+import * as styles from './social.module.css';
 
-export const Social = ({ social }) => {
-  return (
-    <div className="socials">
-      <a
-        style={{ boxShadow: 'none' }}
-        href={social.bluesky}
-        title="@edbzn.bsky.social on Bluesky"
-      >
-        <img
-          src={bluesky}
-          alt="Bluesky profile"
-          className="social-icon-bluesky"
-        />
-      </a>
-      <a
-        style={{ boxShadow: 'none' }}
-        href={social.twitter}
-        title="@edbzn on X (Twitter)"
-      >
-        <img src={twitter} alt="X profile" className="social-icon-twitter" />
-      </a>
-      <a
-        style={{ boxShadow: 'none' }}
-        href={social.github}
-        title="@edbzn on GitHub"
-      >
-        <img src={github} alt="Github profile" className="social-icon-github" />
-      </a>
-      <a
-        style={{ boxShadow: 'none' }}
-        href={social.linkedin}
-        title="@edouardbozon on LinkedIn"
-      >
-        <img
-          src={linkedin}
-          alt="Linkedin profile"
-          className="social-icon-linkedin"
-        />
-      </a>
-    </div>
-  );
-};
+// Marks in currentColor; each link's class sets its brand colour
+const links = [
+  {
+    key: 'bluesky',
+    label: 'Bluesky',
+    title: '@edbzn.bsky.social on Bluesky',
+    viewBox: '0 0 600 530',
+    path: 'm135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z',
+  },
+  {
+    key: 'twitter',
+    label: 'X',
+    title: '@edbzn on X (Twitter)',
+    viewBox: '0 0 300 271',
+    path: 'm236 0h46l-101 115 118 156h-92.6l-72.5-94.8-83 94.8h-46l107-123-113-148h94.9l65.5 86.6zm-16.1 244h25.5l-165-218h-27.4z',
+  },
+  {
+    key: 'github',
+    label: 'GitHub',
+    title: '@edbzn on GitHub',
+    viewBox: '0 0 16 16',
+    path: 'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z',
+  },
+  {
+    key: 'linkedin',
+    label: 'LinkedIn',
+    title: '@edouardbozon on LinkedIn',
+    viewBox: '0 0 32 32',
+    path: 'M29.63.001H2.362C1.06.001 0 1.034 0 2.306V29.69C0 30.965 1.06 32 2.362 32h27.27C30.937 32 32 30.965 32 29.69V2.306C32 1.034 30.937.001 29.63.001z',
+    // White "in" on the blue square, as in the original logo
+    inner:
+      'M4.745 11.997H9.5v15.27H4.745zm2.374-7.6c1.517 0 2.75 1.233 2.75 2.75S8.636 9.9 7.12 9.9a2.76 2.76 0 0 1-2.754-2.753 2.75 2.75 0 0 1 2.753-2.75m5.35 7.6h4.552v2.087h.063c.634-1.2 2.182-2.466 4.5-2.466 4.806 0 5.693 3.163 5.693 7.274v8.376h-4.743V19.84c0-1.77-.032-4.05-2.466-4.05-2.47 0-2.85 1.93-2.85 3.92v7.554h-4.742v-15.27z',
+  },
+];
+
+export const Social = ({ social }) => (
+  <ul className={styles.list}>
+    {links.map((link) => (
+      <li key={link.key}>
+        <a
+          className={`${styles.link} ${styles[link.key]}`}
+          href={social[link.key]}
+          title={link.title}
+          aria-label={`${link.label} profile`}
+        >
+          <svg
+            viewBox={link.viewBox}
+            width="16"
+            height="16"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path d={link.path} />
+            {link.inner && <path d={link.inner} fill="#fff" />}
+          </svg>
+        </a>
+      </li>
+    ))}
+  </ul>
+);

@@ -1,6 +1,6 @@
 .list {
   list-style: none;
-  margin: 1.5em 0;
+  margin: 1.5em calc(-1 * var(--card-bleed));
   padding: 0;
   font-family: var(--font-sans);
   /* One bordered list, ideas separated by dividers */

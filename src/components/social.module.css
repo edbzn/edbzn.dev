@@ -1,0 +1,46 @@
+.list {
+  display: flex;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list li {
+  margin: 0;
+}
+
+/* Icon buttons in their brand colours */
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  box-shadow: none;
+  transition: background-color 0.15s ease;
+}
+
+.link:hover {
+  background-color: var(--nav-active-bg);
+}
+
+.bluesky {
+  color: #1185fe;
+}
+
+/* X and GitHub marks are black, or white on the dark themes */
+.twitter,
+.github {
+  color: var(--text-primary);
+}
+
+.linkedin {
+  color: #0177b5;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
