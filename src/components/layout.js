@@ -9,11 +9,11 @@ import { LogoProximityTrigger } from './logo-proximity-trigger';
 class Layout extends React.Component {
   render() {
     const { children, github, author, location, breadcrumb } = this.props;
-    // The blog (index, tag pages and articles) gets the black hole, Uses the
-    // galaxy, every other page the globe.
+    // The blog (index, tag pages and articles) gets the black hole, Open
+    // source the galaxy, every other page the globe.
     const pathname = location?.pathname || '/';
-    const onBlog = /^\/(blog|tags)(\/|$)/.test(pathname);
-    const onUses = /^\/uses(\/|$)/.test(pathname);
+    const onBlog = /^\/blog(\/|$)/.test(pathname);
+    const onOpenSource = /^\/open-source(\/|$)/.test(pathname);
     return (
       <div
         style={{
@@ -185,7 +185,7 @@ class Layout extends React.Component {
           </main>
         </div>
         <LazyAscii
-          scene={onBlog ? 'black-hole' : onUses ? 'galaxy' : 'globe'}
+          scene={onBlog ? 'black-hole' : onOpenSource ? 'galaxy' : 'globe'}
         />
         {/* Full-bleed band mirroring the header, closing the page. */}
         <footer

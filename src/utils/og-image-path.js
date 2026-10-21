@@ -6,7 +6,7 @@
  *   "/"                   -> "home"
  *   "/blog/"              -> "blog"
  *   "/blog/my-post/"      -> "blog-my-post"
- *   "/tags/angular"       -> "tags-angular"
+ *   "/blog/tags/angular"  -> "blog-tags-angular"
  */
 function ogImageSlug(pathname) {
   const cleaned = (pathname || '/').replace(/^\/+|\/+$/g, '');

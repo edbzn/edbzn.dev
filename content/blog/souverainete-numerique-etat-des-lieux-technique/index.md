@@ -4,7 +4,6 @@ date: '2026-04-13'
 description: "De GendBuntu à Sécurix en passant par NixOS, panorama des approches techniques de l'État français pour migrer ses postes de travail vers Linux et les logiciels libres."
 tags: [linux, open-source]
 lang: fr
-cover: ./cover.svg
 ---
 
 ![NixOS](./nixos.jpeg)

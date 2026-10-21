@@ -20,7 +20,7 @@ export const Tags = ({ tags, style }) => {
       {tags.map((tag) => (
         <Link
           key={slugifyTag(tag)}
-          to={`/tags/${slugifyTag(tag)}`}
+          to={`/blog/tags/${slugifyTag(tag)}`}
           className={styles.tag}
         >
           #{slugifyTag(tag)}

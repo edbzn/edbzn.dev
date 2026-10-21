@@ -2,7 +2,6 @@
 title: Experimenting with lit-html
 date: '2018-12-21T00:00:00.000Z'
 tags: [javascript]
-cover: ./cover.svg
 ---
 
 The Polymer team at Google work on a [higher abstraction over web components](https://www.polymer-project.org/blog/2018-12-13-lit-html-rc). I use that library from the `0.10.0` version and today I migrated an app to the `1.0.0-rc.1`.

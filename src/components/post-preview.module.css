@@ -1,105 +1,101 @@
-/* Plain rows: thumbnail on the left, text on the right, a thin divider
-   between posts, no card chrome */
+/* Plain rows: title, description and date, a thin divider between posts,
+   no card chrome */
 .article {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
   padding: 1.75rem 0;
   border-top: 1px solid var(--border-color);
 }
 
-.article:first-child {
+/* Each year's first post sits right under its label */
+.year + .article {
   padding-top: 0;
   border-top: none;
 }
 
-.content {
-  flex: 1;
-  min-width: 0;
+.yearGroup + .yearGroup {
+  margin-top: 2.5rem;
 }
 
-/* Clamped so every row has about the same height */
-.title,
-.description {
+/* Small label, as in the home page's latest posts list */
+.year {
+  margin: 0 0 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+/* Clamped so every row has about the same height; the description is shown
+   in full */
+.title {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   overflow: hidden;
+  /* Extra bold, like the post page titles */
+  font-size: 1.4rem;
+  font-weight: 900;
+  line-height: 1.35;
 }
 
-/* Cover banners are drawn at 2.4:1 with their subject kept in the middle
-   two thirds, so a 1.6:1 crop shows all of it */
-.banner {
-  flex-shrink: 0;
-  display: block;
-  width: 192px;
-  aspect-ratio: 1.6;
-  overflow: hidden;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  /* Cover banners are transparent: the tile colour comes from the theme. In
-     abyss a translucent blue-to-shade gradient lets the drifting background
-     glows show through. */
-  background: linear-gradient(
-    135deg,
-    rgba(92, 188, 236, 0.08),
-    rgba(4, 10, 16, 0.3)
-  );
+/* Like the cards: no underline, accent colour on hover */
+.titleLink {
+  color: var(--text-primary);
+  text-decoration: none;
   box-shadow: none;
+  transition: color 0.15s ease;
 }
 
-:global(:root[data-theme='dark']) .banner {
-  background: linear-gradient(135deg, #1c1c1c, #0e0e0e);
+.titleLink:hover {
+  color: var(--accent-color);
 }
 
-:global(:root[data-theme='light']) .banner {
-  background: linear-gradient(135deg, #f2f2f2, #e6e6e6);
+.titleLink:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }
 
-.banner :global(.gatsby-image-wrapper) {
-  display: block;
-  height: 100%;
+/* Description in the body font, between the sans title and meta line */
+.description {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.65;
 }
 
-/* SVG diagrams and logos: show them whole instead of cropping */
-.vector {
-  display: block;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0.5rem;
-  object-fit: contain;
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  margin-top: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
 }
 
-.fill {
-  display: block;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  object-fit: cover;
+/* Plain text, muted like the date, accent colour on hover */
+.tagLink {
+  color: inherit;
+  text-decoration: none;
+  box-shadow: none;
+  transition: color 0.15s ease;
 }
 
-/* Cover banners are white and grey shapes: invert them for the light theme */
-:global(:root[data-theme='light']) .fill {
-  filter: invert(1);
+.tagLink:hover {
+  color: var(--accent-color);
 }
 
-/* ...and tint them in the abyss blues: white comes out about #7fc1e0, close to
-   --tag-text, and the greys turn a deeper petrol blue */
-:global(:root[data-theme='abyss']) .fill {
-  filter: brightness(0.45) sepia(1) hue-rotate(154deg) saturate(1.5)
-    brightness(1.3);
+.tagLink:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }
 
 @media screen and (max-width: 640px) {
   .article {
-    gap: 0.875rem;
     padding: 1.5rem 0;
-  }
-
-  .banner {
-    width: 104px;
   }
 
   .title {

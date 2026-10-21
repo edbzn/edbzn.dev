@@ -76,7 +76,7 @@ describe('Accessibility tests', () => {
   it('Has no detectable accessibility violations on home (dark mode)', () => {
     cy.visit('/', {
       onBeforeLoad: (win) => {
-        win.localStorage.setItem('theme', 'dark');
+        win.localStorage.setItem('theme-choice', 'dark');
       },
     });
     cy.get('main', { timeout: 10000 })
@@ -94,7 +94,7 @@ describe('Accessibility tests', () => {
   it('Has no detectable accessibility violations on blog (dark mode)', () => {
     cy.visit('/blog', {
       onBeforeLoad: (win) => {
-        win.localStorage.setItem('theme', 'dark');
+        win.localStorage.setItem('theme-choice', 'dark');
       },
     });
     cy.get('main', { timeout: 10000 })
@@ -112,7 +112,7 @@ describe('Accessibility tests', () => {
   it('Has no detectable accessibility violations on home (abyss mode)', () => {
     cy.visit('/', {
       onBeforeLoad: (win) => {
-        win.localStorage.setItem('theme', 'abyss');
+        win.localStorage.setItem('theme-choice', 'abyss');
       },
     });
     cy.get('main', { timeout: 10000 })
@@ -135,7 +135,7 @@ describe('Accessibility tests', () => {
   it('Has no detectable accessibility violations on blog (abyss mode)', () => {
     cy.visit('/blog', {
       onBeforeLoad: (win) => {
-        win.localStorage.setItem('theme', 'abyss');
+        win.localStorage.setItem('theme-choice', 'abyss');
       },
     });
     cy.get('main', { timeout: 10000 })

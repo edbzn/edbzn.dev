@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="1200" height="500">
-<linearGradient id="tail" gradientUnits="userSpaceOnUse" x1="830" y1="190" x2="300" y2="340"><stop offset="0" stop-color="#ffffff" stop-opacity="0.8"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
-<path d="M 838.2 218.9 L 300 340 L 821.8 161.1 Z" fill="url(#tail)"/>
-<circle cx="830.0" cy="190.0" r="32" fill="#ffffff" />
-</svg>

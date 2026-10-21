@@ -26,7 +26,6 @@ const BlogPostTemplate = (props) => {
     const getGiscusTheme = () => {
       if (typeof window === 'undefined') return 'light';
 
-      const savedTheme = localStorage.getItem('theme');
       const root = document.documentElement;
       const currentTheme = root.getAttribute('data-theme');
 
@@ -201,17 +200,7 @@ export default BlogPostTemplate;
 
 export const Head = ({ data, location }) => {
   const post = data.mdx;
-  const cover = post.frontmatter.cover;
-  // Social platforms don't render SVG: keep the generated PNG for SVG covers
-  const image =
-    cover?.publicURL && cover.extension !== 'svg'
-      ? {
-          url: cover.publicURL,
-          width: cover.childImageSharp?.original?.width,
-          height: cover.childImageSharp?.original?.height,
-          alt: post.frontmatter.title,
-        }
-      : null;
+  // No image: Seo uses the generated social image of the post
   return (
     <Seo
       title={post.frontmatter.title}
@@ -219,7 +208,6 @@ export const Head = ({ data, location }) => {
       article={true}
       canonical={post.frontmatter.canonical}
       pathname={location.pathname}
-      image={image}
     />
   );
 };
@@ -248,16 +236,6 @@ export const pageQuery = graphql`
         draft
         tags
         lang
-        cover {
-          publicURL
-          extension
-          childImageSharp {
-            original {
-              width
-              height
-            }
-          }
-        }
       }
     }
   }
