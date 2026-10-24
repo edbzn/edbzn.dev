@@ -1,6 +1,6 @@
 /**
  * The edbzn compass rose, pre-colored for the generated social previews
- * (colors match the site header's logo in the light theme).
+ * (colors match the site header's logo in the dark theme).
  *
  * Design:
  *   - Thin circular ring (hollow donut via evenodd)
@@ -18,14 +18,14 @@ const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" 
       <circle cx="50" cy="50" r="7" fill="black"/>
     </mask>
   </defs>
-  <path d="M 50 8 A 42 42 0 1 0 50 92 A 42 42 0 1 0 50 8 Z M 50 12 A 38 38 0 1 1 50 88 A 38 38 0 1 1 50 12 Z" fill="#000000" fill-rule="evenodd"/>
-  <g fill="#171717">
+  <path d="M 50 8 A 42 42 0 1 0 50 92 A 42 42 0 1 0 50 8 Z M 50 12 A 38 38 0 1 1 50 88 A 38 38 0 1 1 50 12 Z" fill="#ffffff" fill-rule="evenodd"/>
+  <g fill="#ffffff">
     <polygon points="49,2 51,2 51,8 49,8"/>
     <polygon points="92,49 98,49 98,51 92,51"/>
     <polygon points="49,92 51,92 51,98 49,98"/>
     <polygon points="2,49 8,49 8,51 2,51"/>
   </g>
-  <g mask="url(#compass-hole)" fill="#171717">
+  <g mask="url(#compass-hole)" fill="#ffffff">
     <polygon points="68,32 55.2,49.2 50.8,44.8"/>
     <polygon points="68,68 50.8,55.2 55.2,50.8"/>
     <polygon points="32,68 44.8,50.8 49.2,55.2"/>

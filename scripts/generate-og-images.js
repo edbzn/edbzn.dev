@@ -2,7 +2,7 @@
  * Build-time generator for dynamic social preview images (OpenGraph / Twitter).
  *
  * Renders a 1200×630 PNG for every page based on its title, description
- * and optional tags, styled to match the website's light theme.
+ * and optional tags, styled to match the website's dark theme.
  *
  * Invoked from `gatsby-node.js`'s `onPostBuild` hook.
  */
@@ -18,16 +18,15 @@ const WIDTH = 1200;
 const HEIGHT = 630;
 const PADDING = 72;
 
-// Light palette — kept in sync with static/css/main.css `:root`.
-const LIGHT = {
-  bg: '#ffffff',
-  bgBottom: '#f6f5f5',
-  accent: '#007acc',
-  text: 'rgba(0, 0, 0, 0.9)',
-  textStrong: '#111111',
-  textMuted: 'rgba(0, 0, 0, 0.6)',
-  border: 'rgba(0, 0, 0, 0.1)',
-  tagBg: 'rgb(241, 241, 241)',
+// Dark palette — kept in sync with static/css/main.css `:root[data-theme='dark']`.
+const DARK = {
+  bg: '#2d2d2d',
+  bgBottom: '#1e1e1e',
+  text: 'rgba(255, 255, 255, 0.9)',
+  textStrong: '#ffffff',
+  textMuted: 'rgba(255, 255, 255, 0.58)',
+  border: 'rgba(255, 255, 255, 0.085)',
+  tagBg: 'rgba(255, 255, 255, 0.1)',
 };
 
 const FONTSOURCE_DIR = path.join(
@@ -138,14 +137,10 @@ function template({ title, description, tags, kind }) {
         justifyContent: 'space-between',
         padding: PADDING,
         fontFamily: 'Merriweather',
-        color: LIGHT.text,
-        // The site's light page: white fading to its off-white background,
-        // with a faint accent wash.
-        backgroundColor: LIGHT.bg,
-        backgroundImage: [
-          'radial-gradient(120% 80% at 30% 20%, rgba(0, 122, 204, 0.06), transparent 70%)',
-          `linear-gradient(180deg, ${LIGHT.bg} 0%, ${LIGHT.bgBottom} 100%)`,
-        ].join(', '),
+        color: DARK.text,
+        // The site's dark page: its raised surface fading to the page background.
+        backgroundColor: DARK.bg,
+        backgroundImage: `linear-gradient(180deg, ${DARK.bg} 0%, ${DARK.bgBottom} 100%)`,
       },
       children: [
         // Header: logo + label
@@ -176,7 +171,7 @@ function template({ title, description, tags, kind }) {
                     fontWeight: 700,
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
-                    color: LIGHT.accent,
+                    color: DARK.textMuted,
                   },
                   children: label,
                 },
@@ -205,7 +200,7 @@ function template({ title, description, tags, kind }) {
                     fontWeight: 800,
                     lineHeight: 1.12,
                     letterSpacing: '-0.02em',
-                    color: LIGHT.textStrong,
+                    color: DARK.textStrong,
                   },
                   children: safeTitle,
                 },
@@ -216,11 +211,11 @@ function template({ title, description, tags, kind }) {
                     props: {
                       style: {
                         display: 'flex',
-                        fontFamily: 'Merriweather',
+                        fontFamily: 'Public Sans',
                         fontSize: 28,
                         lineHeight: 1.5,
                         fontWeight: 400,
-                        color: LIGHT.textMuted,
+                        color: DARK.textMuted,
                       },
                       children: safeDescription,
                     },
@@ -229,62 +224,32 @@ function template({ title, description, tags, kind }) {
             ].filter(Boolean),
           },
         },
-        // Footer: tags + signature
+        // Footer: tags
         {
           type: 'div',
           props: {
             style: {
               display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingTop: 24,
-              borderTop: `1px solid ${LIGHT.border}`,
-              fontFamily: 'Public Sans, sans-serif',
+              gap: 12,
+              flexWrap: 'wrap',
             },
-            children: [
-              {
-                type: 'div',
-                props: {
-                  style: {
-                    display: 'flex',
-                    gap: 12,
-                    flexWrap: 'wrap',
-                    maxWidth: '65%',
-                  },
-                  children: (tags || []).slice(0, 4).map((tag) => ({
-                    type: 'div',
-                    props: {
-                      style: {
-                        display: 'flex',
-                        fontFamily: 'Public Sans',
-                        fontSize: 22,
-                        fontWeight: 600,
-                        color: LIGHT.text,
-                        backgroundColor: LIGHT.tagBg,
-                        padding: '6px 16px',
-                        border: `1px solid ${LIGHT.border}`,
-                        borderRadius: 999,
-                      },
-                      children: `#${tag}`,
-                    },
-                  })),
+            children: (tags || []).slice(0, 4).map((tag) => ({
+              type: 'div',
+              props: {
+                style: {
+                  display: 'flex',
+                  fontFamily: 'Public Sans',
+                  fontSize: 22,
+                  fontWeight: 600,
+                  color: DARK.text,
+                  backgroundColor: DARK.tagBg,
+                  padding: '6px 16px',
+                  border: `1px solid ${DARK.border}`,
+                  borderRadius: 999,
                 },
+                children: `#${tag}`,
               },
-              {
-                type: 'div',
-                props: {
-                  style: {
-                    display: 'flex',
-                    alignItems: 'center',
-                    fontFamily: 'Public Sans',
-                    fontSize: 26,
-                    fontWeight: 700,
-                    color: LIGHT.text,
-                  },
-                  children: 'Edouard Bozon · edbzn.dev',
-                },
-              },
-            ],
+            })),
           },
         },
       ],
